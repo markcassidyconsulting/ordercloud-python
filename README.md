@@ -12,7 +12,7 @@ An idiomatic async Python SDK for the [Sitecore OrderCloud](https://ordercloud.i
 
 Built with modern Python: async/await throughout, Pydantic v2 typed models, full type annotations, and `py.typed` for downstream type checking. **Full API coverage** — all 632 operations across 60 resources, generated from the OpenAPI spec.
 
-> **Status:** Production-grade. Full API coverage, 759 unit tests, 97% overall coverage. Sync and async clients, typed xp generics, auto-pagination, retry with backoff, structured logging, middleware hooks.
+> **Status:** Production-grade. Full API coverage, 759 unit tests + 25 integration tests, 97% coverage. Sync and async clients, typed xp generics, auto-pagination, retry with backoff, structured logging, middleware hooks.
 
 ## Why This Exists
 
@@ -413,24 +413,78 @@ The codegen pipeline: **OpenAPI JSON** -> parser -> intermediate representation 
 ```bash
 git clone https://github.com/markcassidyconsulting/ordercloud-python.git
 cd ordercloud-python
-pip install -e ".[dev,codegen]"
-
-# Run linter
-ruff check src/ tests/
-ruff format src/ tests/
-
-# Run tests
-pytest
-
-# Run tests with coverage
-pytest --cov=ordercloud --cov-report=term-missing
+pip install -e ".[dev,examples,codegen]"
 ```
+
+### Running Tests
+
+```bash
+# Unit tests only (mocked HTTP, no network calls — fast)
+pytest tests/ --ignore=tests/integration
+
+# Unit tests with coverage
+pytest tests/ --ignore=tests/integration --cov=ordercloud --cov-report=term-missing
+
+# Lint and format
+ruff check src/ tests/
+ruff format --check src/ tests/
+
+# Type checking
+mypy src/
+```
+
+### Integration Tests
+
+Integration tests run against a live OrderCloud sandbox and are **skipped automatically** when credentials are not set. They never run by accident.
+
+**Setup:**
+
+1. Create a `.env` file at the repo root (gitignored):
+
+```env
+ORDERCLOUD_TEST_CLIENT_ID=your-sandbox-client-id
+ORDERCLOUD_TEST_CLIENT_SECRET=your-sandbox-client-secret
+ORDERCLOUD_TEST_BASE_URL=https://sandboxapi.ordercloud.io/v1
+ORDERCLOUD_TEST_AUTH_URL=https://sandboxauth.ordercloud.io/oauth/token
+```
+
+2. Run:
+
+```bash
+pytest tests/integration/ -v
+```
+
+The test suite is self-bootstrapping — it uses the SDK itself to create all test data from a single admin API client credential. All test resources use an `inttest-` ID prefix and are cleaned up automatically.
+
+> **Why `ORDERCLOUD_TEST_*`?** The `TEST_` prefix prevents the integration tests from running against a production OrderCloud instance if you happen to have `ORDERCLOUD_CLIENT_ID` set in your environment for normal SDK usage.
 
 ### Test Suite
 
-759 unit tests across 6 test modules (auth, HTTP, models, resources, resource coverage, sync client). All tests use mocked HTTP via `respx` — no network calls.
+784 tests across 12 modules.
 
-Coverage on hand-written infrastructure:
+**Unit tests (759)** — mocked HTTP via [respx](https://lundberg.github.io/respx/), no network calls:
+
+| Module | Tests | Purpose |
+|--------|-------|---------|
+| `test_auth.py` | 13 | OAuth2 token management |
+| `test_http.py` | 16 | HTTP client, error parsing, retries |
+| `test_models.py` | 28 | Model round-trips, enums, xp, ListPage |
+| `test_resources.py` | 22 | Representative resource operations |
+| `test_resource_coverage.py` | 632 | All 60 resources, all 632 operations |
+| `test_sync_client.py` | 48 | Sync wrapper, pagination |
+
+**Integration tests (25)** — live sandbox, skipped when credentials are absent:
+
+| Module | Tests | Purpose |
+|--------|-------|---------|
+| `test_auth.py` | 4 | Client credentials grant, token caching |
+| `test_crud.py` | 7 | Products, Buyers, Catalogs, Categories, Users |
+| `test_pagination.py` | 3 | Auto-pagination, search, list metadata |
+| `test_query_params.py` | 3 | Assignment lifecycle, DELETE with query params |
+| `test_errors.py` | 5 | Error parsing, structured API errors |
+| `test_sync_client.py` | 3 | Sync CRUD, pagination, errors |
+
+**Coverage** (97% overall, 90% threshold enforced in CI):
 
 | Module | Coverage |
 |--------|----------|
