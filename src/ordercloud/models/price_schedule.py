@@ -3,15 +3,14 @@
 """OrderCloud PriceMarkupType, PriceBreak, PriceSchedule models."""
 
 from __future__ import annotations
-from enum import Enum
 from typing import Generic, Optional
 
-from .shared import OrderCloudModel, XP
+from .shared import OrderCloudEnum, OrderCloudModel, XP
 
 __all__ = ["PriceMarkupType", "PriceBreak", "PriceSchedule"]
 
 
-class PriceMarkupType(str, Enum):
+class PriceMarkupType(OrderCloudEnum):
     """"""
 
     NoMarkup = "NoMarkup"

@@ -3,10 +3,9 @@
 """OrderCloud Locale and related models."""
 
 from __future__ import annotations
-from enum import Enum
 from typing import Generic, Optional
 
-from .shared import OrderCloudModel, XP
+from .shared import OrderCloudEnum, OrderCloudModel, XP
 
 __all__ = [
     "UserOrderMoveOption",
@@ -20,7 +19,7 @@ __all__ = [
 ]
 
 
-class UserOrderMoveOption(str, Enum):
+class UserOrderMoveOption(OrderCloudEnum):
     """"""
 
     _None = "None"

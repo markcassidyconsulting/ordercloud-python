@@ -3,15 +3,14 @@
 """OrderCloud ApprovalStatus and related models."""
 
 from __future__ import annotations
-from enum import Enum
 from typing import Generic, Optional
 
-from .shared import OrderCloudModel, XP
+from .shared import OrderCloudEnum, OrderCloudModel, XP
 
 __all__ = ["ApprovalStatus", "ApprovalType", "ApprovalRule", "SellerApprovalRule"]
 
 
-class ApprovalStatus(str, Enum):
+class ApprovalStatus(OrderCloudEnum):
     """"""
 
     Pending = "Pending"
@@ -19,7 +18,7 @@ class ApprovalStatus(str, Enum):
     Declined = "Declined"
 
 
-class ApprovalType(str, Enum):
+class ApprovalType(OrderCloudEnum):
     """"""
 
     Order = "Order"
