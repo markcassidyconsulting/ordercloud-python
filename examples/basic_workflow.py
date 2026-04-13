@@ -22,7 +22,10 @@ async def main():
     auth_url = os.environ.get("ORDERCLOUD_AUTH_URL", "https://auth.ordercloud.io/oauth/token")
 
     async with OrderCloudClient.create(
-        client_id, client_secret, base_url=base_url, auth_url=auth_url
+        client_id=client_id,
+        client_secret=client_secret,
+        base_url=base_url,
+        auth_url=auth_url,
     ) as oc:
         # Create or update a product (Save = PUT, idempotent)
         product = await oc.products.save("sdk-demo-001", {

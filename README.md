@@ -2,9 +2,9 @@
 
 An idiomatic async Python SDK for the [Sitecore OrderCloud](https://ordercloud.io) e-commerce platform.
 
-Built with modern Python: async/await throughout, Pydantic v2 typed models, full type annotations, and `py.typed` for downstream type checking.
+Built with modern Python: async/await throughout, Pydantic v2 typed models, full type annotations, and `py.typed` for downstream type checking. **Full API coverage** — all 632 operations across 60 resources, generated from the OpenAPI spec.
 
-> **Status:** Phase 1 (Foundation). The SDK covers 6 core resources with full CRUD. API coverage is expanding — see [API Coverage](#api-coverage) below.
+> **Status:** Phase 2 (Full API Coverage). Models and resources are generated from the official OpenAPI v3 spec via an included codegen tool. The SDK covers all OrderCloud API endpoints.
 
 ## Why This Exists
 
@@ -69,16 +69,72 @@ asyncio.run(main())
 
 ## API Coverage
 
-| Resource | list | get | create | save | patch | delete | Other |
-|----------|:----:|:---:|:------:|:----:|:-----:|:------:|-------|
-| Products | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | |
-| Orders | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | submit, approve, cancel, complete |
-| Line Items | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | |
-| Catalogs | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | |
-| Categories | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | |
-| Buyers | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | |
+The SDK covers **all 60 resources** and **632 operations** in the OrderCloud API. Models and resource clients are generated from the official OpenAPI v3 spec (version 1.0.445).
 
-Not yet implemented: Price Schedules, Specs, Suppliers, Promotions, Shipments, Payments, Security Profiles, Admin Users, User Groups, Addresses, Me endpoints, Webhooks, Incrementors.
+### Core Commerce
+
+| Resource | Operations | Highlights |
+|----------|-----------|------------|
+| Products | 18 | CRUD, variants, specs, suppliers, assignments |
+| Orders | 29 | CRUD, submit, approve, decline, cancel, complete, forward, split, ship, promotions |
+| Line Items | 9 | CRUD, shipping address management, cross-order listing |
+| Cart | 37 | Full shopping cart lifecycle, checkout, payments, promotions |
+| Bundles | 12 | CRUD, product/catalog assignments |
+| Catalogs | 15 | CRUD, product/bundle/category assignments |
+| Categories | 15 | CRUD, hierarchical with depth control, assignments |
+
+### Buyers & Users
+
+| Resource | Operations | Highlights |
+|----------|-----------|------------|
+| Buyers | 7 | CRUD, seller relationships |
+| Buyer Groups | 6 | CRUD |
+| Users | 11 | CRUD, access tokens, move, cross-buyer listing |
+| User Groups | 9 | CRUD, user assignments |
+| Me | 80 | Full buyer-perspective API (addresses, orders, products, subscriptions, etc.) |
+| Admin Users | 8 | CRUD, token revocation, account unlock |
+| Admin User Groups | 9 | CRUD, user assignments |
+
+### Pricing & Promotions
+
+| Resource | Operations | Highlights |
+|----------|-----------|------------|
+| Price Schedules | 8 | CRUD, price breaks |
+| Promotions | 9 | CRUD, assignments |
+| Discounts | 9 | CRUD, assignments |
+| Specs | 15 | CRUD, options, product assignments |
+
+### Fulfillment
+
+| Resource | Operations | Highlights |
+|----------|-----------|------------|
+| Shipments | 12 | CRUD, items, ship-from/ship-to addresses |
+| Payments | 7 | CRUD, transactions |
+| Order Returns | 14 | CRUD, submit, approve, decline, complete, cancel |
+
+### Organisation & Security
+
+| Resource | Operations | Highlights |
+|----------|-----------|------------|
+| Suppliers | 9 | CRUD, buyer relationships |
+| Security Profiles | 9 | CRUD, assignments |
+| API Clients | 15 | CRUD, secrets, assignments |
+| Addresses | 9 | CRUD, assignments |
+| Cost Centers | 9 | CRUD, assignments |
+| Credit Cards | 9 | CRUD, assignments |
+| Spending Accounts | 9 | CRUD, assignments |
+
+### Integrations & Infrastructure
+
+| Resource | Operations | Highlights |
+|----------|-----------|------------|
+| Webhooks | 6 | CRUD |
+| Integration Events | 10 | CRUD, calculate, estimate shipping |
+| Message Senders | 11 | CRUD, assignments, CC listeners |
+| Subscriptions | 6 | CRUD |
+| Entity Syncs | 40 | Full sync infrastructure |
+| Delivery Configurations | 6 | CRUD |
+| Inventory Records | 18 | CRUD, variant records, assignments |
 
 ## Usage Examples
 
@@ -136,7 +192,7 @@ order = await client.orders.create(
 
 # Order workflow
 order = await client.orders.submit(OrderDirection.Outgoing, order.ID)
-order = await client.orders.approve(OrderDirection.Incoming, order.ID, comments="Approved")
+order = await client.orders.approve(OrderDirection.Incoming, order.ID)
 order = await client.orders.complete(OrderDirection.Incoming, order.ID)
 ```
 
@@ -154,7 +210,7 @@ line_item = await client.line_items.create(
 # List line items on an order
 line_items = await client.line_items.list(OrderDirection.Outgoing, "order-id")
 for li in line_items.Items:
-    print(f"  {li.ProductID} x{li.Quantity} = {li.LineTotal}")
+    print(f"  {li.ProductID} x{li.Quantity}")
 ```
 
 ### Catalogs and Categories
@@ -210,12 +266,23 @@ except OrderCloudError as e:
         print(f"  {error.error_code}: {error.message}")
 ```
 
+## Code Generation
+
+Models and resource clients are generated from the OrderCloud OpenAPI v3 spec using the included codegen tool:
+
+```bash
+pip install -e ".[codegen]"
+python -m tools.codegen --spec path/to/ordercloud-openapi-v3.json --output src/ordercloud
+```
+
+The codegen pipeline: **OpenAPI JSON** → parser → intermediate representation → transformer → Jinja2 templates → Python source → ruff format. Hand-written infrastructure (`shared.py`, `base.py`, `auth.py`, `http.py`, `config.py`, `errors.py`) is preserved — only model and resource files are generated.
+
 ## Development
 
 ```bash
 git clone https://github.com/markcassidyconsulting/ordercloud-python.git
 cd ordercloud-python
-pip install -e ".[dev]"
+pip install -e ".[dev,codegen]"
 
 # Run linter
 ruff check src/
