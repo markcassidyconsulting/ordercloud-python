@@ -505,7 +505,7 @@ The test suite is self-bootstrapping — it uses the SDK itself to create all te
 
 ## Contributing
 
-Bug reports and feature requests are welcome via [GitHub Issues](https://github.com/markcassidyconsulting/ordercloud-python/issues). If you're interested in the internals, the codegen pipeline in `tools/codegen/` is a good starting point. See the [Changelog](CHANGELOG.md) for release history.
+Bug reports, feature requests, and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, running tests, code generation, and PR guidelines. See the [Changelog](CHANGELOG.md) for release history.
 
 ## License
 
