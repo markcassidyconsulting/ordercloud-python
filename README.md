@@ -8,15 +8,19 @@
 [![PyPI](https://img.shields.io/pypi/v/ordercloud-python)](https://pypi.org/project/ordercloud-python/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-An idiomatic async Python SDK for the [Sitecore OrderCloud](https://ordercloud.io) e-commerce platform.
+A fully typed, async-first Python SDK for [Sitecore OrderCloud](https://ordercloud.io).
 
-Built with modern Python: async/await throughout, Pydantic v2 typed models, full type annotations, and `py.typed` for downstream type checking. **Full API coverage** — all 632 operations across 60 resources, generated from the OpenAPI spec.
+**Complete API coverage** — all 632 operations across 60 resources, generated from the official OpenAPI spec. Built for modern Python:
 
-> **Status:** Production-grade. Full API coverage, 759 unit tests + 25 integration tests, 97% coverage. Sync and async clients, typed xp generics, auto-pagination, retry with backoff, structured logging, middleware hooks.
-
-## Why This Exists
-
-This SDK is part of a multi-language showcase proving a thesis: **the tech no longer matters**. The same OpenAPI spec, four idiomatic SDKs (Python, Go, Rust, PHP), each built the way a practitioner of that language would build it. The platform is incidental — the skill is knowing what to build, how to validate it, and how to ship it.
+- **Async and sync clients** — `async with OrderCloudClient(...)` or `with SyncOrderCloudClient(...)`. Same API shape, your choice of runtime.
+- **Pydantic v2 models** — every API resource is a typed, validated model. snake_case fields, PascalCase aliases for API compatibility.
+- **Typed extended properties** — `Product[MyXpModel]` gives you type-safe access to OrderCloud's `xp` fields.
+- **Auto-pagination** — `async for product in paginate(client.products.list)` handles page iteration automatically.
+- **Retry with backoff** — configurable retries on 429/5xx with exponential backoff and `Retry-After` support.
+- **Middleware hooks** — intercept requests and responses for logging, metrics, or header injection.
+- **Structured logging** — standard Python `logging` module, DEBUG/WARNING levels.
+- **Full type annotations** — `py.typed` marker for downstream type checking with mypy, pyright, etc.
+- **784 tests, 97% coverage** — 759 unit tests (mocked HTTP) + 25 integration tests (live sandbox).
 
 ## Installation
 
@@ -501,9 +505,7 @@ The test suite is self-bootstrapping — it uses the SDK itself to create all te
 
 ## Contributing
 
-This SDK is a showcase project — part of a series proving that platform-specific expertise is no longer the bottleneck in software delivery. It is not actively seeking external contributions, but bug reports and feedback are welcome via [GitHub Issues](https://github.com/markcassidyconsulting/ordercloud-python/issues).
-
-If you want to understand how the SDK is built, the codegen pipeline in `tools/codegen/` is a good starting point. See the [Changelog](CHANGELOG.md) for release history.
+Bug reports and feature requests are welcome via [GitHub Issues](https://github.com/markcassidyconsulting/ordercloud-python/issues). If you're interested in the internals, the codegen pipeline in `tools/codegen/` is a good starting point. See the [Changelog](CHANGELOG.md) for release history.
 
 ## License
 
