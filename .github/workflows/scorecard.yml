@@ -6,7 +6,8 @@ on:
   schedule:
     - cron: "0 6 * * 1" # Every Monday at 06:00 UTC
 
-permissions: read-all
+permissions:
+  contents: read
 
 jobs:
   analysis:
@@ -15,6 +16,8 @@ jobs:
     permissions:
       security-events: write
       id-token: write
+      contents: read
+      actions: read
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
