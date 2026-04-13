@@ -5,6 +5,7 @@
 [![codecov](https://codecov.io/gh/markcassidyconsulting/ordercloud-python/graph/badge.svg)](https://codecov.io/gh/markcassidyconsulting/ordercloud-python)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/markcassidyconsulting/ordercloud-python/badge)](https://scorecard.dev/viewer/?uri=github.com/markcassidyconsulting/ordercloud-python)
 ![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue)
+[![PyPI](https://img.shields.io/pypi/v/ordercloud-python)](https://pypi.org/project/ordercloud-python/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 An idiomatic async Python SDK for the [Sitecore OrderCloud](https://ordercloud.io) e-commerce platform.
@@ -20,7 +21,7 @@ This SDK is part of a multi-language showcase proving a thesis: **the tech no lo
 ## Installation
 
 ```bash
-pip install ordercloud
+pip install ordercloud-python
 ```
 
 Requires Python 3.10+.
@@ -443,6 +444,12 @@ Coverage on hand-written infrastructure:
 | `resources/base.py` | 100% |
 | `models/shared.py` | 100% |
 | All 37 model modules | 100% |
+
+## Contributing
+
+This SDK is a showcase project — part of a series proving that platform-specific expertise is no longer the bottleneck in software delivery. It is not actively seeking external contributions, but bug reports and feedback are welcome via [GitHub Issues](https://github.com/markcassidyconsulting/ordercloud-python/issues).
+
+If you want to understand how the SDK is built, the codegen pipeline in `tools/codegen/` is a good starting point. See the [Changelog](CHANGELOG.md) for release history.
 
 ## License
 
