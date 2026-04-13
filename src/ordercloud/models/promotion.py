@@ -3,9 +3,9 @@
 """OrderCloud PromotionOverride and related models."""
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 
 __all__ = [
     "PromotionOverride",
@@ -46,7 +46,7 @@ class PromotionIntegration(OrderCloudModel):
     CustomAuthHeaderValue: Optional[str] = None
 
 
-class AddedPromo(OrderCloudModel):
+class AddedPromo(OrderCloudModel, Generic[XP]):
     """An OrderCloud AddedPromo.
 
     Attributes:
@@ -103,10 +103,10 @@ class AddedPromo(OrderCloudModel):
     Active: bool = True
     UseIntegration: Optional[bool] = None
     Priority: Optional[int] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
-class RemovedPromo(OrderCloudModel):
+class RemovedPromo(OrderCloudModel, Generic[XP]):
     """An OrderCloud RemovedPromo.
 
     Attributes:
@@ -167,10 +167,10 @@ class RemovedPromo(OrderCloudModel):
     Active: bool = True
     UseIntegration: Optional[bool] = None
     Priority: Optional[int] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
-class EligiblePromotion(OrderCloudModel):
+class EligiblePromotion(OrderCloudModel, Generic[XP]):
     """An OrderCloud EligiblePromotion.
 
     Attributes:
@@ -225,7 +225,7 @@ class EligiblePromotion(OrderCloudModel):
     Active: bool = True
     UseIntegration: Optional[bool] = None
     Priority: Optional[int] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
 class RefreshPromosResponse(OrderCloudModel):
@@ -240,7 +240,7 @@ class RefreshPromosResponse(OrderCloudModel):
     PromosRemoved: Optional[list[RemovedPromo]] = None
 
 
-class Promotion(OrderCloudModel):
+class Promotion(OrderCloudModel, Generic[XP]):
     """An OrderCloud Promotion.
 
     Attributes:
@@ -293,4 +293,4 @@ class Promotion(OrderCloudModel):
     Active: bool = True
     UseIntegration: Optional[bool] = None
     Priority: Optional[int] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None

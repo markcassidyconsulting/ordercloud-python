@@ -3,14 +3,14 @@
 """OrderCloud Bundle models."""
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 
 __all__ = ["Bundle"]
 
 
-class Bundle(OrderCloudModel):
+class Bundle(OrderCloudModel, Generic[XP]):
     """An OrderCloud Bundle.
 
     Attributes:
@@ -27,4 +27,4 @@ class Bundle(OrderCloudModel):
     Name: Optional[str] = None
     Description: Optional[str] = None
     Active: Optional[bool] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None

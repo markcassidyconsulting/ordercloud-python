@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
 
 from ordercloud.models import (
     Address,
@@ -10,16 +9,13 @@ from ordercloud.models import (
     Catalog,
     Category,
     ListPage,
-    Meta,
     MetaWithFacets,
-    OrderCloudModel,
     Product,
 )
 from ordercloud.models.order import Order, OrderDirection, OrderStatus
 from ordercloud.models.line_item import LineItem
-from ordercloud.models.line_item_types import LineItemProduct
 from ordercloud.models.payment import Payment, PaymentType
-from ordercloud.models.price_schedule import PriceSchedule, PriceBreak
+from ordercloud.models.price_schedule import PriceSchedule
 from ordercloud.models.shipment import Shipment
 from ordercloud.models.promotion import Promotion
 from ordercloud.models.security import SecurityProfile
@@ -269,6 +265,66 @@ class TestEnums:
     def test_payment_type_values(self):
         assert PaymentType.CreditCard.value == "CreditCard"
         assert PaymentType.PurchaseOrder.value == "PurchaseOrder"
+
+
+# ---------------------------------------------------------------------------
+# Typed xp generics
+# ---------------------------------------------------------------------------
+
+
+class TestTypedXpGenerics:
+    def test_unparameterized_accepts_dict(self):
+        """Product without type param still accepts dict xp (backward compat)."""
+        p = Product(Name="Widget", xp={"color": "red", "size": 10})
+        assert p.xp == {"color": "red", "size": 10}
+
+    def test_unparameterized_round_trip(self):
+        data = {"Name": "Widget", "xp": {"custom": True}}
+        p = Product.model_validate(data)
+        assert p.xp == {"custom": True}
+        dumped = p.model_dump(exclude_none=True)
+        assert dumped["xp"] == {"custom": True}
+
+    def test_parameterized_with_pydantic_model(self):
+        from pydantic import BaseModel
+
+        class MyXp(BaseModel):
+            color: str
+            size: int
+
+        p = Product[MyXp](Name="Widget", xp=MyXp(color="red", size=10))
+        assert p.xp.color == "red"
+        assert p.xp.size == 10
+
+    def test_parameterized_serialisation(self):
+        from pydantic import BaseModel
+
+        class MyXp(BaseModel):
+            color: str
+
+        p = Product[MyXp](Name="Widget", xp=MyXp(color="blue"))
+        dumped = p.model_dump(exclude_none=True)
+        assert dumped["xp"] == {"color": "blue"}
+
+    def test_parameterized_deserialisation(self):
+        from pydantic import BaseModel
+
+        class MyXp(BaseModel):
+            color: str
+            size: int
+
+        data = {"Name": "Widget", "xp": {"color": "red", "size": 10}}
+        p = Product[MyXp].model_validate(data)
+        assert isinstance(p.xp, MyXp)
+        assert p.xp.color == "red"
+
+    def test_xp_none_by_default(self):
+        p = Product(Name="Widget")
+        assert p.xp is None
+
+    def test_order_with_xp(self):
+        o = Order(xp={"priority": "high"})
+        assert o.xp == {"priority": "high"}
 
 
 # ---------------------------------------------------------------------------

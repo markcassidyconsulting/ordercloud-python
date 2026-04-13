@@ -1,18 +1,16 @@
-"""Tests for resource client URL construction, param mapping, and response parsing."""
+"""Tests for resource client URL construction, param mapping, response parsing, and pagination."""
 
 from __future__ import annotations
 
-import pytest
 import respx
 from httpx import Response
 
 from ordercloud.http import HttpClient
-from ordercloud.models import Product, ListPage, MetaWithFacets
+from ordercloud.models import Product, ListPage
 from ordercloud.models.order import Order, OrderDirection, OrderStatus
 from ordercloud.models.line_item import LineItem
-from ordercloud.models.buyer import Buyer
 from ordercloud.models.promotion import Promotion
-from ordercloud.models.shipment import Shipment
+from ordercloud.resources.base import paginate
 from ordercloud.resources.products import ProductsResource
 from ordercloud.resources.orders import OrdersResource
 from ordercloud.resources.line_items import LineItemsResource
@@ -132,7 +130,7 @@ class TestProductsResource:
 
     @respx.mock
     async def test_patch(self, http_client: HttpClient):
-        route = respx.patch(f"{TEST_BASE_URL}/products/p1").mock(
+        respx.patch(f"{TEST_BASE_URL}/products/p1").mock(
             return_value=Response(200, json={"ID": "p1", "Name": "Patched"})
         )
         resource = ProductsResource(http_client)
@@ -195,7 +193,7 @@ class TestOrdersResource:
 
     @respx.mock
     async def test_approve(self, http_client: HttpClient):
-        route = respx.post(f"{TEST_BASE_URL}/orders/Incoming/o1/approve").mock(
+        respx.post(f"{TEST_BASE_URL}/orders/Incoming/o1/approve").mock(
             return_value=Response(200, json={"ID": "o1", "Status": "Open"})
         )
         resource = OrdersResource(http_client)
@@ -296,3 +294,184 @@ class TestPhase2Resources:
         resource = ShipmentsResource(http_client)
         shipment = await resource.get("ship-1")
         assert shipment.BuyerID == "b1"
+
+
+# ---------------------------------------------------------------------------
+# Auto-pagination
+# ---------------------------------------------------------------------------
+
+
+def paged_response(items: list[dict], page: int, total_pages: int, total_count: int) -> dict:
+    """Build a mock paginated response."""
+    return {
+        "Items": items,
+        "Meta": {
+            "Page": page,
+            "PageSize": 2,
+            "TotalCount": total_count,
+            "TotalPages": total_pages,
+            "ItemRange": [1, len(items)],
+            "Facets": [],
+        },
+    }
+
+
+class TestPagination:
+    @respx.mock
+    async def test_single_page(self, http_client: HttpClient):
+        respx.get(f"{TEST_BASE_URL}/buyers").mock(
+            return_value=Response(
+                200,
+                json=paged_response(
+                    [{"ID": "b1", "Name": "One"}, {"ID": "b2", "Name": "Two"}],
+                    page=1, total_pages=1, total_count=2,
+                ),
+            )
+        )
+        resource = BuyersResource(http_client)
+        items = [item async for item in paginate(resource.list, page_size=2)]
+        assert len(items) == 2
+        assert items[0].ID == "b1"
+        assert items[1].ID == "b2"
+
+    @respx.mock
+    async def test_multiple_pages(self, http_client: HttpClient):
+        route = respx.get(f"{TEST_BASE_URL}/buyers").mock(
+            side_effect=[
+                Response(
+                    200,
+                    json=paged_response(
+                        [{"ID": "b1"}, {"ID": "b2"}],
+                        page=1, total_pages=3, total_count=5,
+                    ),
+                ),
+                Response(
+                    200,
+                    json=paged_response(
+                        [{"ID": "b3"}, {"ID": "b4"}],
+                        page=2, total_pages=3, total_count=5,
+                    ),
+                ),
+                Response(
+                    200,
+                    json=paged_response(
+                        [{"ID": "b5"}],
+                        page=3, total_pages=3, total_count=5,
+                    ),
+                ),
+            ]
+        )
+        resource = BuyersResource(http_client)
+        items = [item async for item in paginate(resource.list, page_size=2)]
+        assert len(items) == 5
+        assert [b.ID for b in items] == ["b1", "b2", "b3", "b4", "b5"]
+        assert route.call_count == 3
+
+    @respx.mock
+    async def test_empty_result(self, http_client: HttpClient):
+        respx.get(f"{TEST_BASE_URL}/buyers").mock(
+            return_value=Response(
+                200,
+                json=paged_response([], page=1, total_pages=0, total_count=0),
+            )
+        )
+        resource = BuyersResource(http_client)
+        items = [item async for item in paginate(resource.list)]
+        assert items == []
+
+    @respx.mock
+    async def test_passes_kwargs(self, http_client: HttpClient):
+        route = respx.get(f"{TEST_BASE_URL}/buyers").mock(
+            return_value=Response(
+                200,
+                json=paged_response([{"ID": "b1"}], page=1, total_pages=1, total_count=1),
+            )
+        )
+        resource = BuyersResource(http_client)
+        items = [item async for item in paginate(resource.list, search="acme")]
+        assert len(items) == 1
+        url = str(route.calls[0].request.url)
+        assert "search=acme" in url
+
+    @respx.mock
+    async def test_with_positional_args(self, http_client: HttpClient):
+        """paginate works with list methods that take positional args (e.g. orders)."""
+        respx.get(f"{TEST_BASE_URL}/orders/Incoming").mock(
+            return_value=Response(
+                200,
+                json=paged_response(
+                    [{"ID": "o1", "Status": "Open"}],
+                    page=1, total_pages=1, total_count=1,
+                ),
+            )
+        )
+        resource = OrdersResource(http_client)
+        items = [item async for item in paginate(resource.list, OrderDirection.Incoming)]
+        assert len(items) == 1
+        assert items[0].ID == "o1"
+
+
+# ---------------------------------------------------------------------------
+# Async client — create() factory and context manager
+# ---------------------------------------------------------------------------
+
+
+class TestAsyncClientLifecycle:
+    @respx.mock
+    async def test_create_factory(self):
+        from ordercloud import OrderCloudClient
+        from ordercloud.auth import AccessToken
+
+        respx.get(f"{TEST_BASE_URL}/products/p1").mock(
+            return_value=Response(200, json={"ID": "p1", "Name": "Widget"})
+        )
+
+        client = OrderCloudClient.create(
+            client_id="test-client-id",
+            client_secret="test-client-secret",
+            base_url=TEST_BASE_URL,
+            auth_url="https://test-auth.ordercloud.io/oauth/token",
+        )
+        client._token_manager._token = AccessToken("mock-token-12345", expires_in=600)
+
+        product = await client.products.get("p1")
+        assert product.ID == "p1"
+        await client.close()
+
+    @respx.mock
+    async def test_async_context_manager(self):
+        from ordercloud import OrderCloudClient
+        from ordercloud.auth import AccessToken
+
+        respx.get(f"{TEST_BASE_URL}/products/p1").mock(
+            return_value=Response(200, json={"ID": "p1", "Name": "Widget"})
+        )
+
+        client = OrderCloudClient.create(
+            client_id="test-client-id",
+            client_secret="test-client-secret",
+            base_url=TEST_BASE_URL,
+            auth_url="https://test-auth.ordercloud.io/oauth/token",
+        )
+        client._token_manager._token = AccessToken("mock-token-12345", expires_in=600)
+
+        async with client as c:
+            product = await c.products.get("p1")
+            assert product.ID == "p1"
+
+    @respx.mock
+    async def test_list_with_depth_param(self, http_client: HttpClient):
+        """Exercise the depth parameter branch in _build_list_params."""
+        from ordercloud.resources.categories import CategoriesResource
+
+        route = respx.get(f"{TEST_BASE_URL}/catalogs/cat1/categories").mock(
+            return_value=Response(
+                200,
+                json=list_response([{"ID": "c1", "Name": "Root"}]),
+            )
+        )
+        resource = CategoriesResource(http_client)
+        page = await resource.list("cat1", depth="all")
+        assert len(page.Items) == 1
+        url = str(route.calls[0].request.url)
+        assert "depth=all" in url

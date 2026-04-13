@@ -3,9 +3,9 @@
 """OrderCloud BuyerPriceBreak and related models."""
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 from .discount import Discount, DiscountedPrices
 from .product import Inventory
 
@@ -44,7 +44,7 @@ class BuyerPriceBreak(OrderCloudModel):
     BundlePrice: Optional[float] = None
 
 
-class BuyerPriceSchedule(OrderCloudModel):
+class BuyerPriceSchedule(OrderCloudModel, Generic[XP]):
     """An OrderCloud BuyerPriceSchedule.
 
     Attributes:
@@ -81,7 +81,7 @@ class BuyerPriceSchedule(OrderCloudModel):
     SaleStart: Optional[str] = None
     SaleEnd: Optional[str] = None
     IsOnSale: Optional[bool] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
 class ProductSeller(OrderCloudModel):
@@ -98,7 +98,7 @@ class ProductSeller(OrderCloudModel):
     Name: Optional[str] = None
 
 
-class BuyerAddress(OrderCloudModel):
+class BuyerAddress(OrderCloudModel, Generic[XP]):
     """An OrderCloud BuyerAddress.
 
     Attributes:
@@ -137,10 +137,10 @@ class BuyerAddress(OrderCloudModel):
     Country: Optional[str] = None
     Phone: Optional[str] = None
     AddressName: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
-class BuyerCreditCard(OrderCloudModel):
+class BuyerCreditCard(OrderCloudModel, Generic[XP]):
     """An OrderCloud BuyerCreditCard.
 
     Attributes:
@@ -163,10 +163,10 @@ class BuyerCreditCard(OrderCloudModel):
     PartialAccountNumber: Optional[str] = None
     CardholderName: Optional[str] = None
     ExpirationDate: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
-class BuyerProduct(OrderCloudModel):
+class BuyerProduct(OrderCloudModel, Generic[XP]):
     """An OrderCloud BuyerProduct.
 
     Attributes:
@@ -215,7 +215,7 @@ class BuyerProduct(OrderCloudModel):
     AllSuppliersCanSell: Optional[bool] = None
     Returnable: Optional[bool] = None
     DateCreated: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
 class BuyerSupplier(OrderCloudModel):
@@ -230,7 +230,7 @@ class BuyerSupplier(OrderCloudModel):
     Name: Optional[str] = None
 
 
-class BuyerGroup(OrderCloudModel):
+class BuyerGroup(OrderCloudModel, Generic[XP]):
     """An OrderCloud BuyerGroup.
 
     Attributes:
@@ -245,10 +245,10 @@ class BuyerGroup(OrderCloudModel):
     Name: Optional[str] = None
     Description: Optional[str] = None
     DefaultCatalogID: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
-class Buyer(OrderCloudModel):
+class Buyer(OrderCloudModel, Generic[XP]):
     """An OrderCloud Buyer.
 
     Attributes:
@@ -267,4 +267,4 @@ class Buyer(OrderCloudModel):
     DefaultCatalogID: Optional[str] = None
     Active: Optional[bool] = None
     DateCreated: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None

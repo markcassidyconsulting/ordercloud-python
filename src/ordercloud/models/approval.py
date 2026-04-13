@@ -4,9 +4,9 @@
 
 from __future__ import annotations
 from enum import Enum
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 
 __all__ = ["ApprovalStatus", "ApprovalType", "ApprovalRule", "SellerApprovalRule"]
 
@@ -26,7 +26,7 @@ class ApprovalType(str, Enum):
     OrderReturn = "OrderReturn"
 
 
-class ApprovalRule(OrderCloudModel):
+class ApprovalRule(OrderCloudModel, Generic[XP]):
     """An OrderCloud ApprovalRule.
 
     Attributes:
@@ -43,10 +43,10 @@ class ApprovalRule(OrderCloudModel):
     Description: Optional[str] = None
     ApprovingGroupID: Optional[str] = None
     RuleExpression: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
-class SellerApprovalRule(OrderCloudModel):
+class SellerApprovalRule(OrderCloudModel, Generic[XP]):
     """An OrderCloud SellerApprovalRule.
 
     Attributes:
@@ -67,7 +67,7 @@ class SellerApprovalRule(OrderCloudModel):
     Description: Optional[str] = None
     ApprovingGroupID: Optional[str] = None
     RuleExpression: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
 _ApprovalType = ApprovalType

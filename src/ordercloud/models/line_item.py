@@ -3,9 +3,9 @@
 """OrderCloud BundleItems, LineItem models."""
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 from .address import Address
 from .line_item_types import LineItemProduct, LineItemSpec, LineItemVariant
 
@@ -22,7 +22,7 @@ class BundleItems(OrderCloudModel):
     LineItems: Optional[list[LineItem]] = None
 
 
-class LineItem(OrderCloudModel):
+class LineItem(OrderCloudModel, Generic[XP]):
     """An OrderCloud LineItem.
 
     Attributes:
@@ -91,4 +91,4 @@ class LineItem(OrderCloudModel):
     IncomingOrderID: Optional[str] = None
     OutgoingOrderID: Optional[str] = None
     InvitationID: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None

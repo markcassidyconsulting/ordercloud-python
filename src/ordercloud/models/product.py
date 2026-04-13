@@ -3,9 +3,9 @@
 """OrderCloud Inventory and related models."""
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 from .price_schedule import PriceMarkupType
 
 __all__ = [
@@ -85,7 +85,7 @@ class VariantOverrides(OrderCloudModel):
     Active: bool = True
 
 
-class Variant(OrderCloudModel):
+class Variant(OrderCloudModel, Generic[XP]):
     """An OrderCloud Variant.
 
     Attributes:
@@ -112,10 +112,10 @@ class Variant(OrderCloudModel):
     ShipLength: Optional[float] = None
     Inventory: Optional[VariantInventory] = None
     Specs: Optional[list[VariantSpec]] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
-class AdHocProduct(OrderCloudModel):
+class AdHocProduct(OrderCloudModel, Generic[XP]):
     """An OrderCloud AdHocProduct.
 
     Attributes:
@@ -142,10 +142,10 @@ class AdHocProduct(OrderCloudModel):
     ShipLength: Optional[float] = None
     DefaultSupplierID: Optional[str] = None
     Returnable: Optional[bool] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
-class ProductSupplier(OrderCloudModel):
+class ProductSupplier(OrderCloudModel, Generic[XP]):
     """An OrderCloud ProductSupplier.
 
     Attributes:
@@ -164,10 +164,10 @@ class ProductSupplier(OrderCloudModel):
     Active: Optional[bool] = None
     DateCreated: Optional[str] = None
     AllBuyersCanOrder: Optional[bool] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
-class Product(OrderCloudModel):
+class Product(OrderCloudModel, Generic[XP]):
     """An OrderCloud Product.
 
     Attributes:
@@ -220,7 +220,7 @@ class Product(OrderCloudModel):
     AllSuppliersCanSell: Optional[bool] = None
     Returnable: Optional[bool] = None
     DateCreated: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
 _Inventory = Inventory

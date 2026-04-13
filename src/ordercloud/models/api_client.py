@@ -3,9 +3,9 @@
 """OrderCloud ApiClientSecret, ApiClientSecretCreateResponse, ApiClient models."""
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 from .misc import ApiRole
 
 __all__ = ["ApiClientSecret", "ApiClientSecretCreateResponse", "ApiClient"]
@@ -41,7 +41,7 @@ class ApiClientSecretCreateResponse(OrderCloudModel):
     Expiration: Optional[str] = None
 
 
-class ApiClient(OrderCloudModel):
+class ApiClient(OrderCloudModel, Generic[XP]):
     """An OrderCloud ApiClient.
 
     Attributes:
@@ -80,7 +80,7 @@ class ApiClient(OrderCloudModel):
     RefreshTokenDuration: Optional[int] = None
     AnonymousTokenDuration: int = 10080
     DefaultContextUserName: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
     AllowAnyBuyer: Optional[bool] = None
     AllowAnySupplier: Optional[bool] = None
     AllowSeller: Optional[bool] = None

@@ -4,9 +4,9 @@
 
 from __future__ import annotations
 from enum import Enum
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 from .misc import ApiRole
 
 __all__ = ["MessageType", "MessageSenderConfig", "MessageSender"]
@@ -56,7 +56,7 @@ class MessageSenderConfig(OrderCloudModel):
     Endpoint: Optional[str] = None
 
 
-class MessageSender(OrderCloudModel):
+class MessageSender(OrderCloudModel, Generic[XP]):
     """An OrderCloud MessageSender.
 
     Attributes:
@@ -75,6 +75,6 @@ class MessageSender(OrderCloudModel):
     MessageTypes: Optional[list[MessageType]] = None
     Description: Optional[str] = None
     ElevatedRoles: Optional[list[ApiRole]] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
     DeliveryConfigID: Optional[str] = None
     AllowAllBuyers: bool = False

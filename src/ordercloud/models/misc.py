@@ -4,9 +4,9 @@
 
 from __future__ import annotations
 from enum import Enum
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 
 __all__ = [
     "AccessLevel",
@@ -237,7 +237,7 @@ class XpIndex(OrderCloudModel):
     Key: Optional[str] = None
 
 
-class ProductFacet(OrderCloudModel):
+class ProductFacet(OrderCloudModel, Generic[XP]):
     """An OrderCloud ProductFacet.
 
     Attributes:
@@ -254,10 +254,10 @@ class ProductFacet(OrderCloudModel):
     XpPath: Optional[str] = None
     ListOrder: Optional[int] = None
     MinCount: int = 1
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
-class GroupOrderInvitation(OrderCloudModel):
+class GroupOrderInvitation(OrderCloudModel, Generic[XP]):
     """An OrderCloud GroupOrderInvitation.
 
     Attributes:
@@ -274,7 +274,7 @@ class GroupOrderInvitation(OrderCloudModel):
     Name: Optional[str] = None
     OrderID: Optional[str] = None
     OrderStatus: Optional[_OrderStatus] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
 _OrderStatus = OrderStatus

@@ -3,14 +3,14 @@
 """OrderCloud Catalog models."""
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 
 __all__ = ["Catalog"]
 
 
-class Catalog(OrderCloudModel):
+class Catalog(OrderCloudModel, Generic[XP]):
     """An OrderCloud Catalog.
 
     Attributes:
@@ -29,4 +29,4 @@ class Catalog(OrderCloudModel):
     Description: Optional[str] = None
     Active: Optional[bool] = None
     CategoryCount: int = 0
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None

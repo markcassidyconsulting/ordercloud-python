@@ -78,12 +78,24 @@ def _build_model_groups(
         needs_enum = False
         needs_field = False
 
+        needs_generic = False
+        needs_xp_typevar = False
+
         for name in schema_names:
             if name in enums:
                 group_enums.append(enums[name])
             elif name in models:
                 model = models[name]
                 group_models.append(model)
+
+                # Rewrite xp fields to use the XP TypeVar.
+                if model.has_xp:
+                    needs_generic = True
+                    needs_xp_typevar = True
+                    for field in model.fields:
+                        if field.is_xp:
+                            field.python_type = "Optional[XP]"
+                            field.default = "None"
 
                 # Analyse fields for import needs.
                 for field in model.fields:
@@ -141,6 +153,8 @@ def _build_model_groups(
             needs_optional=needs_optional,
             needs_enum=needs_enum,
             needs_field=needs_field,
+            needs_generic=needs_generic,
+            needs_xp_typevar=needs_xp_typevar,
             cross_imports=cross_imports,
             has_models=bool(group_models),
         )
@@ -182,6 +196,8 @@ def _build_model_imports(
     needs_optional: bool,
     needs_enum: bool,
     needs_field: bool,
+    needs_generic: bool,
+    needs_xp_typevar: bool,
     cross_imports: set[tuple[str, str]],
     has_models: bool,
 ) -> list[str]:
@@ -196,6 +212,8 @@ def _build_model_imports(
     typing_names: list[str] = []
     if needs_any:
         typing_names.append("Any")
+    if needs_generic:
+        typing_names.append("Generic")
     if needs_optional:
         typing_names.append("Optional")
     if typing_names:
@@ -209,9 +227,12 @@ def _build_model_imports(
     if lines and (cross_imports or has_models):
         lines.append("")
 
-    # Shared base class.
+    # Shared base class (and XP TypeVar when needed).
     if has_models:
-        lines.append("from .shared import OrderCloudModel")
+        shared_imports = ["OrderCloudModel"]
+        if needs_xp_typevar:
+            shared_imports.append("XP")
+        lines.append(f"from .shared import {', '.join(sorted(shared_imports))}")
 
     # Cross-module imports (grouped by source module).
     by_module: dict[str, list[str]] = defaultdict(list)

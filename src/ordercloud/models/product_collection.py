@@ -3,9 +3,9 @@
 """OrderCloud ProductCollectionEntry and related models."""
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 from .buyer import BuyerPriceSchedule
 from .misc import AccessLevel
 from .product import Inventory
@@ -33,7 +33,7 @@ class ProductCollectionEntry(OrderCloudModel):
     ListOrder: Optional[int] = None
 
 
-class ProductCollectionProduct(OrderCloudModel):
+class ProductCollectionProduct(OrderCloudModel, Generic[XP]):
     """An OrderCloud ProductCollectionProduct.
 
     Attributes:
@@ -90,10 +90,10 @@ class ProductCollectionProduct(OrderCloudModel):
     AllSuppliersCanSell: Optional[bool] = None
     Returnable: Optional[bool] = None
     DateCreated: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
-class ProductCollectionBuyerProduct(OrderCloudModel):
+class ProductCollectionBuyerProduct(OrderCloudModel, Generic[XP]):
     """An OrderCloud ProductCollectionBuyerProduct.
 
     Attributes:
@@ -146,10 +146,10 @@ class ProductCollectionBuyerProduct(OrderCloudModel):
     AllSuppliersCanSell: Optional[bool] = None
     Returnable: Optional[bool] = None
     DateCreated: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
-class ProductCollectionInvitation(OrderCloudModel):
+class ProductCollectionInvitation(OrderCloudModel, Generic[XP]):
     """An OrderCloud ProductCollectionInvitation.
 
     Attributes:
@@ -166,10 +166,10 @@ class ProductCollectionInvitation(OrderCloudModel):
     Admin: bool = False
     Accepted: bool = False
     ExpirationDate: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
-class ProductCollection(OrderCloudModel):
+class ProductCollection(OrderCloudModel, Generic[XP]):
     """An OrderCloud ProductCollection.
 
     Attributes:
@@ -181,5 +181,5 @@ class ProductCollection(OrderCloudModel):
 
     ID: Optional[str] = None
     Name: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
     AccessLevel: Optional[_AccessLevel] = None

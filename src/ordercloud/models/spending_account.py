@@ -3,14 +3,14 @@
 """OrderCloud SpendingAccount models."""
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 
 __all__ = ["SpendingAccount"]
 
 
-class SpendingAccount(OrderCloudModel):
+class SpendingAccount(OrderCloudModel, Generic[XP]):
     """An OrderCloud SpendingAccount.
 
     Attributes:
@@ -29,4 +29,4 @@ class SpendingAccount(OrderCloudModel):
     AllowAsPaymentMethod: Optional[bool] = None
     StartDate: Optional[str] = None
     EndDate: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None

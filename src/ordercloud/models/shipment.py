@@ -3,9 +3,9 @@
 """OrderCloud ShipMethod and related models."""
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 from .address import Address
 from .line_item_types import LineItemProduct, LineItemSpec, LineItemVariant
 
@@ -19,7 +19,7 @@ __all__ = [
 ]
 
 
-class ShipMethod(OrderCloudModel):
+class ShipMethod(OrderCloudModel, Generic[XP]):
     """An OrderCloud ShipMethod.
 
     Attributes:
@@ -34,7 +34,7 @@ class ShipMethod(OrderCloudModel):
     Name: Optional[str] = None
     Cost: Optional[float] = None
     EstimatedTransitDays: Optional[int] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
 class ShipEstimateItem(OrderCloudModel):
@@ -49,7 +49,7 @@ class ShipEstimateItem(OrderCloudModel):
     Quantity: Optional[int] = None
 
 
-class ShipEstimate(OrderCloudModel):
+class ShipEstimate(OrderCloudModel, Generic[XP]):
     """An OrderCloud ShipEstimate.
 
     Attributes:
@@ -61,13 +61,13 @@ class ShipEstimate(OrderCloudModel):
     """
 
     ID: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
     SelectedShipMethodID: Optional[str] = None
     ShipEstimateItems: Optional[list[ShipEstimateItem]] = None
     ShipMethods: Optional[list[ShipMethod]] = None
 
 
-class ShipEstimateResponse(OrderCloudModel):
+class ShipEstimateResponse(OrderCloudModel, Generic[XP]):
     """An OrderCloud ShipEstimateResponse.
 
     Attributes:
@@ -81,11 +81,11 @@ class ShipEstimateResponse(OrderCloudModel):
     ShipEstimates: Optional[list[ShipEstimate]] = None
     HttpStatusCode: Optional[int] = None
     UnhandledErrorBody: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
     Succeeded: Optional[bool] = None
 
 
-class ShipmentItem(OrderCloudModel):
+class ShipmentItem(OrderCloudModel, Generic[XP]):
     """An OrderCloud ShipmentItem.
 
     Attributes:
@@ -110,10 +110,10 @@ class ShipmentItem(OrderCloudModel):
     Product: Optional[LineItemProduct] = None
     Variant: Optional[LineItemVariant] = None
     Specs: Optional[list[LineItemSpec]] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
-class Shipment(OrderCloudModel):
+class Shipment(OrderCloudModel, Generic[XP]):
     """An OrderCloud Shipment.
 
     Attributes:
@@ -141,7 +141,7 @@ class Shipment(OrderCloudModel):
     TrackingNumber: Optional[str] = None
     Cost: Optional[float] = None
     OwnerID: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
     Account: Optional[str] = None
     FromAddressID: Optional[str] = None
     ToAddressID: Optional[str] = None

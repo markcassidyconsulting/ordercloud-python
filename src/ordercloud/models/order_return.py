@@ -3,9 +3,9 @@
 """OrderCloud OrderReturnItem, OrderReturnApproval, OrderReturn models."""
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 from .approval import ApprovalStatus
 from .misc import OrderStatus
 from .user import User
@@ -53,7 +53,7 @@ class OrderReturnApproval(OrderCloudModel):
     Comments: Optional[str] = None
 
 
-class OrderReturn(OrderCloudModel):
+class OrderReturn(OrderCloudModel, Generic[XP]):
     """An OrderCloud OrderReturn.
 
     Attributes:
@@ -88,4 +88,4 @@ class OrderReturn(OrderCloudModel):
     RefundAmount: Optional[float] = None
     Comments: Optional[str] = None
     ItemsToReturn: Optional[list[OrderReturnItem]] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None

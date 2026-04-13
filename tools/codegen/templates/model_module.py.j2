@@ -23,7 +23,11 @@ class {{ enum.name }}(str, Enum):
 {% for model in models %}
 
 
+{% if model.has_xp %}
+class {{ model.name }}(OrderCloudModel, Generic[XP]):
+{% else %}
 class {{ model.name }}(OrderCloudModel):
+{% endif %}
     """{{ model.description }}
 
     Attributes:

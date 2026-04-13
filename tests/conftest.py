@@ -80,6 +80,35 @@ def mock_auth(config: OrderCloudConfig) -> respx.Router:
 
 
 @pytest.fixture
+def retry_config() -> OrderCloudConfig:
+    """A test configuration with retries enabled."""
+    return OrderCloudConfig(
+        client_id=TEST_CLIENT_ID,
+        client_secret=TEST_CLIENT_SECRET,
+        base_url=TEST_BASE_URL,
+        auth_url=TEST_AUTH_URL,
+        scopes=["FullAccess"],
+        timeout=5.0,
+        max_retries=3,
+        retry_backoff=0.0,  # No actual delay in tests
+    )
+
+
+@pytest.fixture
+async def retry_http_client(
+    retry_config: OrderCloudConfig, mock_auth: respx.Router
+) -> HttpClient:
+    """An HttpClient with retries enabled and zero backoff for fast tests."""
+    token_manager = TokenManager(retry_config)
+    client = HttpClient(retry_config, token_manager)
+    token_manager._token = AccessToken("mock-token-12345", expires_in=600)
+    try:
+        yield client
+    finally:
+        await client.close()
+
+
+@pytest.fixture
 async def http_client(config: OrderCloudConfig, mock_auth: respx.Router) -> HttpClient:
     """An HttpClient wired to a mocked auth endpoint.
 

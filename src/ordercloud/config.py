@@ -16,6 +16,8 @@ class OrderCloudConfig:
         auth_url: OAuth2 token endpoint URL.
         scopes: List of OAuth2 scopes to request.
         timeout: HTTP request timeout in seconds.
+        max_retries: Maximum number of retries on 429/5xx responses (0 = disabled).
+        retry_backoff: Base delay in seconds for exponential backoff between retries.
     """
 
     client_id: str
@@ -24,3 +26,5 @@ class OrderCloudConfig:
     auth_url: str = "https://auth.ordercloud.io/oauth/token"
     scopes: list[str] = field(default_factory=lambda: ["FullAccess"])
     timeout: float = 30.0
+    max_retries: int = 0
+    retry_backoff: float = 0.5

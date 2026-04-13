@@ -4,9 +4,9 @@
 
 from __future__ import annotations
 from enum import Enum
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 from .misc import ApiRole
 from .payment import PaymentType
 
@@ -41,7 +41,7 @@ class SubscriptionPayment(OrderCloudModel):
     SpendingAccountID: Optional[str] = None
 
 
-class SubscriptionIntegration(OrderCloudModel):
+class SubscriptionIntegration(OrderCloudModel, Generic[XP]):
     """An OrderCloud SubscriptionIntegration.
 
     Attributes:
@@ -62,12 +62,12 @@ class SubscriptionIntegration(OrderCloudModel):
     Active: Optional[bool] = None
     NotificationDays: Optional[int] = None
     Url: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
     CustomAuthHeaderName: Optional[str] = None
     CustomAuthHeaderValue: Optional[str] = None
 
 
-class SubscriptionIntegrationResponse(OrderCloudModel):
+class SubscriptionIntegrationResponse(OrderCloudModel, Generic[XP]):
     """An OrderCloud SubscriptionIntegrationResponse.
 
     Attributes:
@@ -79,11 +79,11 @@ class SubscriptionIntegrationResponse(OrderCloudModel):
 
     HttpStatusCode: Optional[int] = None
     UnhandledErrorBody: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
     Succeeded: Optional[bool] = None
 
 
-class Subscription(OrderCloudModel):
+class Subscription(OrderCloudModel, Generic[XP]):
     """An OrderCloud Subscription.
 
     Attributes:
@@ -122,4 +122,4 @@ class Subscription(OrderCloudModel):
     BillingAddressID: Optional[str] = None
     ShippingAddressID: Optional[str] = None
     ProjectedSubtotal: float = 0.0
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None

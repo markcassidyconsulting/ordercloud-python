@@ -4,9 +4,9 @@
 
 from __future__ import annotations
 from enum import Enum
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 
 __all__ = [
     "UserOrderMoveOption",
@@ -76,7 +76,7 @@ class MeSupplier(OrderCloudModel):
     ID: Optional[str] = None
 
 
-class OrderUser(OrderCloudModel):
+class OrderUser(OrderCloudModel, Generic[XP]):
     """An OrderCloud OrderUser.
 
     Attributes:
@@ -108,7 +108,7 @@ class OrderUser(OrderCloudModel):
     Phone: Optional[str] = None
     TermsAccepted: Optional[str] = None
     Active: Optional[bool] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
     AvailableRoles: Optional[list[str]] = None
     Locale: Optional[_Locale] = None
     DateCreated: Optional[str] = None
@@ -116,7 +116,7 @@ class OrderUser(OrderCloudModel):
     PasswordLastSetDate: Optional[str] = None
 
 
-class MeUser(OrderCloudModel):
+class MeUser(OrderCloudModel, Generic[XP]):
     """An OrderCloud MeUser.
 
     Attributes:
@@ -154,7 +154,7 @@ class MeUser(OrderCloudModel):
     Phone: Optional[str] = None
     TermsAccepted: Optional[str] = None
     Active: Optional[bool] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
     AvailableRoles: Optional[list[str]] = None
     Locale: Optional[_Locale] = None
     DateCreated: Optional[str] = None
@@ -162,7 +162,7 @@ class MeUser(OrderCloudModel):
     PasswordLastSetDate: Optional[str] = None
 
 
-class User(OrderCloudModel):
+class User(OrderCloudModel, Generic[XP]):
     """An OrderCloud User.
 
     Attributes:
@@ -196,7 +196,7 @@ class User(OrderCloudModel):
     Phone: Optional[str] = None
     TermsAccepted: Optional[str] = None
     Active: Optional[bool] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
     AvailableRoles: Optional[list[str]] = None
     Locale: Optional[_Locale] = None
     DateCreated: Optional[str] = None

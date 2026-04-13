@@ -3,14 +3,14 @@
 """OrderCloud Address models."""
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 
 __all__ = ["Address"]
 
 
-class Address(OrderCloudModel):
+class Address(OrderCloudModel, Generic[XP]):
     """An OrderCloud Address.
 
     Attributes:
@@ -43,4 +43,4 @@ class Address(OrderCloudModel):
     Country: Optional[str] = None
     Phone: Optional[str] = None
     AddressName: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None

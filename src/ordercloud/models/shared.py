@@ -11,9 +11,11 @@ from typing import Any, Generic, Optional, TypeVar
 from pydantic import BaseModel, ConfigDict, Field
 
 T = TypeVar("T")
+XP = TypeVar("XP")
 
 __all__ = [
     "OrderCloudModel",
+    "XP",
     "Meta",
     "ListFacetValue",
     "ListFacet",

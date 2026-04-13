@@ -4,9 +4,9 @@
 
 from __future__ import annotations
 from enum import Enum
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 
 __all__ = ["PaymentType", "PaymentTransaction", "Payment"]
 
@@ -19,7 +19,7 @@ class PaymentType(str, Enum):
     SpendingAccount = "SpendingAccount"
 
 
-class PaymentTransaction(OrderCloudModel):
+class PaymentTransaction(OrderCloudModel, Generic[XP]):
     """An OrderCloud PaymentTransaction.
 
     Attributes:
@@ -42,10 +42,10 @@ class PaymentTransaction(OrderCloudModel):
     Succeeded: Optional[bool] = None
     ResultCode: Optional[str] = None
     ResultMessage: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
-class Payment(OrderCloudModel):
+class Payment(OrderCloudModel, Generic[XP]):
     """An OrderCloud Payment.
 
     Attributes:
@@ -73,5 +73,5 @@ class Payment(OrderCloudModel):
     Amount: Optional[float] = None
     Accepted: Optional[bool] = None
     OrderReturnID: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
     Transactions: Optional[list[PaymentTransaction]] = None

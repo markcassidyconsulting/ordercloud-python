@@ -3,9 +3,9 @@
 """OrderCloud DiscountBreak, DiscountedPrices, Discount models."""
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 
 __all__ = ["DiscountBreak", "DiscountedPrices", "Discount"]
 
@@ -38,7 +38,7 @@ class DiscountedPrices(OrderCloudModel):
     BundlePrice: Optional[float] = None
 
 
-class Discount(OrderCloudModel):
+class Discount(OrderCloudModel, Generic[XP]):
     """An OrderCloud Discount.
 
     Attributes:
@@ -59,4 +59,4 @@ class Discount(OrderCloudModel):
     CatalogID: Optional[str] = None
     CategoryID: Optional[str] = None
     ProductID: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None

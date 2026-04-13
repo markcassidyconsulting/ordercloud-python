@@ -4,9 +4,9 @@
 
 from __future__ import annotations
 from enum import Enum
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 
 __all__ = ["PriceMarkupType", "PriceBreak", "PriceSchedule"]
 
@@ -38,7 +38,7 @@ class PriceBreak(OrderCloudModel):
     BundlePrice: Optional[float] = None
 
 
-class PriceSchedule(OrderCloudModel):
+class PriceSchedule(OrderCloudModel, Generic[XP]):
     """An OrderCloud PriceSchedule.
 
     Attributes:
@@ -73,4 +73,4 @@ class PriceSchedule(OrderCloudModel):
     SaleStart: Optional[str] = None
     SaleEnd: Optional[str] = None
     IsOnSale: Optional[bool] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None

@@ -3,14 +3,14 @@
 """OrderCloud UserGroup models."""
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 
 __all__ = ["UserGroup"]
 
 
-class UserGroup(OrderCloudModel):
+class UserGroup(OrderCloudModel, Generic[XP]):
     """An OrderCloud UserGroup.
 
     Attributes:
@@ -23,4 +23,4 @@ class UserGroup(OrderCloudModel):
     ID: Optional[str] = None
     Name: Optional[str] = None
     Description: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None

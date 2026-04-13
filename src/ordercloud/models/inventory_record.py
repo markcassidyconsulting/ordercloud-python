@@ -3,9 +3,9 @@
 """OrderCloud InventoryIntegration, InventoryRecord models."""
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 from .address import Address
 
 __all__ = ["InventoryIntegration", "InventoryRecord"]
@@ -24,7 +24,7 @@ class InventoryIntegration(OrderCloudModel):
     LimitNotifications: Optional[bool] = None
 
 
-class InventoryRecord(OrderCloudModel):
+class InventoryRecord(OrderCloudModel, Generic[XP]):
     """An OrderCloud InventoryRecord.
 
     Attributes:
@@ -49,4 +49,4 @@ class InventoryRecord(OrderCloudModel):
     QuantityAvailable: Optional[int] = None
     NotificationPoint: Optional[int] = None
     LastUpdated: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None

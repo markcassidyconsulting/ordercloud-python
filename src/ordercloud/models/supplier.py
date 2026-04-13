@@ -3,9 +3,9 @@
 """OrderCloud SupplierBuyer, Supplier models."""
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 
 __all__ = ["SupplierBuyer", "Supplier"]
 
@@ -22,7 +22,7 @@ class SupplierBuyer(OrderCloudModel):
     Name: Optional[str] = None
 
 
-class Supplier(OrderCloudModel):
+class Supplier(OrderCloudModel, Generic[XP]):
     """An OrderCloud Supplier.
 
     Attributes:
@@ -39,4 +39,4 @@ class Supplier(OrderCloudModel):
     Active: Optional[bool] = None
     DateCreated: Optional[str] = None
     AllBuyersCanOrder: Optional[bool] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None

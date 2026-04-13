@@ -1,5 +1,6 @@
 """Base resource class with shared helpers for OrderCloud API resources."""
 
+from collections.abc import AsyncIterator, Awaitable, Callable
 from typing import Any, Optional, TypeVar
 
 from pydantic import BaseModel
@@ -9,7 +10,46 @@ from ..models.shared import ListPage, Meta
 
 T = TypeVar("T", bound=BaseModel)
 
-__all__ = ["BaseResource"]
+__all__ = ["BaseResource", "paginate"]
+
+
+async def paginate(
+    list_method: Callable[..., Awaitable[ListPage[T]]],
+    *args: Any,
+    page_size: int = 100,
+    **kwargs: Any,
+) -> AsyncIterator[T]:
+    """Auto-paginate any list endpoint, yielding individual items.
+
+    Calls ``list_method`` repeatedly, incrementing the page number until
+    all pages have been fetched.  Yields items one at a time.
+
+    Args:
+        list_method: A bound list method (e.g. ``client.products.list``).
+        *args: Positional arguments forwarded to the list method.
+        page_size: Items per page (default 100, the API maximum).
+        **kwargs: Keyword arguments forwarded to the list method.
+
+    Yields:
+        Individual items across all pages.
+
+    Example::
+
+        from ordercloud.resources import paginate
+
+        async for product in paginate(client.products.list, search="widget"):
+            print(product.Name)
+    """
+    page = 1
+    kwargs["page_size"] = page_size
+    while True:
+        kwargs["page"] = page
+        result = await list_method(*args, **kwargs)
+        for item in result.Items:
+            yield item
+        if page >= result.Meta.TotalPages:
+            break
+        page += 1
 
 
 class BaseResource:

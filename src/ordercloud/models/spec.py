@@ -3,16 +3,16 @@
 """OrderCloud SpecOption, Spec models."""
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 from .price_schedule import PriceMarkupType
 
 __all__ = ["SpecOption", "Spec"]
 _PriceMarkupType = PriceMarkupType
 
 
-class SpecOption(OrderCloudModel):
+class SpecOption(OrderCloudModel, Generic[XP]):
     """An OrderCloud SpecOption.
 
     Attributes:
@@ -31,10 +31,10 @@ class SpecOption(OrderCloudModel):
     IsOpenText: Optional[bool] = None
     PriceMarkupType: Optional[_PriceMarkupType] = None
     PriceMarkup: Optional[float] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
-class Spec(OrderCloudModel):
+class Spec(OrderCloudModel, Generic[XP]):
     """An OrderCloud Spec.
 
     Attributes:
@@ -61,6 +61,6 @@ class Spec(OrderCloudModel):
     AllowOpenText: Optional[bool] = None
     DefaultOptionID: Optional[str] = None
     DefinesVariant: Optional[bool] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
     OptionCount: int = 0
     Options: Optional[list[SpecOption]] = None

@@ -3,9 +3,9 @@
 """OrderCloud OrderApprovalInfo and related models."""
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 from .address import Address
 from .approval import ApprovalStatus
 from .line_item import LineItem
@@ -87,7 +87,7 @@ class OrderApproval(OrderCloudModel):
     Comments: Optional[str] = None
 
 
-class OrderPromotion(OrderCloudModel):
+class OrderPromotion(OrderCloudModel, Generic[XP]):
     """An OrderCloud OrderPromotion.
 
     Attributes:
@@ -148,7 +148,7 @@ class OrderPromotion(OrderCloudModel):
     Active: bool = True
     UseIntegration: Optional[bool] = None
     Priority: Optional[int] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
 class ShipMethodSelection(OrderCloudModel):
@@ -185,7 +185,7 @@ class OrderSplitResult(OrderCloudModel):
     RemainingLineItemIDs: Optional[list[str]] = None
 
 
-class OrderSubmitResponse(OrderCloudModel):
+class OrderSubmitResponse(OrderCloudModel, Generic[XP]):
     """An OrderCloud OrderSubmitResponse.
 
     Attributes:
@@ -197,11 +197,11 @@ class OrderSubmitResponse(OrderCloudModel):
 
     HttpStatusCode: Optional[int] = None
     UnhandledErrorBody: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
     Succeeded: Optional[bool] = None
 
 
-class OrderSubmitForApprovalResponse(OrderCloudModel):
+class OrderSubmitForApprovalResponse(OrderCloudModel, Generic[XP]):
     """An OrderCloud OrderSubmitForApprovalResponse.
 
     Attributes:
@@ -213,11 +213,11 @@ class OrderSubmitForApprovalResponse(OrderCloudModel):
 
     HttpStatusCode: Optional[int] = None
     UnhandledErrorBody: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
     Succeeded: Optional[bool] = None
 
 
-class OrderApprovedResponse(OrderCloudModel):
+class OrderApprovedResponse(OrderCloudModel, Generic[XP]):
     """An OrderCloud OrderApprovedResponse.
 
     Attributes:
@@ -229,11 +229,11 @@ class OrderApprovedResponse(OrderCloudModel):
 
     HttpStatusCode: Optional[int] = None
     UnhandledErrorBody: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
     Succeeded: Optional[bool] = None
 
 
-class OrderCalculateResponse(OrderCloudModel):
+class OrderCalculateResponse(OrderCloudModel, Generic[XP]):
     """An OrderCloud OrderCalculateResponse.
 
     Attributes:
@@ -253,7 +253,7 @@ class OrderCalculateResponse(OrderCloudModel):
     FeeTotal: Optional[float] = None
     HttpStatusCode: Optional[int] = None
     UnhandledErrorBody: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
     Succeeded: Optional[bool] = None
 
 
@@ -277,7 +277,7 @@ class LineItemOverride(OrderCloudModel):
     Remove: Optional[bool] = None
 
 
-class ExtendedLineItem(OrderCloudModel):
+class ExtendedLineItem(OrderCloudModel, Generic[XP]):
     """An OrderCloud ExtendedLineItem.
 
     Attributes:
@@ -350,7 +350,7 @@ class ExtendedLineItem(OrderCloudModel):
     IncomingOrderID: Optional[str] = None
     OutgoingOrderID: Optional[str] = None
     InvitationID: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
 class OrderWorksheet(OrderCloudModel):
@@ -381,7 +381,7 @@ class OrderWorksheet(OrderCloudModel):
     SubscriptionIntegrationResponse: Optional[_SubscriptionIntegrationResponse] = None
 
 
-class Order(OrderCloudModel):
+class Order(OrderCloudModel, Generic[XP]):
     """An OrderCloud Order.
 
     Attributes:
@@ -446,7 +446,7 @@ class Order(OrderCloudModel):
     Total: float = 0.0
     IsSubmitted: Optional[bool] = None
     SubscriptionID: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
 _Order = Order

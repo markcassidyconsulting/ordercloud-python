@@ -7,6 +7,7 @@ from __future__ import annotations
 from .auth import TokenManager
 from .config import OrderCloudConfig
 from .http import HttpClient
+from .middleware import AfterResponse, BeforeRequest
 from .resources.addresses import AddressesResource
 from .resources.admin_addresses import AdminAddressesResource
 from .resources.admin_user_groups import AdminUserGroupsResource
@@ -184,6 +185,14 @@ class OrderCloudClient:
             timeout=timeout,
         )
         return cls(config)
+
+    def add_before_request(self, hook: BeforeRequest) -> None:
+        """Register a hook called before each HTTP request."""
+        self._http.add_before_request(hook)
+
+    def add_after_response(self, hook: AfterResponse) -> None:
+        """Register a hook called after each HTTP response."""
+        self._http.add_after_response(hook)
 
     async def close(self) -> None:
         """Close the underlying HTTP client."""

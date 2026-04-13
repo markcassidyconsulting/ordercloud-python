@@ -3,16 +3,16 @@
 """OrderCloud LineItemProduct, LineItemVariant, LineItemSpec models."""
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Generic, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudModel, XP
 from .price_schedule import PriceMarkupType
 
 __all__ = ["LineItemProduct", "LineItemVariant", "LineItemSpec"]
 _PriceMarkupType = PriceMarkupType
 
 
-class LineItemProduct(OrderCloudModel):
+class LineItemProduct(OrderCloudModel, Generic[XP]):
     """An OrderCloud LineItemProduct.
 
     Attributes:
@@ -41,10 +41,10 @@ class LineItemProduct(OrderCloudModel):
     ShipLength: Optional[float] = None
     DefaultSupplierID: Optional[str] = None
     ParentID: Optional[str] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
-class LineItemVariant(OrderCloudModel):
+class LineItemVariant(OrderCloudModel, Generic[XP]):
     """An OrderCloud LineItemVariant.
 
     Attributes:
@@ -65,7 +65,7 @@ class LineItemVariant(OrderCloudModel):
     ShipHeight: Optional[float] = None
     ShipWidth: Optional[float] = None
     ShipLength: Optional[float] = None
-    xp: Optional[dict[str, Any]] = None
+    xp: Optional[XP] = None
 
 
 class LineItemSpec(OrderCloudModel):

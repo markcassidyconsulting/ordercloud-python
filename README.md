@@ -4,7 +4,7 @@ An idiomatic async Python SDK for the [Sitecore OrderCloud](https://ordercloud.i
 
 Built with modern Python: async/await throughout, Pydantic v2 typed models, full type annotations, and `py.typed` for downstream type checking. **Full API coverage** — all 632 operations across 60 resources, generated from the OpenAPI spec.
 
-> **Status:** Full API coverage with test suite. Models and resources are generated from the official OpenAPI v3 spec via an included codegen tool. 79 unit tests, 100% coverage on hand-written infrastructure.
+> **Status:** Production-grade. Full API coverage, 127 unit tests, 100% coverage on all hand-written infrastructure. Sync and async clients, typed xp generics, auto-pagination, retry with backoff, structured logging, middleware hooks.
 
 ## Why This Exists
 
@@ -19,6 +19,8 @@ pip install ordercloud
 Requires Python 3.10+.
 
 ## Quick Start
+
+### Async (default)
 
 ```python
 import asyncio
@@ -45,6 +47,22 @@ async def main():
 asyncio.run(main())
 ```
 
+### Sync
+
+```python
+from ordercloud import SyncOrderCloudClient
+
+with SyncOrderCloudClient.create(
+    client_id="YOUR_CLIENT_ID",
+    client_secret="YOUR_CLIENT_SECRET",
+) as client:
+    products = client.products.list(page_size=10)
+    for p in products.Items:
+        print(f"{p.ID}: {p.Name}")
+```
+
+The sync client wraps the async client internally — same features, same API shape, no `await`.
+
 ## Configuration
 
 | Parameter | Default | Description |
@@ -55,6 +73,8 @@ asyncio.run(main())
 | `auth_url` | `https://auth.ordercloud.io/oauth/token` | OAuth2 token endpoint |
 | `scopes` | `["FullAccess"]` | OAuth2 scopes to request |
 | `timeout` | `30.0` | HTTP request timeout (seconds) |
+| `max_retries` | `0` | Max retries on 429/5xx (0 = disabled) |
+| `retry_backoff` | `0.5` | Base delay in seconds for exponential backoff |
 
 ### Regional Environments
 
@@ -66,6 +86,109 @@ asyncio.run(main())
 | Europe West Sandbox | `https://westeurope-sandbox.ordercloud.io/v1` | `https://westeurope-sandbox-auth.ordercloud.io/oauth/token` |
 | Australia East Production | `https://australiaeast-production.ordercloud.io/v1` | `https://australiaeast-production-auth.ordercloud.io/oauth/token` |
 | Japan East Production | `https://japaneast-production.ordercloud.io/v1` | `https://japaneast-production-auth.ordercloud.io/oauth/token` |
+
+## Typed Extended Properties (xp)
+
+OrderCloud models support extended properties (`xp`) — arbitrary JSON attached to any resource. By default, `xp` is `dict[str, Any]`. You can type it with a Pydantic model:
+
+```python
+from pydantic import BaseModel
+from ordercloud.models import Product
+
+class MyProductXp(BaseModel):
+    color: str
+    weight_kg: float
+
+# Create with typed xp
+product = Product[MyProductXp](
+    Name="Widget",
+    xp=MyProductXp(color="red", weight_kg=1.5),
+)
+product.xp.color  # str, not Any
+
+# Deserialise with typed xp
+data = {"Name": "Widget", "xp": {"color": "blue", "weight_kg": 2.0}}
+product = Product[MyProductXp].model_validate(data)
+product.xp.color  # "blue"
+```
+
+Unparameterized usage (`Product(xp={"anything": True})`) still works — fully backward compatible.
+
+## Auto-Pagination
+
+Iterate through all pages automatically:
+
+```python
+from ordercloud import paginate
+
+# Async
+async for product in paginate(client.products.list, search="widget"):
+    print(product.Name)
+
+# Works with positional args too
+async for order in paginate(client.orders.list, OrderDirection.Incoming):
+    print(order.ID)
+```
+
+For the sync client:
+
+```python
+from ordercloud import paginate_sync
+
+for product in paginate_sync(client.products.list, search="widget"):
+    print(product.Name)
+```
+
+## Retry Logic
+
+Enable automatic retries on transient failures (429 rate limit, 5xx server errors):
+
+```python
+client = OrderCloudClient.create(
+    client_id="...",
+    client_secret="...",
+    max_retries=3,       # Retry up to 3 times
+    retry_backoff=0.5,   # 0.5s, 1s, 2s exponential backoff
+)
+```
+
+Respects `Retry-After` headers. Never retries on 4xx client errors (400, 401, 403, 404, etc.).
+
+## Structured Logging
+
+The SDK logs via Python's standard `logging` module under the `ordercloud` logger:
+
+```python
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
+# Or configure just the SDK logger
+logging.getLogger("ordercloud").setLevel(logging.DEBUG)
+```
+
+| Level | What's logged |
+|-------|--------------|
+| `DEBUG` | Every request (`Request: GET /products`) and response (`Response: GET /products 200`) |
+| `WARNING` | Retry attempts with status code and backoff delay |
+
+## Middleware Hooks
+
+Register hooks to intercept requests and responses:
+
+```python
+from ordercloud import RequestContext, ResponseContext
+
+async def add_correlation_id(ctx: RequestContext) -> None:
+    ctx.headers["X-Correlation-ID"] = generate_id()
+
+async def log_timing(ctx: ResponseContext) -> None:
+    print(f"{ctx.request.method} {ctx.request.path} -> {ctx.response.status_code}")
+
+client.add_before_request(add_correlation_id)
+client.add_after_response(log_timing)
+```
+
+Before-request hooks receive a mutable `RequestContext` — modify `headers`, `params`, or `json` before the request is sent. After-response hooks receive a `ResponseContext` with the request details and response. Hooks are called on every attempt, including retries.
 
 ## API Coverage
 
@@ -275,7 +398,7 @@ pip install -e ".[codegen]"
 python -m tools.codegen --spec path/to/ordercloud-openapi-v3.json --output src/ordercloud
 ```
 
-The codegen pipeline: **OpenAPI JSON** → parser → intermediate representation → transformer → Jinja2 templates → Python source → ruff format. Hand-written infrastructure (`shared.py`, `base.py`, `auth.py`, `http.py`, `config.py`, `errors.py`) is preserved — only model and resource files are generated.
+The codegen pipeline: **OpenAPI JSON** -> parser -> intermediate representation -> transformer -> Jinja2 templates -> Python source -> ruff format. Hand-written infrastructure (`shared.py`, `base.py`, `auth.py`, `http.py`, `config.py`, `errors.py`, `middleware.py`, `sync_client.py`) is preserved — only model and resource files are generated.
 
 ## Development
 
@@ -285,12 +408,34 @@ cd ordercloud-python
 pip install -e ".[dev,codegen]"
 
 # Run linter
-ruff check src/
-ruff format src/
+ruff check src/ tests/
+ruff format src/ tests/
 
-# Run tests (once test suite exists)
+# Run tests
 pytest
+
+# Run tests with coverage
+pytest --cov=ordercloud --cov-report=term-missing
 ```
+
+### Test Suite
+
+127 unit tests across 5 test modules (auth, HTTP, models, resources, sync client). All tests use mocked HTTP via `respx` — no network calls.
+
+Coverage on hand-written infrastructure:
+
+| Module | Coverage |
+|--------|----------|
+| `auth.py` | 100% |
+| `client.py` | 100% |
+| `config.py` | 100% |
+| `errors.py` | 100% |
+| `http.py` | 97% |
+| `middleware.py` | 100% |
+| `sync_client.py` | 100% |
+| `resources/base.py` | 100% |
+| `models/shared.py` | 100% |
+| All 37 model modules | 100% |
 
 ## License
 
