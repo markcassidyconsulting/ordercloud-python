@@ -29,7 +29,7 @@ class {{ class_name }}(BaseResource):
 {% if op.query_params %}
         *,
 {% for q in op.query_params %}
-        {{ q.name }}: {{ q.python_type }} = None,
+        {{ q.name }}: {{ q.python_type }}{{ "" if q.required else " = None" }},
 {% endfor %}
 {% endif %}
     ) -> {{ _return_annotation(op) }}:
@@ -73,43 +73,62 @@ class {{ class_name }}(BaseResource):
 {% endfor %}
         resp = await self._http.get({{ op.path_template | quote_path }}, **params)
         return self._parse_list(resp.json(), {{ op.return_type }}{{ ", meta_cls=MetaWithFacets" if op.uses_facet_meta else "" }})
-{% elif op.http_method == "get" and op.return_type %}
-        resp = await self._http.get({{ op.path_template | quote_path }})
+{% else %}
+{% set _has_qp = op.query_params | length > 0 %}
+{% if _has_qp %}
+        _params: dict[str, Any] = {}
+{% for q in op.query_params %}
+        if {{ q.name }} is not None:
+            _params["{{ q.api_name or q.name }}"] = {{ q.name }}
+{% endfor %}
+{% endif %}
+{% if op.http_method == "get" and op.return_type %}
+        resp = await self._http.get({{ op.path_template | quote_path }}{{ ", **_params" if _has_qp else "" }})
         return {{ op.return_type }}(**resp.json())
 {% elif op.http_method == "post" and op.body_model and op.return_type %}
-        resp = await self._http.post({{ op.path_template | quote_path }}, json=self._serialize({{ op.body_param.name }}))
+        resp = await self._http.post({{ op.path_template | quote_path }}, json=self._serialize({{ op.body_param.name }}){{ ", params=_params or None" if _has_qp else "" }})
         return {{ op.return_type }}(**resp.json())
 {% elif op.http_method == "post" and op.body_model and not op.return_type %}
-        await self._http.post({{ op.path_template | quote_path }}, json=self._serialize({{ op.body_param.name }}))
+        await self._http.post({{ op.path_template | quote_path }}, json=self._serialize({{ op.body_param.name }}){{ ", params=_params or None" if _has_qp else "" }})
 {% elif op.http_method == "post" and not op.body_model and op.return_type %}
-        resp = await self._http.post({{ op.path_template | quote_path }})
+        resp = await self._http.post({{ op.path_template | quote_path }}{{ ", params=_params or None" if _has_qp else "" }})
         return {{ op.return_type }}(**resp.json())
 {% elif op.http_method == "post" and not op.body_model and not op.return_type %}
-        await self._http.post({{ op.path_template | quote_path }})
+        await self._http.post({{ op.path_template | quote_path }}{{ ", params=_params or None" if _has_qp else "" }})
 {% elif op.http_method == "put" and op.body_model and op.return_type %}
         resp = await self._http.put(
             {{ op.path_template | quote_path }},
             json=self._serialize({{ op.body_param.name }}),
+{%- if _has_qp %}
+            params=_params or None,
+{%- endif %}
         )
         return {{ op.return_type }}(**resp.json())
 {% elif op.http_method == "put" and op.body_model and not op.return_type %}
         await self._http.put(
             {{ op.path_template | quote_path }},
             json=self._serialize({{ op.body_param.name }}),
+{%- if _has_qp %}
+            params=_params or None,
+{%- endif %}
         )
 {% elif op.http_method == "put" and not op.body_model and not op.return_type %}
-        await self._http.put({{ op.path_template | quote_path }})
+        await self._http.put({{ op.path_template | quote_path }}{{ ", params=_params or None" if _has_qp else "" }})
 {% elif op.http_method == "patch" and op.body_model and op.return_type %}
-        resp = await self._http.patch({{ op.path_template | quote_path }}, json=partial)
+        resp = await self._http.patch({{ op.path_template | quote_path }}, json=partial{{ ", params=_params or None" if _has_qp else "" }})
         return {{ op.return_type }}(**resp.json())
 {% elif op.http_method == "patch" and op.body_model and not op.return_type %}
-        await self._http.patch({{ op.path_template | quote_path }}, json=partial)
+        await self._http.patch({{ op.path_template | quote_path }}, json=partial{{ ", params=_params or None" if _has_qp else "" }})
+{% elif op.http_method == "delete" and op.return_type %}
+        resp = await self._http.delete({{ op.path_template | quote_path }}{{ ", **_params" if _has_qp else "" }})
+        return {{ op.return_type }}(**resp.json())
 {% elif op.http_method == "delete" %}
-        await self._http.delete({{ op.path_template | quote_path }})
+        await self._http.delete({{ op.path_template | quote_path }}{{ ", **_params" if _has_qp else "" }})
 {% else %}
         resp = await self._http.{{ op.http_method }}({{ op.path_template | quote_path }})
 {% if op.return_type %}
         return {{ op.return_type }}(**resp.json())
+{% endif %}
 {% endif %}
 {% endif %}
 {% endfor %}

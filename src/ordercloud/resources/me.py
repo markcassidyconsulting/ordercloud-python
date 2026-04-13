@@ -259,7 +259,7 @@ class MeResource(BaseResource):
 
         Args:
             depth: Indicates how deep down the hierarchy to return results. Valid values are a number of 1 or greater, or 'all'. Relative to ParentID if specified. Default is 1.
-            catalog_id: The userâ€™s default CatalogID will be used to return categories if you do not pass another CatalogID explicitly. Listing categories across multiple catalogs is not supported.
+            catalog_id: The user’s default CatalogID will be used to return categories if you do not pass another CatalogID explicitly. Listing categories across multiple catalogs is not supported.
             product_id: ID of the product.
             search: Word or phrase to search for.
             search_on: Comma-delimited list of fields to search on.
@@ -291,7 +291,7 @@ class MeResource(BaseResource):
         self,
         category_id: str,
         *,
-        catalog_id: Optional[str] = None,
+        catalog_id: Optional[str],
     ) -> Category:
         """Retrieve a category
 
@@ -302,7 +302,10 @@ class MeResource(BaseResource):
         Returns:
             The Category object.
         """
-        resp = await self._http.get(f"/me/categories/{category_id}")
+        _params: dict[str, Any] = {}
+        if catalog_id is not None:
+            _params["catalogID"] = catalog_id
+        resp = await self._http.get(f"/me/categories/{category_id}", **_params)
         return Category(**resp.json())
 
     async def list_cost_centers(
@@ -590,14 +593,17 @@ class MeResource(BaseResource):
     async def transfer_anon_user_order(
         self,
         *,
-        anon_user_token: Optional[str] = None,
+        anon_user_token: Optional[str],
     ) -> None:
         """Transfer an anon user order
 
         Args:
             anon_user_token: Anon user token of the me.
         """
-        await self._http.put("/me/orders")
+        _params: dict[str, Any] = {}
+        if anon_user_token is not None:
+            _params["anonUserToken"] = anon_user_token
+        await self._http.put("/me/orders", params=_params or None)
 
     async def list_approvable_orders(
         self,
@@ -1068,7 +1074,10 @@ class MeResource(BaseResource):
         Returns:
             The BuyerProduct object.
         """
-        resp = await self._http.get(f"/me/products/{product_id}")
+        _params: dict[str, Any] = {}
+        if seller_id is not None:
+            _params["sellerID"] = seller_id
+        resp = await self._http.get(f"/me/products/{product_id}", **_params)
         return BuyerProduct(**resp.json())
 
     async def list_product_inventory_records(
@@ -1204,7 +1213,10 @@ class MeResource(BaseResource):
         Returns:
             The Spec object.
         """
-        resp = await self._http.get(f"/me/products/{product_id}/specs/{spec_id}")
+        _params: dict[str, Any] = {}
+        if catalog_id is not None:
+            _params["catalogID"] = catalog_id
+        resp = await self._http.get(f"/me/products/{product_id}/specs/{spec_id}", **_params)
         return Spec(**resp.json())
 
     async def list_variants(
@@ -1357,7 +1369,7 @@ class MeResource(BaseResource):
         self,
         me_user: Union[MeUser, dict[str, Any]],
         *,
-        anon_user_token: Optional[str] = None,
+        anon_user_token: Optional[str],
     ) -> AccessTokenBasic:
         """Register a user
 
@@ -1368,9 +1380,13 @@ class MeResource(BaseResource):
         Returns:
             The AccessTokenBasic object.
         """
+        _params: dict[str, Any] = {}
+        if anon_user_token is not None:
+            _params["anonUserToken"] = anon_user_token
         resp = await self._http.put(
             "/me/register",
             json=self._serialize(me_user),
+            params=_params or None,
         )
         return AccessTokenBasic(**resp.json())
 

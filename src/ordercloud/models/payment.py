@@ -3,14 +3,15 @@
 """OrderCloud PaymentType, PaymentTransaction, Payment models."""
 
 from __future__ import annotations
+from enum import Enum
 from typing import Generic, Optional
 
-from .shared import OrderCloudEnum, OrderCloudModel, XP
+from .shared import OrderCloudModel, XP
 
 __all__ = ["PaymentType", "PaymentTransaction", "Payment"]
 
 
-class PaymentType(OrderCloudEnum):
+class PaymentType(str, Enum):
     """"""
 
     PurchaseOrder = "PurchaseOrder"

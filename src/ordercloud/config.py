@@ -1,6 +1,6 @@
 """OrderCloud client configuration."""
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 __all__ = ["OrderCloudConfig"]
 
@@ -14,7 +14,7 @@ class OrderCloudConfig:
         client_secret: OAuth2 client secret (empty for public clients).
         base_url: OrderCloud API base URL (including ``/v1``).
         auth_url: OAuth2 token endpoint URL.
-        scopes: List of OAuth2 scopes to request.
+        scopes: OAuth2 scopes to request (converted to tuple for immutability).
         timeout: HTTP request timeout in seconds.
         max_retries: Maximum number of retries on 429/5xx responses (0 = disabled).
         retry_backoff: Base delay in seconds for exponential backoff between retries.
@@ -24,7 +24,11 @@ class OrderCloudConfig:
     client_secret: str = ""
     base_url: str = "https://api.ordercloud.io/v1"
     auth_url: str = "https://auth.ordercloud.io/oauth/token"
-    scopes: list[str] = field(default_factory=lambda: ["FullAccess"])
+    scopes: tuple[str, ...] = ("FullAccess",)
     timeout: float = 30.0
     max_retries: int = 0
     retry_backoff: float = 0.5
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.scopes, tuple):
+            object.__setattr__(self, "scopes", tuple(self.scopes))

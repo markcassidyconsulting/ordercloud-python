@@ -76,8 +76,13 @@ class CategoriesResource(BaseResource):
         Returns:
             The Category object.
         """
+        _params: dict[str, Any] = {}
+        if adjust_list_orders is not None:
+            _params["adjustListOrders"] = adjust_list_orders
         resp = await self._http.post(
-            f"/catalogs/{catalog_id}/categories", json=self._serialize(category)
+            f"/catalogs/{catalog_id}/categories",
+            json=self._serialize(category),
+            params=_params or None,
         )
         return Category(**resp.json())
 
@@ -117,9 +122,13 @@ class CategoriesResource(BaseResource):
         Returns:
             The Category object.
         """
+        _params: dict[str, Any] = {}
+        if adjust_list_orders is not None:
+            _params["adjustListOrders"] = adjust_list_orders
         resp = await self._http.put(
             f"/catalogs/{catalog_id}/categories/{category_id}",
             json=self._serialize(category),
+            params=_params or None,
         )
         return Category(**resp.json())
 
@@ -155,8 +164,11 @@ class CategoriesResource(BaseResource):
         Returns:
             The Category object.
         """
+        _params: dict[str, Any] = {}
+        if adjust_list_orders is not None:
+            _params["adjustListOrders"] = adjust_list_orders
         resp = await self._http.patch(
-            f"/catalogs/{catalog_id}/categories/{category_id}", json=partial
+            f"/catalogs/{catalog_id}/categories/{category_id}", json=partial, params=_params or None
         )
         return Category(**resp.json())
 
@@ -165,7 +177,7 @@ class CategoriesResource(BaseResource):
         catalog_id: str,
         category_id: str,
         *,
-        buyer_id: Optional[str] = None,
+        buyer_id: Optional[str],
         user_id: Optional[str] = None,
         user_group_id: Optional[str] = None,
     ) -> None:
@@ -178,7 +190,16 @@ class CategoriesResource(BaseResource):
             user_id: ID of the user.
             user_group_id: ID of the user group.
         """
-        await self._http.delete(f"/catalogs/{catalog_id}/categories/{category_id}/assignments")
+        _params: dict[str, Any] = {}
+        if buyer_id is not None:
+            _params["buyerID"] = buyer_id
+        if user_id is not None:
+            _params["userID"] = user_id
+        if user_group_id is not None:
+            _params["userGroupID"] = user_group_id
+        await self._http.delete(
+            f"/catalogs/{catalog_id}/categories/{category_id}/assignments", **_params
+        )
 
     async def delete_bundle_assignment(
         self,

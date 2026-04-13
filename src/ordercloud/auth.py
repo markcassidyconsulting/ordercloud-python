@@ -62,6 +62,10 @@ class TokenManager:
     async def get_token(self, client: httpx.AsyncClient) -> str:
         """Return a valid access token, refreshing if needed.
 
+        If a refresh token is available, attempts refresh first.  On
+        failure, clears the stale token and falls back to a full
+        ``client_credentials`` authentication.
+
         Args:
             client: The HTTP client to use for token requests.
 
@@ -71,7 +75,11 @@ class TokenManager:
         async with self._lock:
             if self._token is None or self._token.is_expired:
                 if self._token and self._token.refresh_token:
-                    await self._refresh(client)
+                    try:
+                        await self._refresh(client)
+                    except httpx.HTTPStatusError:
+                        self._token = None
+                        await self._authenticate(client)
                 else:
                     await self._authenticate(client)
             assert self._token is not None

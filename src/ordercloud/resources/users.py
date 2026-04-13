@@ -172,7 +172,7 @@ class UsersResource(BaseResource):
         user_id: str,
         new_buyer_id: str,
         *,
-        orders: Optional[UserOrderMoveOption] = None,
+        orders: UserOrderMoveOption,
     ) -> User:
         """Move a user to a different buyer
 
@@ -185,7 +185,12 @@ class UsersResource(BaseResource):
         Returns:
             The User object.
         """
-        resp = await self._http.post(f"/buyers/{buyer_id}/users/{user_id}/moveto/{new_buyer_id}")
+        _params: dict[str, Any] = {}
+        if orders is not None:
+            _params["orders"] = orders
+        resp = await self._http.post(
+            f"/buyers/{buyer_id}/users/{user_id}/moveto/{new_buyer_id}", params=_params or None
+        )
         return User(**resp.json())
 
     async def revoke_user_tokens(

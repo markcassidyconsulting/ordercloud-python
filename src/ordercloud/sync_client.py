@@ -101,7 +101,7 @@ class SyncOrderCloudClient:
             client_secret=client_secret,
             base_url=base_url,
             auth_url=auth_url,
-            scopes=scopes or ["FullAccess"],
+            scopes=tuple(scopes) if scopes else ("FullAccess",),
             timeout=timeout,
             max_retries=max_retries,
             retry_backoff=retry_backoff,

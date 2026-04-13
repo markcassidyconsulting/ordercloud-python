@@ -80,9 +80,7 @@ class HttpClient:
             AuthenticationError: On 401 or 403 responses.
             OrderCloudError: On any other 4xx/5xx response.
         """
-        token = await self._token_manager.get_token(self._client)
         url = f"{self._config.base_url}{path}"
-        headers = {"Authorization": f"Bearer {token}"}
 
         if params:
             params = {k: v for k, v in params.items() if v is not None}
@@ -90,6 +88,9 @@ class HttpClient:
         max_attempts = 1 + self._config.max_retries
 
         for attempt in range(max_attempts):
+            token = await self._token_manager.get_token(self._client)
+            headers = {"Authorization": f"Bearer {token}"}
+
             ctx = RequestContext(
                 method=method,
                 path=path,
@@ -146,34 +147,50 @@ class HttpClient:
         Respects the ``Retry-After`` header if present, otherwise uses
         exponential backoff: ``retry_backoff * 2^attempt``.
         """
+        max_delay = 120.0
         retry_after = resp.headers.get("Retry-After")
         if retry_after:
             try:
-                return float(retry_after)
+                return min(float(retry_after), max_delay)
             except ValueError:
                 pass
         delay: float = self._config.retry_backoff * (2**attempt)
-        return delay
+        return min(delay, max_delay)
 
     async def get(self, path: str, **params: Any) -> httpx.Response:
         """Send a GET request."""
         return await self.request("GET", path, params=params or None)
 
-    async def post(self, path: str, json: Optional[dict[str, Any]] = None) -> httpx.Response:
+    async def post(
+        self,
+        path: str,
+        json: Optional[dict[str, Any]] = None,
+        params: Optional[dict[str, Any]] = None,
+    ) -> httpx.Response:
         """Send a POST request."""
-        return await self.request("POST", path, json=json)
+        return await self.request("POST", path, json=json, params=params)
 
-    async def put(self, path: str, json: Optional[dict[str, Any]] = None) -> httpx.Response:
+    async def put(
+        self,
+        path: str,
+        json: Optional[dict[str, Any]] = None,
+        params: Optional[dict[str, Any]] = None,
+    ) -> httpx.Response:
         """Send a PUT request."""
-        return await self.request("PUT", path, json=json)
+        return await self.request("PUT", path, json=json, params=params)
 
-    async def patch(self, path: str, json: Optional[dict[str, Any]] = None) -> httpx.Response:
+    async def patch(
+        self,
+        path: str,
+        json: Optional[dict[str, Any]] = None,
+        params: Optional[dict[str, Any]] = None,
+    ) -> httpx.Response:
         """Send a PATCH request."""
-        return await self.request("PATCH", path, json=json)
+        return await self.request("PATCH", path, json=json, params=params)
 
-    async def delete(self, path: str) -> httpx.Response:
+    async def delete(self, path: str, **params: Any) -> httpx.Response:
         """Send a DELETE request."""
-        return await self.request("DELETE", path)
+        return await self.request("DELETE", path, params=params or None)
 
     async def close(self) -> None:
         """Close the underlying HTTP client and release connections."""

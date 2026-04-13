@@ -3,15 +3,16 @@
 """OrderCloud MessageType, MessageSenderConfig, MessageSender models."""
 
 from __future__ import annotations
+from enum import Enum
 from typing import Generic, Optional
 
-from .shared import OrderCloudEnum, OrderCloudModel, XP
+from .shared import OrderCloudModel, XP
 from .misc import ApiRole
 
 __all__ = ["MessageType", "MessageSenderConfig", "MessageSender"]
 
 
-class MessageType(OrderCloudEnum):
+class MessageType(str, Enum):
     """"""
 
     OrderDeclined = "OrderDeclined"

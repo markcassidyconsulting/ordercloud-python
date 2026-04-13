@@ -3,9 +3,10 @@
 """OrderCloud SubscriptionInterval and related models."""
 
 from __future__ import annotations
+from enum import Enum
 from typing import Generic, Optional
 
-from .shared import OrderCloudEnum, OrderCloudModel, XP
+from .shared import OrderCloudModel, XP
 from .misc import ApiRole
 from .payment import PaymentType
 
@@ -18,7 +19,7 @@ __all__ = [
 ]
 
 
-class SubscriptionInterval(OrderCloudEnum):
+class SubscriptionInterval(str, Enum):
     """"""
 
     Days = "Days"

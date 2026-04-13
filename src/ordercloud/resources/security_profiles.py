@@ -147,7 +147,16 @@ class SecurityProfilesResource(BaseResource):
             user_group_id: ID of the user group.
             supplier_id: ID of the supplier.
         """
-        await self._http.delete(f"/securityprofiles/{security_profile_id}/assignments")
+        _params: dict[str, Any] = {}
+        if buyer_id is not None:
+            _params["buyerID"] = buyer_id
+        if user_id is not None:
+            _params["userID"] = user_id
+        if user_group_id is not None:
+            _params["userGroupID"] = user_group_id
+        if supplier_id is not None:
+            _params["supplierID"] = supplier_id
+        await self._http.delete(f"/securityprofiles/{security_profile_id}/assignments", **_params)
 
     async def list_assignments(
         self,

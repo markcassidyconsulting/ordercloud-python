@@ -164,7 +164,14 @@ class ProductsResource(BaseResource):
             user_group_id: ID of the user group.
             seller_id: ID of the seller.
         """
-        await self._http.delete(f"/products/{product_id}/assignments/{buyer_id}")
+        _params: dict[str, Any] = {}
+        if user_id is not None:
+            _params["userID"] = user_id
+        if user_group_id is not None:
+            _params["userGroupID"] = user_group_id
+        if seller_id is not None:
+            _params["sellerID"] = seller_id
+        await self._http.delete(f"/products/{product_id}/assignments/{buyer_id}", **_params)
 
     async def list_specs(
         self,
@@ -252,7 +259,12 @@ class ProductsResource(BaseResource):
             supplier_id: ID of the supplier.
             default_price_schedule_id: ID of the default price schedule.
         """
-        await self._http.put(f"/products/{product_id}/suppliers/{supplier_id}")
+        _params: dict[str, Any] = {}
+        if default_price_schedule_id is not None:
+            _params["defaultPriceScheduleID"] = default_price_schedule_id
+        await self._http.put(
+            f"/products/{product_id}/suppliers/{supplier_id}", params=_params or None
+        )
 
     async def remove_supplier(
         self,
@@ -378,8 +390,13 @@ class ProductsResource(BaseResource):
         Returns:
             The Product object.
         """
+        _params: dict[str, Any] = {}
+        if overwrite_existing is not None:
+            _params["overwriteExisting"] = overwrite_existing
         resp = await self._http.post(
-            f"/products/{product_id}/variants/generate", json=self._serialize(variant_overrides)
+            f"/products/{product_id}/variants/generate",
+            json=self._serialize(variant_overrides),
+            params=_params or None,
         )
         return Product(**resp.json())
 

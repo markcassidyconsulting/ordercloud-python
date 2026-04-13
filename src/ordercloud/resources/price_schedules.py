@@ -150,7 +150,7 @@ class PriceSchedulesResource(BaseResource):
         self,
         price_schedule_id: str,
         *,
-        quantity: Optional[int] = None,
+        quantity: Optional[int],
     ) -> None:
         """Delete a price schedule price break
 
@@ -158,4 +158,7 @@ class PriceSchedulesResource(BaseResource):
             price_schedule_id: ID of the price schedule.
             quantity: Quantity of the price schedule.
         """
-        await self._http.delete(f"/priceschedules/{price_schedule_id}/PriceBreaks")
+        _params: dict[str, Any] = {}
+        if quantity is not None:
+            _params["quantity"] = quantity
+        await self._http.delete(f"/priceschedules/{price_schedule_id}/PriceBreaks", **_params)

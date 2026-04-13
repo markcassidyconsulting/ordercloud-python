@@ -57,8 +57,8 @@ class ForgottenCredentialsResource(BaseResource):
     async def retrieve_username(
         self,
         *,
-        client_id: Optional[str] = None,
-        email: Optional[str] = None,
+        client_id: Optional[str],
+        email: Optional[str],
     ) -> None:
         """Retrieve a username
 
@@ -66,4 +66,9 @@ class ForgottenCredentialsResource(BaseResource):
             client_id: ID of the client.
             email: Email of the forgotten credentials.
         """
-        await self._http.post("/username/retrieve")
+        _params: dict[str, Any] = {}
+        if client_id is not None:
+            _params["clientID"] = client_id
+        if email is not None:
+            _params["email"] = email
+        await self._http.post("/username/retrieve", params=_params or None)

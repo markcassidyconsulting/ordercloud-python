@@ -161,8 +161,13 @@ class SpendingAccountsResource(BaseResource):
             user_id: ID of the user.
             user_group_id: ID of the user group.
         """
+        _params: dict[str, Any] = {}
+        if user_id is not None:
+            _params["userID"] = user_id
+        if user_group_id is not None:
+            _params["userGroupID"] = user_group_id
         await self._http.delete(
-            f"/buyers/{buyer_id}/spendingaccounts/{spending_account_id}/assignments"
+            f"/buyers/{buyer_id}/spendingaccounts/{spending_account_id}/assignments", **_params
         )
 
     async def list_assignments(

@@ -3,9 +3,10 @@
 """OrderCloud AccessLevel and related models."""
 
 from __future__ import annotations
+from enum import Enum
 from typing import Generic, Optional
 
-from .shared import OrderCloudEnum, OrderCloudModel, XP
+from .shared import OrderCloudModel, XP
 
 __all__ = [
     "AccessLevel",
@@ -23,7 +24,7 @@ __all__ = [
 ]
 
 
-class AccessLevel(OrderCloudEnum):
+class AccessLevel(str, Enum):
     """"""
 
     Private = "Private"
@@ -31,7 +32,7 @@ class AccessLevel(OrderCloudEnum):
     Shareable = "Shareable"
 
 
-class ApiRole(OrderCloudEnum):
+class ApiRole(str, Enum):
     """"""
 
     ApiClientAdmin = "ApiClientAdmin"
@@ -128,7 +129,7 @@ class ApiRole(OrderCloudEnum):
     ErrorConfigAdmin = "ErrorConfigAdmin"
 
 
-class CommerceRole(OrderCloudEnum):
+class CommerceRole(str, Enum):
     """"""
 
     Buyer = "Buyer"
@@ -136,7 +137,7 @@ class CommerceRole(OrderCloudEnum):
     Supplier = "Supplier"
 
 
-class OrderDirection(OrderCloudEnum):
+class OrderDirection(str, Enum):
     """Direction of the order, from the current user's perspective."""
 
     Incoming = "Incoming"
@@ -144,7 +145,7 @@ class OrderDirection(OrderCloudEnum):
     All = "All"
 
 
-class OrderStatus(OrderCloudEnum):
+class OrderStatus(str, Enum):
     """"""
 
     Unsubmitted = "Unsubmitted"
@@ -155,7 +156,7 @@ class OrderStatus(OrderCloudEnum):
     Canceled = "Canceled"
 
 
-class PartyType(OrderCloudEnum):
+class PartyType(str, Enum):
     """"""
 
     User = "User"
@@ -164,7 +165,7 @@ class PartyType(OrderCloudEnum):
     BuyerGroup = "BuyerGroup"
 
 
-class SearchType(OrderCloudEnum):
+class SearchType(str, Enum):
     """"""
 
     AnyTerm = "AnyTerm"
@@ -174,7 +175,7 @@ class SearchType(OrderCloudEnum):
     ExactPhrasePrefix = "ExactPhrasePrefix"
 
 
-class XpThingType(OrderCloudEnum):
+class XpThingType(str, Enum):
     """"""
 
     Address = "Address"

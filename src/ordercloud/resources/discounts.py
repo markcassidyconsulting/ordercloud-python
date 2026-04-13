@@ -138,7 +138,14 @@ class DiscountsResource(BaseResource):
             user_group_id: ID of the user group.
             buyer_group_id: ID of the buyer group.
         """
-        await self._http.delete(f"/discounts/{discount_id}/assignments")
+        _params: dict[str, Any] = {}
+        if buyer_id is not None:
+            _params["buyerID"] = buyer_id
+        if user_group_id is not None:
+            _params["userGroupID"] = user_group_id
+        if buyer_group_id is not None:
+            _params["buyerGroupID"] = buyer_group_id
+        await self._http.delete(f"/discounts/{discount_id}/assignments", **_params)
 
     async def list_assignments(
         self,

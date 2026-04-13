@@ -162,6 +162,8 @@ class OrderCloudClient:
         auth_url: str = "https://auth.ordercloud.io/oauth/token",
         scopes: list[str] | None = None,
         timeout: float = 30.0,
+        max_retries: int = 0,
+        retry_backoff: float = 0.5,
     ) -> OrderCloudClient:
         """Create a client from individual parameters.
 
@@ -172,6 +174,8 @@ class OrderCloudClient:
             auth_url: OAuth2 token endpoint.
             scopes: Requested scopes (default: ``["FullAccess"]``).
             timeout: HTTP request timeout in seconds.
+            max_retries: Max retries on 429/5xx (0 = disabled).
+            retry_backoff: Base delay in seconds for exponential backoff.
 
         Returns:
             A configured ``OrderCloudClient`` instance.
@@ -181,16 +185,18 @@ class OrderCloudClient:
             client_secret=client_secret,
             base_url=base_url,
             auth_url=auth_url,
-            scopes=scopes or ["FullAccess"],
+            scopes=tuple(scopes) if scopes else ("FullAccess",),
             timeout=timeout,
+            max_retries=max_retries,
+            retry_backoff=retry_backoff,
         )
         return cls(config)
 
-    def add_before_request(self, hook: BeforeRequest) -> None:
+    def add_before_request(self, hook: "BeforeRequest") -> None:
         """Register a hook called before each HTTP request."""
         self._http.add_before_request(hook)
 
-    def add_after_response(self, hook: AfterResponse) -> None:
+    def add_after_response(self, hook: "AfterResponse") -> None:
         """Register a hook called after each HTTP response."""
         self._http.add_after_response(hook)
 

@@ -163,7 +163,14 @@ class BundlesResource(BaseResource):
             user_group_id: ID of the user group.
             seller_id: ID of the seller.
         """
-        await self._http.delete(f"/bundles/{bundle_id}/assignments/{buyer_id}")
+        _params: dict[str, Any] = {}
+        if user_id is not None:
+            _params["userID"] = user_id
+        if user_group_id is not None:
+            _params["userGroupID"] = user_group_id
+        if seller_id is not None:
+            _params["sellerID"] = seller_id
+        await self._http.delete(f"/bundles/{bundle_id}/assignments/{buyer_id}", **_params)
 
     async def delete_product_assignment(
         self,

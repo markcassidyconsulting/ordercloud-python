@@ -155,7 +155,7 @@ class InventoryRecordsResource(BaseResource):
         product_id: str,
         inventory_record_id: str,
         *,
-        buyer_id: Optional[str] = None,
+        buyer_id: Optional[str],
         user_id: Optional[str] = None,
         user_group_id: Optional[str] = None,
     ) -> None:
@@ -168,8 +168,15 @@ class InventoryRecordsResource(BaseResource):
             user_id: ID of the user.
             user_group_id: ID of the user group.
         """
+        _params: dict[str, Any] = {}
+        if buyer_id is not None:
+            _params["buyerID"] = buyer_id
+        if user_id is not None:
+            _params["userID"] = user_id
+        if user_group_id is not None:
+            _params["userGroupID"] = user_group_id
         await self._http.delete(
-            f"/products/{product_id}/inventoryrecords/{inventory_record_id}/assignments"
+            f"/products/{product_id}/inventoryrecords/{inventory_record_id}/assignments", **_params
         )
 
     async def list_assignments(
@@ -388,7 +395,7 @@ class InventoryRecordsResource(BaseResource):
         variant_id: str,
         inventory_record_id: str,
         *,
-        buyer_id: Optional[str] = None,
+        buyer_id: Optional[str],
         user_id: Optional[str] = None,
         user_group_id: Optional[str] = None,
     ) -> None:
@@ -402,8 +409,16 @@ class InventoryRecordsResource(BaseResource):
             user_id: ID of the user.
             user_group_id: ID of the user group.
         """
+        _params: dict[str, Any] = {}
+        if buyer_id is not None:
+            _params["buyerID"] = buyer_id
+        if user_id is not None:
+            _params["userID"] = user_id
+        if user_group_id is not None:
+            _params["userGroupID"] = user_group_id
         await self._http.delete(
-            f"/products/{product_id}/variants/{variant_id}/inventoryrecords/{inventory_record_id}/assignments"
+            f"/products/{product_id}/variants/{variant_id}/inventoryrecords/{inventory_record_id}/assignments",
+            **_params,
         )
 
     async def list_variant_assignments(

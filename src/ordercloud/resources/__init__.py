@@ -2,7 +2,7 @@
 # Source: ordercloud-openapi-v3.json
 """OrderCloud API resource clients."""
 
-from .base import BaseResource, paginate  # noqa: F401
+from .base import BaseResource  # noqa: F401
 from .addresses import AddressesResource  # noqa: F401
 from .admin_addresses import AdminAddressesResource  # noqa: F401
 from .admin_user_groups import AdminUserGroupsResource  # noqa: F401

@@ -37,6 +37,24 @@ __all__ = ["parse_spec"]
 # comma-separated strings.  Force to ``str`` to match _build_list_params.
 _COMMA_SEPARATED_PARAMS = {"searchOn", "sortBy"}
 
+# Mojibake replacements — smart quotes and other characters that appear
+# as multi-byte garble when the spec's UTF-8 is decoded as latin-1.
+_MOJIBAKE_MAP = {
+    "\u00e2\u0080\u0099": "'",  # right single quote
+    "\u00e2\u0080\u009c": '"',  # left double quote
+    "\u00e2\u0080\u009d": '"',  # right double quote
+    "\u00e2\u0080\u0093": "-",  # en dash
+    "\u00e2\u0080\u0094": "-",  # em dash
+    "\u00e2\u0080\u00a6": "...",  # ellipsis
+}
+
+
+def _clean_description(text: str) -> str:
+    """Normalise description text from the OpenAPI spec."""
+    for garbled, replacement in _MOJIBAKE_MAP.items():
+        text = text.replace(garbled, replacement)
+    return text.strip()
+
 
 def parse_spec(spec_path: Path) -> tuple[
     dict[str, ModelDef],
@@ -50,7 +68,7 @@ def parse_spec(spec_path: Path) -> tuple[
         A tuple of ``(models, enums, resources, all_schema_names)`` where
         each dict is keyed by the schema/resource name.
     """
-    with open(spec_path) as f:
+    with open(spec_path, encoding="utf-8") as f:
         spec = json.load(f)
 
     schemas = spec.get("components", {}).get("schemas", {})
@@ -89,7 +107,7 @@ def _parse_enum(name: str, schema: dict[str, Any]) -> EnumDef:
     return EnumDef(
         name=name,
         values=schema["enum"],
-        description=schema.get("description", f"{name} enum."),
+        description=_clean_description(schema.get("description", f"{name} enum.")),
     )
 
 
@@ -115,7 +133,7 @@ def _parse_model(
                 name=prop_name,
                 python_type=python_type,
                 default=default,
-                description=prop_schema.get("description", ""),
+                description=_clean_description(prop_schema.get("description", "")),
                 read_only=read_only,
                 is_xp=is_xp,
                 is_enum_ref=is_enum_ref,
@@ -130,7 +148,7 @@ def _parse_model(
     return ModelDef(
         name=name,
         fields=fields,
-        description=schema.get("description", f"An OrderCloud {name}."),
+        description=_clean_description(schema.get("description", f"An OrderCloud {name}.")),
         has_xp=has_xp,
     )
 
@@ -176,8 +194,8 @@ def _parse_operation(
 ) -> OperationDef:
     operation_id = operation.get("operationId", "")
     method_name = operation_id_to_method_name(operation_id)
-    summary = operation.get("summary", "")
-    description = operation.get("description", "")
+    summary = _clean_description(operation.get("summary", ""))
+    description = _clean_description(operation.get("description", ""))
 
     path_params: list[ParamDef] = []
     query_params: list[ParamDef] = []
@@ -220,7 +238,7 @@ def _parse_param(
     location = param.get("in", "query")
     required = param.get("required", location == "path")
     schema = param.get("schema", {})
-    description = param.get("description", "")
+    description = _clean_description(param.get("description", ""))
 
     ref = extract_ref(schema)
     is_enum = ref is not None and ref in enum_names
