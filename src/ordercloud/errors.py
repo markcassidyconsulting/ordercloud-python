@@ -1,20 +1,41 @@
+"""OrderCloud API error types."""
+
 from dataclasses import dataclass
-from typing import Optional
+from typing import Any, Optional
+
+__all__ = ["ApiError", "OrderCloudError", "AuthenticationError"]
 
 
 @dataclass
 class ApiError:
-    """A single error returned by the OrderCloud API."""
+    """A single error returned by the OrderCloud API.
+
+    Attributes:
+        error_code: Machine-readable error code (e.g. ``"NotFound"``).
+        message: Human-readable error description.
+        data: Optional structured data associated with the error.
+    """
 
     error_code: str
     message: str
-    data: object = None
+    data: Any = None
 
 
 class OrderCloudError(Exception):
-    """Raised when the OrderCloud API returns an error response."""
+    """Raised when the OrderCloud API returns an error response.
 
-    def __init__(self, status_code: int, errors: list[ApiError], raw: Optional[dict] = None):
+    Attributes:
+        status_code: The HTTP status code.
+        errors: List of individual API errors from the response body.
+        raw: The raw JSON response body, if available.
+    """
+
+    def __init__(
+        self,
+        status_code: int,
+        errors: list[ApiError],
+        raw: Optional[dict[str, Any]] = None,
+    ) -> None:
         self.status_code = status_code
         self.errors = errors
         self.raw = raw
@@ -23,4 +44,4 @@ class OrderCloudError(Exception):
 
 
 class AuthenticationError(OrderCloudError):
-    """Raised on 401/403 responses."""
+    """Raised on 401/403 responses from the OrderCloud API."""

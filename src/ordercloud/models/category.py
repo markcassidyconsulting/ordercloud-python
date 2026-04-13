@@ -1,9 +1,26 @@
+"""OrderCloud Category model."""
+
 from typing import Any, Optional
 
 from .shared import OrderCloudModel
 
+__all__ = ["Category"]
+
 
 class Category(OrderCloudModel):
+    """An OrderCloud Category (belongs to a Catalog).
+
+    Attributes:
+        ID: Unique identifier (auto-generated if not provided).
+        Name: Display name of the category.
+        Description: Optional description.
+        ListOrder: Sort order among sibling categories.
+        Active: Whether the category is active.
+        ParentID: ID of the parent category (``None`` for top-level).
+        ChildCount: Number of direct child categories (read-only).
+        xp: Extended properties (arbitrary custom data).
+    """
+
     ID: Optional[str] = None
     Name: Optional[str] = None
     Description: Optional[str] = None

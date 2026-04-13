@@ -1,15 +1,19 @@
-from .products import ProductsResource
+"""OrderCloud API resource clients."""
+
+from .base import BaseResource
+from .buyers import BuyersResource
 from .catalogs import CatalogsResource
 from .categories import CategoriesResource
-from .buyers import BuyersResource
-from .orders import OrdersResource
 from .line_items import LineItemsResource
+from .orders import OrdersResource
+from .products import ProductsResource
 
 __all__ = [
-    "ProductsResource",
+    "BaseResource",
+    "BuyersResource",
     "CatalogsResource",
     "CategoriesResource",
-    "BuyersResource",
-    "OrdersResource",
     "LineItemsResource",
+    "OrdersResource",
+    "ProductsResource",
 ]

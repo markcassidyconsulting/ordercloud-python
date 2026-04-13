@@ -36,7 +36,7 @@ async def main():
 
         # List all products
         products = await oc.products.list(page_size=10)
-        print(f"Total products: {products.meta.TotalCount}")
+        print(f"Total products: {products.Meta.TotalCount}")
         for p in products.Items:
             print(f"  {p.ID}: {p.Name}")
 

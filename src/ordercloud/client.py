@@ -1,3 +1,5 @@
+"""OrderCloud SDK client — the main entry point."""
+
 from typing import Optional
 
 from .auth import TokenManager
@@ -10,22 +12,34 @@ from .resources.line_items import LineItemsResource
 from .resources.orders import OrdersResource
 from .resources.products import ProductsResource
 
+__all__ = ["OrderCloudClient"]
+
 
 class OrderCloudClient:
     """Entry point for the OrderCloud Python SDK.
 
-    Usage::
+    Provides access to all OrderCloud API resources as attributes.
+    Use the ``create`` class method for convenient construction, or
+    pass an ``OrderCloudConfig`` directly.
 
-        from ordercloud import OrderCloudClient
+    Example::
 
         async with OrderCloudClient.create(
             client_id="...",
             client_secret="...",
         ) as client:
             products = await client.products.list()
+
+    Attributes:
+        products: Product operations.
+        catalogs: Catalog operations.
+        categories: Category operations (nested under catalogs).
+        buyers: Buyer operations.
+        orders: Order operations.
+        line_items: Line item operations (nested under orders).
     """
 
-    def __init__(self, config: OrderCloudConfig):
+    def __init__(self, config: OrderCloudConfig) -> None:
         self._config = config
         self._token_manager = TokenManager(config)
         self._http = HttpClient(config, self._token_manager)
@@ -48,6 +62,22 @@ class OrderCloudClient:
         scopes: Optional[list[str]] = None,
         timeout: float = 30.0,
     ) -> "OrderCloudClient":
+        """Create a client with individual configuration parameters.
+
+        This is a convenience alternative to constructing an
+        ``OrderCloudConfig`` manually.
+
+        Args:
+            client_id: OAuth2 client ID.
+            client_secret: OAuth2 client secret (empty for public clients).
+            base_url: API base URL including ``/v1``.
+            auth_url: OAuth2 token endpoint URL.
+            scopes: OAuth2 scopes to request (defaults to ``["FullAccess"]``).
+            timeout: HTTP request timeout in seconds.
+
+        Returns:
+            A configured ``OrderCloudClient`` instance.
+        """
         config = OrderCloudConfig(
             client_id=client_id,
             client_secret=client_secret,
@@ -59,6 +89,7 @@ class OrderCloudClient:
         return cls(config)
 
     async def close(self) -> None:
+        """Close the underlying HTTP client and release connections."""
         await self._http.close()
 
     async def __aenter__(self) -> "OrderCloudClient":
