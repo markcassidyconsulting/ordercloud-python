@@ -15,7 +15,7 @@ authors = [
 dependencies = [
     "httpx>=0.27",
     "pydantic>=2.13.0",
-    "python-dotenv>=1.0",
+    "python-dotenv>=1.2.2",
 ]
 
 [project.optional-dependencies]
