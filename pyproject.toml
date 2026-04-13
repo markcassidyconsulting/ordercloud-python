@@ -28,7 +28,7 @@ dev = [
     "mypy>=1.10",
 ]
 codegen = [
-    "jinja2>=3.1",
+    "jinja2>=3.1.6",
 ]
 
 [tool.hatch.build.targets.wheel]
