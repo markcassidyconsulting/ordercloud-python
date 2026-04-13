@@ -15,7 +15,8 @@ class Catalog(OrderCloudModel):
         OwnerID: The ID of the organisation that owns this catalog.
         Name: Display name of the catalog.
         Description: Optional description.
-        Active: Whether the catalog is active.
+        Active: Whether the catalog is active.  If false, categories and
+            products within it are not visible to buyer users.
         CategoryCount: Number of categories in this catalog (read-only).
         xp: Extended properties (arbitrary custom data).
     """
@@ -24,6 +25,6 @@ class Catalog(OrderCloudModel):
     OwnerID: Optional[str] = None
     Name: Optional[str] = None
     Description: Optional[str] = None
-    Active: bool = True
+    Active: Optional[bool] = None
     CategoryCount: int = 0
     xp: Optional[dict[str, Any]] = None

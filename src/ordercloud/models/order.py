@@ -1,4 +1,4 @@
-"""OrderCloud Order model and status enum."""
+"""OrderCloud Order model, status enum, and direction enum."""
 
 from enum import Enum
 from typing import Any, Optional
@@ -40,19 +40,25 @@ class Order(OrderCloudModel):
         ShippingAddressID: ID of the shipping address.
         Comments: Free-text comments on the order.
         LineItemCount: Number of line items (read-only).
-        Status: Current order status.
+        Status: Current order status (read-only).
         DateCreated: ISO 8601 timestamp of creation (read-only).
         DateSubmitted: ISO 8601 timestamp of submission (read-only).
         DateApproved: ISO 8601 timestamp of approval (read-only).
         DateDeclined: ISO 8601 timestamp of decline (read-only).
         DateCanceled: ISO 8601 timestamp of cancellation (read-only).
         DateCompleted: ISO 8601 timestamp of completion (read-only).
+        LastUpdated: ISO 8601 timestamp of last update (read-only).
         Subtotal: Order subtotal before shipping and tax (read-only).
-        ShippingCost: Shipping cost (read-only).
-        TaxCost: Tax amount (read-only).
-        PromotionDiscount: Total promotion discount (read-only).
-        Total: Order grand total (read-only).
+        ShippingCost: Shipping cost (writable with OverrideShipping role).
+        TaxCost: Tax amount (writable with TaxOverride role).
+        Gratuity: Gratuity amount (default 0).
+        Fees: Fees associated with the order (read-only).
+        BaseDiscount: Sum of discount assignment amounts (read-only).
+        PromotionDiscount: Sum of promotion amounts (read-only).
+        Currency: Currency code inherited from the buyer (read-only).
+        Total: Grand total (read-only).
         IsSubmitted: Whether the order has been submitted (read-only).
+        SubscriptionID: ID of the subscription for automated orders (read-only).
         xp: Extended properties (arbitrary custom data).
     """
 
@@ -73,10 +79,16 @@ class Order(OrderCloudModel):
     DateDeclined: Optional[str] = None
     DateCanceled: Optional[str] = None
     DateCompleted: Optional[str] = None
+    LastUpdated: Optional[str] = None
     Subtotal: float = 0.0
     ShippingCost: float = 0.0
     TaxCost: float = 0.0
+    Gratuity: float = 0.0
+    Fees: float = 0.0
+    BaseDiscount: float = 0.0
     PromotionDiscount: float = 0.0
+    Currency: Optional[str] = None
     Total: float = 0.0
-    IsSubmitted: bool = False
+    IsSubmitted: Optional[bool] = None
+    SubscriptionID: Optional[str] = None
     xp: Optional[dict[str, Any]] = None

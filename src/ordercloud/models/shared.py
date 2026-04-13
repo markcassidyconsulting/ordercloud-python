@@ -6,7 +6,7 @@ JSON representation directly.  Python-side access is also PascalCase
 trade-off for zero-friction serialisation round-trips.
 """
 
-from typing import Generic, Optional, TypeVar
+from typing import Any, Generic, Optional, TypeVar
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -73,11 +73,13 @@ class ListFacet(BaseModel):
         Name: The facet field name.
         XpPath: The extended property path for this facet.
         Values: The individual facet values and their counts.
+        xp: Extended properties (arbitrary custom data).
     """
 
     Name: str = ""
     XpPath: str = ""
     Values: list[ListFacetValue] = Field(default_factory=list)
+    xp: Optional[dict[str, Any]] = None
 
 
 class MetaWithFacets(Meta):

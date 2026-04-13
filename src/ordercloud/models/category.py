@@ -14,8 +14,9 @@ class Category(OrderCloudModel):
         ID: Unique identifier (auto-generated if not provided).
         Name: Display name of the category.
         Description: Optional description.
-        ListOrder: Sort order among sibling categories.
-        Active: Whether the category is active.
+        ListOrder: Sort order among sibling categories (minimum 0).
+        Active: Whether the category is active.  If false, buyers cannot
+            see this category or any categories or products under it.
         ParentID: ID of the parent category (``None`` for top-level).
         ChildCount: Number of direct child categories (read-only).
         xp: Extended properties (arbitrary custom data).
@@ -25,7 +26,7 @@ class Category(OrderCloudModel):
     Name: Optional[str] = None
     Description: Optional[str] = None
     ListOrder: Optional[int] = None
-    Active: bool = True
+    Active: Optional[bool] = None
     ParentID: Optional[str] = None
     ChildCount: int = 0
     xp: Optional[dict[str, Any]] = None
