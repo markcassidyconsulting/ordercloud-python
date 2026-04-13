@@ -11,12 +11,16 @@ Quick start::
         products = await client.products.list()
 """
 
+from importlib.metadata import version as _version
+
 from .client import OrderCloudClient
 from .config import OrderCloudConfig
 from .errors import AuthenticationError, OrderCloudError
 from .middleware import AfterResponse, BeforeRequest, RequestContext, ResponseContext
 from .resources.base import paginate
 from .sync_client import SyncOrderCloudClient, paginate_sync
+
+__version__ = _version("ordercloud-python")
 
 __all__ = [
     "OrderCloudClient",
