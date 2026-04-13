@@ -32,3 +32,11 @@ class OrderCloudConfig:
     def __post_init__(self) -> None:
         if not isinstance(self.scopes, tuple):
             object.__setattr__(self, "scopes", tuple(self.scopes))
+
+    def __repr__(self) -> str:
+        return (
+            f"OrderCloudConfig(client_id={self.client_id!r}, "
+            f"client_secret='***', "
+            f"base_url={self.base_url!r}, "
+            f"auth_url={self.auth_url!r})"
+        )

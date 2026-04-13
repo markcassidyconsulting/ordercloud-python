@@ -33,6 +33,9 @@ class AccessToken:
         """Whether the token has expired (with a 30-second safety buffer)."""
         return time.time() >= self._expires_at - 30
 
+    def __repr__(self) -> str:
+        return f"AccessToken(expired={self.is_expired})"
+
 
 class TokenManager:
     """Handles OAuth2 token acquisition and automatic refresh.
