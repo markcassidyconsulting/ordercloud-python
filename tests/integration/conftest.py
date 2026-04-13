@@ -3,11 +3,15 @@
 These tests run against a live OrderCloud sandbox. They are skipped
 automatically when credentials are not available in the environment.
 
+Environment variables use an ORDERCLOUD_TEST_ prefix to avoid
+accidentally running tests against a production instance when
+ORDERCLOUD_CLIENT_ID is set for normal SDK usage.
+
 Required environment variables (typically in .env at repo root):
-    ORDERCLOUD_CLIENT_ID
-    ORDERCLOUD_CLIENT_SECRET
-    ORDERCLOUD_BASE_URL  (optional, defaults to US production)
-    ORDERCLOUD_AUTH_URL   (optional, defaults to US production)
+    ORDERCLOUD_TEST_CLIENT_ID
+    ORDERCLOUD_TEST_CLIENT_SECRET
+    ORDERCLOUD_TEST_BASE_URL  (optional, defaults to US production)
+    ORDERCLOUD_TEST_AUTH_URL   (optional, defaults to US production)
 """
 
 from __future__ import annotations
@@ -39,17 +43,19 @@ except ImportError:
     pass  # dotenv not installed — rely on env vars being set directly
 
 HAS_CREDENTIALS = bool(
-    os.environ.get("ORDERCLOUD_CLIENT_ID") and os.environ.get("ORDERCLOUD_CLIENT_SECRET")
+    os.environ.get("ORDERCLOUD_TEST_CLIENT_ID") and os.environ.get("ORDERCLOUD_TEST_CLIENT_SECRET")
 )
 
 
 def _make_config(**overrides: object) -> OrderCloudConfig:
-    """Build OrderCloudConfig from environment variables."""
+    """Build OrderCloudConfig from ORDERCLOUD_TEST_* environment variables."""
     kwargs: dict = {
-        "client_id": os.environ["ORDERCLOUD_CLIENT_ID"],
-        "client_secret": os.environ["ORDERCLOUD_CLIENT_SECRET"],
-        "base_url": os.environ.get("ORDERCLOUD_BASE_URL", "https://api.ordercloud.io/v1"),
-        "auth_url": os.environ.get("ORDERCLOUD_AUTH_URL", "https://auth.ordercloud.io/oauth/token"),
+        "client_id": os.environ["ORDERCLOUD_TEST_CLIENT_ID"],
+        "client_secret": os.environ["ORDERCLOUD_TEST_CLIENT_SECRET"],
+        "base_url": os.environ.get("ORDERCLOUD_TEST_BASE_URL", "https://api.ordercloud.io/v1"),
+        "auth_url": os.environ.get(
+            "ORDERCLOUD_TEST_AUTH_URL", "https://auth.ordercloud.io/oauth/token"
+        ),
         "max_retries": 2,
         "retry_backoff": 1.0,
     }
