@@ -3,7 +3,9 @@
 from enum import Enum
 from typing import Any, Optional
 
+from .address import Address
 from .shared import OrderCloudModel
+from .user import OrderUser
 
 __all__ = ["OrderDirection", "OrderStatus", "Order"]
 
@@ -13,6 +15,7 @@ class OrderDirection(str, Enum):
 
     Incoming = "Incoming"
     Outgoing = "Outgoing"
+    All = "All"
 
 
 class OrderStatus(str, Enum):
@@ -63,12 +66,12 @@ class Order(OrderCloudModel):
     """
 
     ID: Optional[str] = None
-    FromUser: Optional[dict[str, Any]] = None
+    FromUser: Optional[OrderUser] = None
     FromCompanyID: Optional[str] = None
     ToCompanyID: Optional[str] = None
     FromUserID: Optional[str] = None
     BillingAddressID: Optional[str] = None
-    BillingAddress: Optional[dict[str, Any]] = None
+    BillingAddress: Optional[Address] = None
     ShippingAddressID: Optional[str] = None
     Comments: Optional[str] = None
     LineItemCount: int = 0

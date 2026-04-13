@@ -2,6 +2,8 @@
 
 from typing import Any, Optional
 
+from .address import Address
+from .line_item_types import LineItemProduct, LineItemVariant
 from .shared import OrderCloudModel
 
 __all__ = ["LineItem"]
@@ -62,10 +64,10 @@ class LineItem(OrderCloudModel):
     ShippingAccount: Optional[str] = None
     ShippingAddressID: Optional[str] = None
     ShipFromAddressID: Optional[str] = None
-    Product: Optional[dict[str, Any]] = None
-    Variant: Optional[dict[str, Any]] = None
-    ShippingAddress: Optional[dict[str, Any]] = None
-    ShipFromAddress: Optional[dict[str, Any]] = None
+    Product: Optional[LineItemProduct] = None
+    Variant: Optional[LineItemVariant] = None
+    ShippingAddress: Optional[Address] = None
+    ShipFromAddress: Optional[Address] = None
     SupplierID: Optional[str] = None
     InventoryRecordID: Optional[str] = None
     PriceScheduleID: Optional[str] = None
