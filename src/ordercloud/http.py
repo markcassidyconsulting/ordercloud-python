@@ -115,8 +115,8 @@ class HttpClient:
             logger.debug("Response: %s %s %d", method, path, resp.status_code)
 
             resp_ctx = ResponseContext(request=ctx, response=resp, attempt=attempt)
-            for hook in self._after_response:
-                await hook(resp_ctx)
+            for after_hook in self._after_response:
+                await after_hook(resp_ctx)
 
             if resp.status_code < 400:
                 return resp
@@ -152,7 +152,8 @@ class HttpClient:
                 return float(retry_after)
             except ValueError:
                 pass
-        return self._config.retry_backoff * (2**attempt)
+        delay: float = self._config.retry_backoff * (2**attempt)
+        return delay
 
     async def get(self, path: str, **params: Any) -> httpx.Response:
         """Send a GET request."""

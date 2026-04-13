@@ -1,5 +1,12 @@
 # ordercloud-python
 
+[![CI](https://github.com/markcassidyconsulting/ordercloud-python/actions/workflows/ci.yml/badge.svg)](https://github.com/markcassidyconsulting/ordercloud-python/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/markcassidyconsulting/ordercloud-python/actions/workflows/codeql.yml/badge.svg)](https://github.com/markcassidyconsulting/ordercloud-python/actions/workflows/codeql.yml)
+[![codecov](https://codecov.io/gh/markcassidyconsulting/ordercloud-python/graph/badge.svg)](https://codecov.io/gh/markcassidyconsulting/ordercloud-python)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/markcassidyconsulting/ordercloud-python/badge)](https://scorecard.dev/viewer/?uri=github.com/markcassidyconsulting/ordercloud-python)
+![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 An idiomatic async Python SDK for the [Sitecore OrderCloud](https://ordercloud.io) e-commerce platform.
 
 Built with modern Python: async/await throughout, Pydantic v2 typed models, full type annotations, and `py.typed` for downstream type checking. **Full API coverage** — all 632 operations across 60 resources, generated from the OpenAPI spec.

@@ -172,7 +172,7 @@ class UsersResource(BaseResource):
         user_id: str,
         new_buyer_id: str,
         *,
-        orders: UserOrderMoveOption = None,
+        orders: Optional[UserOrderMoveOption] = None,
     ) -> User:
         """Move a user to a different buyer
 

@@ -287,7 +287,8 @@ class OrderReturnsResource(BaseResource):
         Returns:
             The OrderReturn object.
         """
-        await self._http.delete(f"/orderreturns/{return_id}/items/{line_item_id}")
+        resp = await self._http.delete(f"/orderreturns/{return_id}/items/{line_item_id}")
+        return OrderReturn(**resp.json())
 
     async def submit(
         self,

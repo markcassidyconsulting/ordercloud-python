@@ -26,9 +26,7 @@ def _make_sync_client() -> SyncOrderCloudClient:
     )
     client = SyncOrderCloudClient(config)
     # Pre-populate token to avoid auth calls in tests.
-    client._async_client._token_manager._token = AccessToken(
-        "mock-token-12345", expires_in=600
-    )
+    client._async_client._token_manager._token = AccessToken("mock-token-12345", expires_in=600)
     return client
 
 
@@ -87,9 +85,7 @@ class TestSyncClient:
 
     @respx.mock
     def test_delete_product(self):
-        route = respx.delete(f"{TEST_BASE_URL}/products/p1").mock(
-            return_value=Response(204)
-        )
+        route = respx.delete(f"{TEST_BASE_URL}/products/p1").mock(return_value=Response(204))
         client = _make_sync_client()
         try:
             result = client.products.delete("p1")
@@ -118,9 +114,7 @@ class TestSyncClient:
             base_url=TEST_BASE_URL,
             auth_url=TEST_AUTH_URL,
         )
-        client._async_client._token_manager._token = AccessToken(
-            "mock-token-12345", expires_in=600
-        )
+        client._async_client._token_manager._token = AccessToken("mock-token-12345", expires_in=600)
         try:
             product = client.products.get("p1")
             assert product.ID == "p1"
@@ -159,8 +153,12 @@ class TestSyncClient:
                 json={
                     "Items": [],
                     "Meta": {
-                        "Page": 1, "PageSize": 20, "TotalCount": 0,
-                        "TotalPages": 0, "ItemRange": [], "Facets": [],
+                        "Page": 1,
+                        "PageSize": 20,
+                        "TotalCount": 0,
+                        "TotalPages": 0,
+                        "ItemRange": [],
+                        "Facets": [],
                     },
                 },
             )

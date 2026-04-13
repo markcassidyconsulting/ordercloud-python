@@ -23,9 +23,7 @@ from .conftest import TEST_BASE_URL
 class TestRequestBuilding:
     @respx.mock
     async def test_get_sends_bearer_token(self, http_client: HttpClient):
-        route = respx.get(f"{TEST_BASE_URL}/products").mock(
-            return_value=Response(200, json={})
-        )
+        route = respx.get(f"{TEST_BASE_URL}/products").mock(return_value=Response(200, json={}))
         await http_client.get("/products")
         assert route.calls[0].request.headers["authorization"] == "Bearer mock-token-12345"
 
@@ -39,9 +37,7 @@ class TestRequestBuilding:
 
     @respx.mock
     async def test_get_passes_query_params(self, http_client: HttpClient):
-        route = respx.get(f"{TEST_BASE_URL}/products").mock(
-            return_value=Response(200, json={})
-        )
+        route = respx.get(f"{TEST_BASE_URL}/products").mock(return_value=Response(200, json={}))
         await http_client.get("/products", search="widget", page=1, pageSize=20)
         url = route.calls[0].request.url
         assert "search=widget" in str(url)
@@ -50,9 +46,7 @@ class TestRequestBuilding:
 
     @respx.mock
     async def test_get_strips_none_params(self, http_client: HttpClient):
-        route = respx.get(f"{TEST_BASE_URL}/products").mock(
-            return_value=Response(200, json={})
-        )
+        route = respx.get(f"{TEST_BASE_URL}/products").mock(return_value=Response(200, json={}))
         await http_client.get("/products", search="widget", sortBy=None)
         url = str(route.calls[0].request.url)
         assert "search=widget" in url
@@ -86,9 +80,7 @@ class TestRequestBuilding:
 
     @respx.mock
     async def test_delete_sends_no_body(self, http_client: HttpClient):
-        route = respx.delete(f"{TEST_BASE_URL}/products/p1").mock(
-            return_value=Response(204)
-        )
+        route = respx.delete(f"{TEST_BASE_URL}/products/p1").mock(return_value=Response(204))
         await http_client.delete("/products/p1")
         assert route.called
 
@@ -182,9 +174,7 @@ class TestErrorHandling:
     @respx.mock
     async def test_error_preserves_raw_body(self, http_client: HttpClient):
         raw = {"Errors": [{"ErrorCode": "Test", "Message": "test error", "Data": {"extra": 1}}]}
-        respx.get(f"{TEST_BASE_URL}/products").mock(
-            return_value=Response(400, json=raw)
-        )
+        respx.get(f"{TEST_BASE_URL}/products").mock(return_value=Response(400, json=raw))
         with pytest.raises(OrderCloudError) as exc_info:
             await http_client.get("/products")
         assert exc_info.value.raw == raw
@@ -363,9 +353,7 @@ class TestLogging:
     async def test_logs_request_and_response(
         self, http_client: HttpClient, caplog: pytest.LogCaptureFixture
     ):
-        respx.get(f"{TEST_BASE_URL}/products").mock(
-            return_value=Response(200, json={})
-        )
+        respx.get(f"{TEST_BASE_URL}/products").mock(return_value=Response(200, json={}))
         with caplog.at_level(logging.DEBUG, logger="ordercloud"):
             await http_client.get("/products")
         messages = [r.message for r in caplog.records]
@@ -398,9 +386,7 @@ class TestLogging:
 class TestMiddleware:
     @respx.mock
     async def test_before_request_adds_header(self, http_client: HttpClient):
-        route = respx.get(f"{TEST_BASE_URL}/products").mock(
-            return_value=Response(200, json={})
-        )
+        route = respx.get(f"{TEST_BASE_URL}/products").mock(return_value=Response(200, json={}))
 
         async def add_correlation_id(ctx: RequestContext) -> None:
             ctx.headers["X-Correlation-ID"] = "test-123"
@@ -411,9 +397,7 @@ class TestMiddleware:
 
     @respx.mock
     async def test_before_request_modifies_params(self, http_client: HttpClient):
-        route = respx.get(f"{TEST_BASE_URL}/products").mock(
-            return_value=Response(200, json={})
-        )
+        route = respx.get(f"{TEST_BASE_URL}/products").mock(return_value=Response(200, json={}))
 
         async def force_page_size(ctx: RequestContext) -> None:
             if ctx.params is None:
@@ -427,9 +411,7 @@ class TestMiddleware:
 
     @respx.mock
     async def test_after_response_receives_context(self, http_client: HttpClient):
-        respx.get(f"{TEST_BASE_URL}/products").mock(
-            return_value=Response(200, json={})
-        )
+        respx.get(f"{TEST_BASE_URL}/products").mock(return_value=Response(200, json={}))
 
         captured: list[ResponseContext] = []
 
@@ -466,9 +448,7 @@ class TestMiddleware:
 
     @respx.mock
     async def test_multiple_hooks_run_in_order(self, http_client: HttpClient):
-        respx.get(f"{TEST_BASE_URL}/products").mock(
-            return_value=Response(200, json={})
-        )
+        respx.get(f"{TEST_BASE_URL}/products").mock(return_value=Response(200, json={}))
 
         order: list[str] = []
 
@@ -500,9 +480,7 @@ class TestMiddleware:
 
         client.add_after_response(capture)
 
-        respx.get(f"{TEST_BASE_URL}/products").mock(
-            return_value=Response(200, json={})
-        )
+        respx.get(f"{TEST_BASE_URL}/products").mock(return_value=Response(200, json={}))
 
         async with respx.mock:
             await client._http.get("/products")
@@ -524,9 +502,7 @@ class TestMiddleware:
 
         client.add_before_request(add_header)
 
-        route = respx.get(f"{TEST_BASE_URL}/products").mock(
-            return_value=Response(200, json={})
-        )
+        route = respx.get(f"{TEST_BASE_URL}/products").mock(return_value=Response(200, json={}))
 
         await client._http.get("/products")
 

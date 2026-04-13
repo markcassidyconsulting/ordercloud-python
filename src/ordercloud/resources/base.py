@@ -128,7 +128,7 @@ class BaseResource:
         )
 
     @staticmethod
-    def _serialize(model: Any) -> dict[str, Any]:
+    def _serialize(model: BaseModel | dict[str, Any]) -> dict[str, Any]:
         """Serialise a Pydantic model or plain dict for an API request body.
 
         Accepts either a Pydantic ``BaseModel`` instance (serialised with

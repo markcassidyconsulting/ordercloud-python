@@ -68,9 +68,7 @@ def mock_auth(config: OrderCloudConfig) -> respx.Router:
     Returns the router so tests can inspect calls or override responses.
     """
     router = respx.Router(assert_all_called=False)
-    router.post(config.auth_url).mock(
-        return_value=Response(200, json=TOKEN_RESPONSE)
-    )
+    router.post(config.auth_url).mock(return_value=Response(200, json=TOKEN_RESPONSE))
     return router
 
 
@@ -95,9 +93,7 @@ def retry_config() -> OrderCloudConfig:
 
 
 @pytest.fixture
-async def retry_http_client(
-    retry_config: OrderCloudConfig, mock_auth: respx.Router
-) -> HttpClient:
+async def retry_http_client(retry_config: OrderCloudConfig, mock_auth: respx.Router) -> HttpClient:
     """An HttpClient with retries enabled and zero backoff for fast tests."""
     token_manager = TokenManager(retry_config)
     client = HttpClient(retry_config, token_manager)

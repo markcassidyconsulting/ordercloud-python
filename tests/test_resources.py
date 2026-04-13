@@ -139,9 +139,7 @@ class TestProductsResource:
 
     @respx.mock
     async def test_delete(self, http_client: HttpClient):
-        route = respx.delete(f"{TEST_BASE_URL}/products/p1").mock(
-            return_value=Response(204)
-        )
+        route = respx.delete(f"{TEST_BASE_URL}/products/p1").mock(return_value=Response(204))
         resource = ProductsResource(http_client)
         result = await resource.delete("p1")
         assert result is None
@@ -198,8 +196,10 @@ class TestOrdersResource:
         )
         resource = OrdersResource(http_client)
         from ordercloud.models.order import OrderApprovalInfo
+
         order = await resource.approve(
-            OrderDirection.Incoming, "o1",
+            OrderDirection.Incoming,
+            "o1",
             OrderApprovalInfo(Comments="Approved"),
         )
         assert order.Status == OrderStatus.Open
@@ -215,9 +215,7 @@ class TestOrdersResource:
 
     @respx.mock
     async def test_delete(self, http_client: HttpClient):
-        route = respx.delete(f"{TEST_BASE_URL}/orders/Outgoing/o1").mock(
-            return_value=Response(204)
-        )
+        route = respx.delete(f"{TEST_BASE_URL}/orders/Outgoing/o1").mock(return_value=Response(204))
         resource = OrdersResource(http_client)
         await resource.delete(OrderDirection.Outgoing, "o1")
         assert route.called
@@ -324,7 +322,9 @@ class TestPagination:
                 200,
                 json=paged_response(
                     [{"ID": "b1", "Name": "One"}, {"ID": "b2", "Name": "Two"}],
-                    page=1, total_pages=1, total_count=2,
+                    page=1,
+                    total_pages=1,
+                    total_count=2,
                 ),
             )
         )
@@ -342,21 +342,27 @@ class TestPagination:
                     200,
                     json=paged_response(
                         [{"ID": "b1"}, {"ID": "b2"}],
-                        page=1, total_pages=3, total_count=5,
+                        page=1,
+                        total_pages=3,
+                        total_count=5,
                     ),
                 ),
                 Response(
                     200,
                     json=paged_response(
                         [{"ID": "b3"}, {"ID": "b4"}],
-                        page=2, total_pages=3, total_count=5,
+                        page=2,
+                        total_pages=3,
+                        total_count=5,
                     ),
                 ),
                 Response(
                     200,
                     json=paged_response(
                         [{"ID": "b5"}],
-                        page=3, total_pages=3, total_count=5,
+                        page=3,
+                        total_pages=3,
+                        total_count=5,
                     ),
                 ),
             ]
@@ -401,7 +407,9 @@ class TestPagination:
                 200,
                 json=paged_response(
                     [{"ID": "o1", "Status": "Open"}],
-                    page=1, total_pages=1, total_count=1,
+                    page=1,
+                    total_pages=1,
+                    total_count=1,
                 ),
             )
         )

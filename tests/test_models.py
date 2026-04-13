@@ -355,15 +355,21 @@ class TestListPage:
         assert page.Meta.TotalCount == 0
 
     def test_meta_with_facets(self):
-        meta = MetaWithFacets.model_validate({
-            "Page": 1,
-            "PageSize": 20,
-            "TotalCount": 100,
-            "TotalPages": 5,
-            "ItemRange": [1, 20],
-            "Facets": [
-                {"Name": "Color", "XpPath": "xp.Color", "Values": [{"Value": "Red", "Count": 15}]},
-            ],
-        })
+        meta = MetaWithFacets.model_validate(
+            {
+                "Page": 1,
+                "PageSize": 20,
+                "TotalCount": 100,
+                "TotalPages": 5,
+                "ItemRange": [1, 20],
+                "Facets": [
+                    {
+                        "Name": "Color",
+                        "XpPath": "xp.Color",
+                        "Values": [{"Value": "Red", "Count": 15}],
+                    },
+                ],
+            }
+        )
         assert len(meta.Facets) == 1
         assert meta.Facets[0].Values[0].Count == 15

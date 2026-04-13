@@ -521,7 +521,8 @@ class OrdersResource(BaseResource):
         Returns:
             The Order object.
         """
-        await self._http.delete(f"/orders/{direction}/{order_id}/promotions/{promo_code}")
+        resp = await self._http.delete(f"/orders/{direction}/{order_id}/promotions/{promo_code}")
+        return Order(**resp.json())
 
     async def refresh_promotions(
         self,
