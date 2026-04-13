@@ -61,10 +61,13 @@ class SellerApprovalRule(OrderCloudModel):
     """
 
     OwnerID: Optional[str] = None
-    ApprovalType: Optional[ApprovalType] = None
+    ApprovalType: Optional[_ApprovalType] = None
     ID: Optional[str] = None
     Name: Optional[str] = None
     Description: Optional[str] = None
     ApprovingGroupID: Optional[str] = None
     RuleExpression: Optional[str] = None
     xp: Optional[dict[str, Any]] = None
+
+
+_ApprovalType = ApprovalType

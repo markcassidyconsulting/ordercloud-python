@@ -36,6 +36,9 @@ __all__ = [
     "OrderDirection",
     "OrderStatus",
 ]
+_Subscription = Subscription
+_ShipEstimateResponse = ShipEstimateResponse
+_SubscriptionIntegrationResponse = SubscriptionIntegrationResponse
 
 
 class OrderApprovalInfo(OrderCloudModel):
@@ -315,7 +318,7 @@ class ExtendedLineItem(OrderCloudModel):
     """
 
     OrderID: Optional[str] = None
-    Order: Optional[Order] = None
+    Order: Optional[_Order] = None
     ID: Optional[str] = None
     ProductID: Optional[str] = None
     Quantity: int = 1
@@ -366,16 +369,16 @@ class OrderWorksheet(OrderCloudModel):
         SubscriptionIntegrationResponse:
     """
 
-    Order: Optional[Order] = None
+    Order: Optional[_Order] = None
     LineItems: Optional[list[LineItem]] = None
     OrderPromotions: Optional[list[OrderPromotion]] = None
-    Subscription: Optional[Subscription] = None
-    ShipEstimateResponse: Optional[ShipEstimateResponse] = None
-    OrderCalculateResponse: Optional[OrderCalculateResponse] = None
-    OrderSubmitResponse: Optional[OrderSubmitResponse] = None
-    OrderSubmitForApprovalResponse: Optional[OrderSubmitForApprovalResponse] = None
-    OrderApprovedResponse: Optional[OrderApprovedResponse] = None
-    SubscriptionIntegrationResponse: Optional[SubscriptionIntegrationResponse] = None
+    Subscription: Optional[_Subscription] = None
+    ShipEstimateResponse: Optional[_ShipEstimateResponse] = None
+    OrderCalculateResponse: Optional[_OrderCalculateResponse] = None
+    OrderSubmitResponse: Optional[_OrderSubmitResponse] = None
+    OrderSubmitForApprovalResponse: Optional[_OrderSubmitForApprovalResponse] = None
+    OrderApprovedResponse: Optional[_OrderApprovedResponse] = None
+    SubscriptionIntegrationResponse: Optional[_SubscriptionIntegrationResponse] = None
 
 
 class Order(OrderCloudModel):
@@ -444,3 +447,18 @@ class Order(OrderCloudModel):
     IsSubmitted: Optional[bool] = None
     SubscriptionID: Optional[str] = None
     xp: Optional[dict[str, Any]] = None
+
+
+_Order = Order
+
+
+_OrderCalculateResponse = OrderCalculateResponse
+
+
+_OrderSubmitResponse = OrderSubmitResponse
+
+
+_OrderSubmitForApprovalResponse = OrderSubmitForApprovalResponse
+
+
+_OrderApprovedResponse = OrderApprovedResponse

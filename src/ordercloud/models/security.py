@@ -82,4 +82,7 @@ class SecurityProfile(OrderCloudModel):
     Name: Optional[str] = None
     Roles: Optional[list[ApiRole]] = None
     CustomRoles: Optional[list[str]] = None
-    PasswordConfig: Optional[PasswordConfig] = None
+    PasswordConfig: Optional[_PasswordConfig] = None
+
+
+_PasswordConfig = PasswordConfig

@@ -4,7 +4,7 @@ An idiomatic async Python SDK for the [Sitecore OrderCloud](https://ordercloud.i
 
 Built with modern Python: async/await throughout, Pydantic v2 typed models, full type annotations, and `py.typed` for downstream type checking. **Full API coverage** — all 632 operations across 60 resources, generated from the OpenAPI spec.
 
-> **Status:** Phase 2 (Full API Coverage). Models and resources are generated from the official OpenAPI v3 spec via an included codegen tool. The SDK covers all OrderCloud API endpoints.
+> **Status:** Full API coverage with test suite. Models and resources are generated from the official OpenAPI v3 spec via an included codegen tool. 79 unit tests, 100% coverage on hand-written infrastructure.
 
 ## Why This Exists
 

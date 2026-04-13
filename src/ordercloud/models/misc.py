@@ -273,5 +273,8 @@ class GroupOrderInvitation(OrderCloudModel):
     ExpirationDate: Optional[str] = None
     Name: Optional[str] = None
     OrderID: Optional[str] = None
-    OrderStatus: Optional[OrderStatus] = None
+    OrderStatus: Optional[_OrderStatus] = None
     xp: Optional[dict[str, Any]] = None
+
+
+_OrderStatus = OrderStatus

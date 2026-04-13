@@ -9,6 +9,7 @@ from .shared import OrderCloudModel
 from .address import Address
 
 __all__ = ["InventoryIntegration", "InventoryRecord"]
+_Address = Address
 
 
 class InventoryIntegration(OrderCloudModel):
@@ -42,7 +43,7 @@ class InventoryRecord(OrderCloudModel):
     ID: Optional[str] = None
     OwnerID: Optional[str] = None
     AllowAllBuyers: bool = True
-    Address: Optional[Address] = None
+    Address: Optional[_Address] = None
     AddressID: Optional[str] = None
     OrderCanExceed: Optional[bool] = None
     QuantityAvailable: Optional[int] = None

@@ -108,6 +108,12 @@ class ModelGroup:
     all_names: list[str] = field(default_factory=list)
     """Names to include in ``__all__``."""
 
+    type_aliases: list[tuple[str, str]] = field(default_factory=list)
+    """Aliases for imported types (emit after imports, before classes)."""
+
+    type_aliases_bottom: list[tuple[str, str]] = field(default_factory=list)
+    """Aliases for locally-defined types (emit after all classes)."""
+
 
 @dataclass
 class ParamDef:

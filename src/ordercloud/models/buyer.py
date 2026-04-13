@@ -20,6 +20,8 @@ __all__ = [
     "BuyerGroup",
     "Buyer",
 ]
+_Discount = Discount
+_Inventory = Inventory
 
 
 class BuyerPriceBreak(OrderCloudModel):
@@ -65,7 +67,7 @@ class BuyerPriceSchedule(OrderCloudModel):
     """
 
     PriceBreaks: Optional[list[BuyerPriceBreak]] = None
-    Discount: Optional[Discount] = None
+    Discount: Optional[_Discount] = None
     OwnerID: Optional[str] = None
     ID: Optional[str] = None
     Name: Optional[str] = None
@@ -208,7 +210,7 @@ class BuyerProduct(OrderCloudModel):
     SpecCount: int = 0
     VariantCount: int = 0
     ShipFromAddressID: Optional[str] = None
-    Inventory: Optional[Inventory] = None
+    Inventory: Optional[_Inventory] = None
     DefaultSupplierID: Optional[str] = None
     AllSuppliersCanSell: Optional[bool] = None
     Returnable: Optional[bool] = None

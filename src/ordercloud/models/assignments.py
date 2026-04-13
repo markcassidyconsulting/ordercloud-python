@@ -33,6 +33,7 @@ __all__ = [
     "SpendingAccountAssignment",
     "UserGroupAssignment",
 ]
+_MessageType = MessageType
 
 
 class AddressAssignment(OrderCloudModel):
@@ -259,10 +260,10 @@ class MessageCCListenerAssignment(OrderCloudModel):
         UserID:
     """
 
-    MessageSenderAssignment: Optional[MessageSenderAssignment] = None
+    MessageSenderAssignment: Optional[_MessageSenderAssignment] = None
     MessageConfigName: Optional[str] = None
     MessageConfigDescription: Optional[str] = None
-    MessageType: Optional[MessageType] = None
+    MessageType: Optional[_MessageType] = None
     BuyerID: Optional[str] = None
     SupplierID: Optional[str] = None
     UserGroupID: Optional[str] = None
@@ -393,3 +394,6 @@ class UserGroupAssignment(OrderCloudModel):
 
     UserGroupID: Optional[str] = None
     UserID: Optional[str] = None
+
+
+_MessageSenderAssignment = MessageSenderAssignment

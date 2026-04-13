@@ -103,6 +103,8 @@ def render(
             module_docstring=group.module_docstring,
             imports=group.imports,
             all_names=group.all_names,
+            type_aliases=group.type_aliases,
+            type_aliases_bottom=group.type_aliases_bottom,
             enums=group.enums,
             models=group.models,
         )

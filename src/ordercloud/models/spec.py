@@ -9,6 +9,7 @@ from .shared import OrderCloudModel
 from .price_schedule import PriceMarkupType
 
 __all__ = ["SpecOption", "Spec"]
+_PriceMarkupType = PriceMarkupType
 
 
 class SpecOption(OrderCloudModel):
@@ -28,7 +29,7 @@ class SpecOption(OrderCloudModel):
     Value: Optional[str] = None
     ListOrder: Optional[int] = None
     IsOpenText: Optional[bool] = None
-    PriceMarkupType: Optional[PriceMarkupType] = None
+    PriceMarkupType: Optional[_PriceMarkupType] = None
     PriceMarkup: Optional[float] = None
     xp: Optional[dict[str, Any]] = None
 

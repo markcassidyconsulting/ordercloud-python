@@ -9,6 +9,7 @@ from .shared import OrderCloudModel
 from .price_schedule import PriceMarkupType
 
 __all__ = ["LineItemProduct", "LineItemVariant", "LineItemSpec"]
+_PriceMarkupType = PriceMarkupType
 
 
 class LineItemProduct(OrderCloudModel):
@@ -83,5 +84,5 @@ class LineItemSpec(OrderCloudModel):
     Name: Optional[str] = None
     OptionID: Optional[str] = None
     Value: Optional[str] = None
-    PriceMarkupType: Optional[PriceMarkupType] = None
+    PriceMarkupType: Optional[_PriceMarkupType] = None
     PriceMarkup: Optional[float] = None

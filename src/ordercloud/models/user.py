@@ -110,7 +110,7 @@ class OrderUser(OrderCloudModel):
     Active: Optional[bool] = None
     xp: Optional[dict[str, Any]] = None
     AvailableRoles: Optional[list[str]] = None
-    Locale: Optional[Locale] = None
+    Locale: Optional[_Locale] = None
     DateCreated: Optional[str] = None
     LastActive: Optional[str] = None
     PasswordLastSetDate: Optional[str] = None
@@ -156,7 +156,7 @@ class MeUser(OrderCloudModel):
     Active: Optional[bool] = None
     xp: Optional[dict[str, Any]] = None
     AvailableRoles: Optional[list[str]] = None
-    Locale: Optional[Locale] = None
+    Locale: Optional[_Locale] = None
     DateCreated: Optional[str] = None
     LastActive: Optional[str] = None
     PasswordLastSetDate: Optional[str] = None
@@ -198,7 +198,10 @@ class User(OrderCloudModel):
     Active: Optional[bool] = None
     xp: Optional[dict[str, Any]] = None
     AvailableRoles: Optional[list[str]] = None
-    Locale: Optional[Locale] = None
+    Locale: Optional[_Locale] = None
     DateCreated: Optional[str] = None
     LastActive: Optional[str] = None
     PasswordLastSetDate: Optional[str] = None
+
+
+_Locale = Locale

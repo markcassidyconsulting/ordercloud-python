@@ -8,8 +8,11 @@ from __future__ import annotations
 {% endfor %}
 
 __all__ = [{{ all_names | map("tojson") | join(", ") }}]
-
+{% for alias, original in type_aliases %}
+{{ alias }} = {{ original }}
+{% endfor %}
 {% for enum in enums %}
+
 
 class {{ enum.name }}(str, Enum):
     """{{ enum.description }}"""
@@ -34,4 +37,9 @@ class {{ model.name }}(OrderCloudModel):
 {% for field in model.fields %}
     {{ field.name }}: {{ field.python_type }} = {{ field.default }}
 {% endfor %}
+{% endfor %}
+{% for alias, original in type_aliases_bottom %}
+
+
+{{ alias }} = {{ original }}
 {% endfor %}

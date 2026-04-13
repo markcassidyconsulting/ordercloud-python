@@ -17,6 +17,8 @@ __all__ = [
     "ProductCollectionInvitation",
     "ProductCollection",
 ]
+_Inventory = Inventory
+_AccessLevel = AccessLevel
 
 
 class ProductCollectionEntry(OrderCloudModel):
@@ -83,7 +85,7 @@ class ProductCollectionProduct(OrderCloudModel):
     SpecCount: int = 0
     VariantCount: int = 0
     ShipFromAddressID: Optional[str] = None
-    Inventory: Optional[Inventory] = None
+    Inventory: Optional[_Inventory] = None
     DefaultSupplierID: Optional[str] = None
     AllSuppliersCanSell: Optional[bool] = None
     Returnable: Optional[bool] = None
@@ -139,7 +141,7 @@ class ProductCollectionBuyerProduct(OrderCloudModel):
     SpecCount: int = 0
     VariantCount: int = 0
     ShipFromAddressID: Optional[str] = None
-    Inventory: Optional[Inventory] = None
+    Inventory: Optional[_Inventory] = None
     DefaultSupplierID: Optional[str] = None
     AllSuppliersCanSell: Optional[bool] = None
     Returnable: Optional[bool] = None
@@ -180,4 +182,4 @@ class ProductCollection(OrderCloudModel):
     ID: Optional[str] = None
     Name: Optional[str] = None
     xp: Optional[dict[str, Any]] = None
-    AccessLevel: Optional[AccessLevel] = None
+    AccessLevel: Optional[_AccessLevel] = None

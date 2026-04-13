@@ -105,6 +105,31 @@ def _build_model_groups(
         if group_enums:
             needs_enum = True
 
+        # Detect field/type name collisions and create aliases.
+        # When a field name shadows its type (e.g. Product.Inventory of
+        # type Inventory), Pydantic can't resolve the forward reference.
+        # Fix: create ``_Inventory = Inventory`` and use it in the annotation.
+        # Imported types get aliases at module top (after imports).
+        # Locally-defined types get aliases at module bottom (after the class).
+        local_names = {m.name for m in group_models} | {e.name for e in group_enums}
+        top_aliases: list[tuple[str, str]] = []   # imported types
+        bottom_aliases: list[tuple[str, str]] = []  # locally-defined types
+        alias_set: set[str] = set()
+        for model in group_models:
+            for field in model.fields:
+                if field.ref_type and field.name == field.ref_type:
+                    alias = f"_{field.ref_type}"
+                    if field.ref_type not in alias_set:
+                        if field.ref_type in local_names:
+                            bottom_aliases.append((alias, field.ref_type))
+                        else:
+                            top_aliases.append((alias, field.ref_type))
+                        alias_set.add(field.ref_type)
+                    field.python_type = field.python_type.replace(
+                        field.ref_type, alias
+                    )
+        type_aliases = top_aliases
+
         # Backward-compatibility re-exports (must precede import building).
         re_exports = RE_EXPORTS.get(module_name, [])
         for source_module, re_name in re_exports:
@@ -143,6 +168,8 @@ def _build_model_groups(
                 enums=group_enums,
                 imports=import_lines,
                 all_names=all_names,
+                type_aliases=type_aliases,
+                type_aliases_bottom=bottom_aliases,
             )
         )
 

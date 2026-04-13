@@ -200,9 +200,9 @@ class DeliveryTargets(OrderCloudModel):
 
     Kafka: Optional[KafkaConfig] = None
     Http: Optional[HttpConfig] = None
-    SearchIngestion: Optional[SearchIngestion] = None
-    SendEvent: Optional[SendEvent] = None
-    DiscoverEvent: Optional[DiscoverEvent] = None
+    SearchIngestion: Optional[_SearchIngestion] = None
+    SendEvent: Optional[_SendEvent] = None
+    DiscoverEvent: Optional[_DiscoverEvent] = None
     EventHub: Optional[EventHubConfig] = None
     AzureBlob: Optional[AzureBlobConfig] = None
     AzureTable: Optional[AzureTableConfig] = None
@@ -225,7 +225,7 @@ class DeliveryConfig(OrderCloudModel):
     ID: Optional[str] = None
     Name: Optional[str] = None
     Enabled: Optional[bool] = None
-    DeliveryTargets: Optional[DeliveryTargets] = None
+    DeliveryTargets: Optional[_DeliveryTargets] = None
 
 
 class SendEvent(OrderCloudModel):
@@ -262,3 +262,15 @@ class ErrorConfig(OrderCloudModel):
     """
 
     DeliveryConfigID: Optional[str] = None
+
+
+_SearchIngestion = SearchIngestion
+
+
+_SendEvent = SendEvent
+
+
+_DiscoverEvent = DiscoverEvent
+
+
+_DeliveryTargets = DeliveryTargets

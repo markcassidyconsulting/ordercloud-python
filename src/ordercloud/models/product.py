@@ -18,6 +18,7 @@ __all__ = [
     "ProductSupplier",
     "Product",
 ]
+_PriceMarkupType = PriceMarkupType
 
 
 class Inventory(OrderCloudModel):
@@ -70,7 +71,7 @@ class VariantSpec(OrderCloudModel):
     Name: Optional[str] = None
     OptionID: Optional[str] = None
     Value: Optional[str] = None
-    PriceMarkupType: Optional[PriceMarkupType] = None
+    PriceMarkupType: Optional[_PriceMarkupType] = None
     PriceMarkup: Optional[float] = None
 
 
@@ -214,9 +215,12 @@ class Product(OrderCloudModel):
     SpecCount: int = 0
     VariantCount: int = 0
     ShipFromAddressID: Optional[str] = None
-    Inventory: Optional[Inventory] = None
+    Inventory: Optional[_Inventory] = None
     DefaultSupplierID: Optional[str] = None
     AllSuppliersCanSell: Optional[bool] = None
     Returnable: Optional[bool] = None
     DateCreated: Optional[str] = None
     xp: Optional[dict[str, Any]] = None
+
+
+_Inventory = Inventory
