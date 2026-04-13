@@ -46,10 +46,7 @@ asyncio_mode = "auto"
 source = ["ordercloud"]
 
 [tool.coverage.report]
-# 71% overall: hand-written infrastructure 100%, all 37 model modules 100%,
-# generated resource clients spot-checked (identical Jinja2 template output —
-# testing Products/Orders/LineItems validates the template, not each of 60 files).
-fail_under = 70
+fail_under = 90
 show_missing = true
 exclude_lines = [
     "pragma: no cover",

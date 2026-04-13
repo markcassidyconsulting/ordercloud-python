@@ -53,7 +53,7 @@ jobs:
       - name: Install dependencies
         run: pip install -e ".[dev]"
       - name: Run tests with coverage
-        run: pytest --cov=ordercloud --cov-report=xml --cov-report=term-missing --cov-fail-under=70
+        run: pytest --cov=ordercloud --cov-report=xml --cov-report=term-missing --cov-fail-under=90
       - name: Upload coverage to Codecov
         if: matrix.python-version == '3.13'
         uses: codecov/codecov-action@75cd11691c0faa626561e295848008c8a7dddffe # v5
