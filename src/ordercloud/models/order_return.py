@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 from .approval import ApprovalStatus
@@ -17,75 +18,75 @@ class OrderReturnItem(OrderCloudModel):
     """An OrderCloud OrderReturnItem.
 
     Attributes:
-        LineItemID:
-        Quantity:
-        RefundAmount:
-        Comments:
+        line_item_id:
+        quantity:
+        refund_amount:
+        comments:
     """
 
-    LineItemID: Optional[str] = None
-    Quantity: int = 0
-    RefundAmount: Optional[float] = None
-    Comments: Optional[str] = None
+    line_item_id: Optional[str] = Field(None, alias="LineItemID")
+    quantity: int = Field(0, alias="Quantity")
+    refund_amount: Optional[float] = Field(None, alias="RefundAmount")
+    comments: Optional[str] = Field(None, alias="Comments")
 
 
 class OrderReturnApproval(OrderCloudModel):
     """An OrderCloud OrderReturnApproval.
 
     Attributes:
-        OrderReturnID:
-        ApprovalRuleID:  (read-only)
-        ApprovingGroupID:  (read-only)
-        Status:  (read-only)
-        DateCreated:  (read-only)
-        DateCompleted:  (read-only)
-        Approver:  (read-only)
-        Comments:  (read-only)
+        order_return_id:
+        approval_rule_id:  (read-only)
+        approving_group_id:  (read-only)
+        status:  (read-only)
+        date_created:  (read-only)
+        date_completed:  (read-only)
+        approver:  (read-only)
+        comments:  (read-only)
     """
 
-    OrderReturnID: Optional[str] = None
-    ApprovalRuleID: Optional[str] = None
-    ApprovingGroupID: Optional[str] = None
-    Status: Optional[ApprovalStatus] = None
-    DateCreated: Optional[str] = None
-    DateCompleted: Optional[str] = None
-    Approver: Optional[User] = None
-    Comments: Optional[str] = None
+    order_return_id: Optional[str] = Field(None, alias="OrderReturnID")
+    approval_rule_id: Optional[str] = Field(None, alias="ApprovalRuleID")
+    approving_group_id: Optional[str] = Field(None, alias="ApprovingGroupID")
+    status: Optional[ApprovalStatus] = Field(None, alias="Status")
+    date_created: Optional[str] = Field(None, alias="DateCreated")
+    date_completed: Optional[str] = Field(None, alias="DateCompleted")
+    approver: Optional[User] = Field(None, alias="Approver")
+    comments: Optional[str] = Field(None, alias="Comments")
 
 
 class OrderReturn(OrderCloudModel, Generic[XP]):
     """An OrderCloud OrderReturn.
 
     Attributes:
-        ID:
-        OrderID:
-        PaymentIDs: IDs of payments associated with this order return. (read-only)
-        Status:  (read-only)
-        DateCreated:  (read-only)
-        DateSubmitted: Will be null until the order return passes from the buyer to the seller, including when Status is PendingApproval. (read-only)
-        DateApproved:  (read-only)
-        DateDeclined:  (read-only)
-        DateCanceled:  (read-only)
-        DateCompleted: Populated when payment to customer has been completed. (read-only)
-        LastUpdated:  (read-only)
-        RefundAmount: Sum of all RefundAmounts for items. This value can be overridden by a user with the OrderAdmin role. To remove the override set the value to null.
-        Comments:
-        ItemsToReturn:
+        id:
+        order_id:
+        payment_i_ds: IDs of payments associated with this order return. (read-only)
+        status:  (read-only)
+        date_created:  (read-only)
+        date_submitted: Will be null until the order return passes from the buyer to the seller, including when Status is PendingApproval. (read-only)
+        date_approved:  (read-only)
+        date_declined:  (read-only)
+        date_canceled:  (read-only)
+        date_completed: Populated when payment to customer has been completed. (read-only)
+        last_updated:  (read-only)
+        refund_amount: Sum of all RefundAmounts for items. This value can be overridden by a user with the OrderAdmin role. To remove the override set the value to null.
+        comments:
+        items_to_return:
         xp:
     """
 
-    ID: Optional[str] = None
-    OrderID: Optional[str] = None
-    PaymentIDs: Optional[list[str]] = None
-    Status: Optional[OrderStatus] = None
-    DateCreated: Optional[str] = None
-    DateSubmitted: Optional[str] = None
-    DateApproved: Optional[str] = None
-    DateDeclined: Optional[str] = None
-    DateCanceled: Optional[str] = None
-    DateCompleted: Optional[str] = None
-    LastUpdated: Optional[str] = None
-    RefundAmount: Optional[float] = None
-    Comments: Optional[str] = None
-    ItemsToReturn: Optional[list[OrderReturnItem]] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    order_id: Optional[str] = Field(None, alias="OrderID")
+    payment_i_ds: Optional[list[str]] = Field(None, alias="PaymentIDs")
+    status: Optional[OrderStatus] = Field(None, alias="Status")
+    date_created: Optional[str] = Field(None, alias="DateCreated")
+    date_submitted: Optional[str] = Field(None, alias="DateSubmitted")
+    date_approved: Optional[str] = Field(None, alias="DateApproved")
+    date_declined: Optional[str] = Field(None, alias="DateDeclined")
+    date_canceled: Optional[str] = Field(None, alias="DateCanceled")
+    date_completed: Optional[str] = Field(None, alias="DateCompleted")
+    last_updated: Optional[str] = Field(None, alias="LastUpdated")
+    refund_amount: Optional[float] = Field(None, alias="RefundAmount")
+    comments: Optional[str] = Field(None, alias="Comments")
+    items_to_return: Optional[list[OrderReturnItem]] = Field(None, alias="ItemsToReturn")
+    xp: Optional[XP] = Field(None, alias="xp")

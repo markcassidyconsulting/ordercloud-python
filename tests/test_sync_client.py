@@ -53,8 +53,8 @@ class TestSyncClient:
         try:
             page = client.products.list()
             assert isinstance(page, ListPage)
-            assert len(page.Items) == 1
-            assert page.Items[0].ID == "p1"
+            assert len(page.items) == 1
+            assert page.items[0].id == "p1"
         finally:
             client.close()
 
@@ -67,7 +67,7 @@ class TestSyncClient:
         try:
             product = client.products.get("p1")
             assert isinstance(product, Product)
-            assert product.Name == "Widget"
+            assert product.name == "Widget"
         finally:
             client.close()
 
@@ -79,7 +79,7 @@ class TestSyncClient:
         client = _make_sync_client()
         try:
             product = client.products.create({"Name": "Widget"})
-            assert product.ID == "new"
+            assert product.id == "new"
         finally:
             client.close()
 
@@ -101,7 +101,7 @@ class TestSyncClient:
         )
         with _make_sync_client() as client:
             product = client.products.get("p1")
-            assert product.ID == "p1"
+            assert product.id == "p1"
 
     @respx.mock
     def test_create_factory(self):
@@ -117,7 +117,7 @@ class TestSyncClient:
         client._async_client._token_manager._token = AccessToken("mock-token-12345", expires_in=600)
         try:
             product = client.products.get("p1")
-            assert product.ID == "p1"
+            assert product.id == "p1"
         finally:
             client.close()
 
@@ -254,5 +254,5 @@ class TestPaginateSync:
         with _make_sync_client() as client:
             items = list(paginate_sync(client.products.list, page_size=2))
             assert len(items) == 3
-            assert [p.ID for p in items] == ["p1", "p2", "p3"]
+            assert [p.id for p in items] == ["p1", "p2", "p3"]
             assert route.call_count == 2

@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Any, Optional
+from pydantic import Field
 
 from .shared import OrderCloudEnum, OrderCloudModel
 from .misc import ApiRole
@@ -33,43 +34,43 @@ class IntegrationEvent(OrderCloudModel):
     """An OrderCloud IntegrationEvent.
 
     Attributes:
-        ElevatedRoles:
-        ID:
-        ConfigData: Any additional data needed for your integration event should be included here.
-        EventType:
-        CustomImplementationUrl: URL the integration event will POST data to, likely a route within your middleware.
-        CustomAuthHeaderName: The header name that can be passed to your middleware.
-        CustomAuthHeaderValue: The header value that can be passed to your middleware.
-        Name:
-        HashKey: Security feature that allows your middleware to verify the digital signature in the request header to ensure you only accept trusted data.
+        elevated_roles:
+        id:
+        config_data: Any additional data needed for your integration event should be included here.
+        event_type:
+        custom_implementation_url: URL the integration event will POST data to, likely a route within your middleware.
+        custom_auth_header_name: The header name that can be passed to your middleware.
+        custom_auth_header_value: The header value that can be passed to your middleware.
+        name:
+        hash_key: Security feature that allows your middleware to verify the digital signature in the request header to ensure you only accept trusted data.
     """
 
-    ElevatedRoles: Optional[list[ApiRole]] = None
-    ID: Optional[str] = None
-    ConfigData: Optional[dict[str, Any]] = None
-    EventType: Optional[IntegrationEventType] = None
-    CustomImplementationUrl: Optional[str] = None
-    CustomAuthHeaderName: Optional[str] = None
-    CustomAuthHeaderValue: Optional[str] = None
-    Name: Optional[str] = None
-    HashKey: Optional[str] = None
+    elevated_roles: Optional[list[ApiRole]] = Field(None, alias="ElevatedRoles")
+    id: Optional[str] = Field(None, alias="ID")
+    config_data: Optional[dict[str, Any]] = Field(None, alias="ConfigData")
+    event_type: Optional[IntegrationEventType] = Field(None, alias="EventType")
+    custom_implementation_url: Optional[str] = Field(None, alias="CustomImplementationUrl")
+    custom_auth_header_name: Optional[str] = Field(None, alias="CustomAuthHeaderName")
+    custom_auth_header_value: Optional[str] = Field(None, alias="CustomAuthHeaderValue")
+    name: Optional[str] = Field(None, alias="Name")
+    hash_key: Optional[str] = Field(None, alias="HashKey")
 
 
 class TrackingEvent(OrderCloudModel):
     """An OrderCloud TrackingEvent.
 
     Attributes:
-        ID:
-        EventType:
-        ClientID:
-        Name:
-        ConfigData:
-        DeliveryConfigID:
+        id:
+        event_type:
+        client_id:
+        name:
+        config_data:
+        delivery_config_id:
     """
 
-    ID: Optional[str] = None
-    EventType: Optional[TrackingEventType] = None
-    ClientID: Optional[str] = None
-    Name: Optional[str] = None
-    ConfigData: Optional[dict[str, Any]] = None
-    DeliveryConfigID: Optional[str] = None
+    id: Optional[str] = Field(None, alias="ID")
+    event_type: Optional[TrackingEventType] = Field(None, alias="EventType")
+    client_id: Optional[str] = Field(None, alias="ClientID")
+    name: Optional[str] = Field(None, alias="Name")
+    config_data: Optional[dict[str, Any]] = Field(None, alias="ConfigData")
+    delivery_config_id: Optional[str] = Field(None, alias="DeliveryConfigID")

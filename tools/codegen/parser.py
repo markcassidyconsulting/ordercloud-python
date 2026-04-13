@@ -23,6 +23,7 @@ from .ir import (
 from .naming import (
     operation_id_to_method_name,
     operation_id_to_resource_name,
+    pascal_to_snake,
     path_param_to_snake,
     path_template_to_fstring,
     resource_name_to_attribute,
@@ -122,15 +123,25 @@ def _parse_model(
     for prop_name, prop_schema in properties.items():
         read_only = prop_schema.get("readOnly", False)
 
-        python_type, default, is_xp, is_enum_ref, is_model_ref, ref_type = (
+        python_type, base_default, is_xp, is_enum_ref, is_model_ref, ref_type = (
             map_field(prop_name, prop_schema, enum_names=enum_names)
         )
 
         is_list = prop_schema.get("type") == "array"
 
+        # Compute snake_case Python name and wrap default in Field(alias=...).
+        python_name = pascal_to_snake(prop_name)
+
+        if "Field(" in base_default:
+            # Already wrapped (e.g. "Field(default_factory=list)") — inject alias.
+            default = base_default.rstrip(")") + f', alias="{prop_name}")'
+        else:
+            default = f'Field({base_default}, alias="{prop_name}")'
+
         fields.append(
             FieldDef(
                 name=prop_name,
+                python_name=python_name,
                 python_type=python_type,
                 default=default,
                 description=_clean_description(prop_schema.get("description", "")),

@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 from .address import Address
@@ -16,37 +17,37 @@ class InventoryIntegration(OrderCloudModel):
     """An OrderCloud InventoryIntegration.
 
     Attributes:
-        DeliveryConfigID:
-        LimitNotifications: When true, events will only fire when QuantityAvailable changes in the following ways: is equal to or less than 0, increases from 0 or less than 0 to a positive number, is equal to or less than NotificationPoint, increases from a number equal to or less than the NotificationPoint to a number greater than the NotificationPoint.
+        delivery_config_id:
+        limit_notifications: When true, events will only fire when QuantityAvailable changes in the following ways: is equal to or less than 0, increases from 0 or less than 0 to a positive number, is equal to or less than NotificationPoint, increases from a number equal to or less than the NotificationPoint to a number greater than the NotificationPoint.
     """
 
-    DeliveryConfigID: Optional[str] = None
-    LimitNotifications: Optional[bool] = None
+    delivery_config_id: Optional[str] = Field(None, alias="DeliveryConfigID")
+    limit_notifications: Optional[bool] = Field(None, alias="LimitNotifications")
 
 
 class InventoryRecord(OrderCloudModel, Generic[XP]):
     """An OrderCloud InventoryRecord.
 
     Attributes:
-        ID:
-        OwnerID:
-        AllowAllBuyers: Allow inventory record to be used by all buyers without creating explicit assignments.
-        Address:  (read-only)
-        AddressID: AddressID is required because an inventory record represents a location where physical inventory for a given product exists.
-        OrderCanExceed:
-        QuantityAvailable:
-        NotificationPoint:
-        LastUpdated:  (read-only)
+        id:
+        owner_id:
+        allow_all_buyers: Allow inventory record to be used by all buyers without creating explicit assignments.
+        address:  (read-only)
+        address_id: AddressID is required because an inventory record represents a location where physical inventory for a given product exists.
+        order_can_exceed:
+        quantity_available:
+        notification_point:
+        last_updated:  (read-only)
         xp:
     """
 
-    ID: Optional[str] = None
-    OwnerID: Optional[str] = None
-    AllowAllBuyers: bool = True
-    Address: Optional[_Address] = None
-    AddressID: Optional[str] = None
-    OrderCanExceed: Optional[bool] = None
-    QuantityAvailable: Optional[int] = None
-    NotificationPoint: Optional[int] = None
-    LastUpdated: Optional[str] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    owner_id: Optional[str] = Field(None, alias="OwnerID")
+    allow_all_buyers: bool = Field(True, alias="AllowAllBuyers")
+    address: Optional[_Address] = Field(None, alias="Address")
+    address_id: Optional[str] = Field(None, alias="AddressID")
+    order_can_exceed: Optional[bool] = Field(None, alias="OrderCanExceed")
+    quantity_available: Optional[int] = Field(None, alias="QuantityAvailable")
+    notification_point: Optional[int] = Field(None, alias="NotificationPoint")
+    last_updated: Optional[str] = Field(None, alias="LastUpdated")
+    xp: Optional[XP] = Field(None, alias="xp")

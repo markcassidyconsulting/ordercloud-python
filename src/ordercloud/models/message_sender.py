@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudEnum, OrderCloudModel, XP
 from .misc import ApiRole
@@ -47,33 +48,33 @@ class MessageSenderConfig(OrderCloudModel):
     """An OrderCloud MessageSenderConfig.
 
     Attributes:
-        Secret:
-        Endpoint:
+        secret:
+        endpoint:
     """
 
-    Secret: Optional[str] = None
-    Endpoint: Optional[str] = None
+    secret: Optional[str] = Field(None, alias="Secret")
+    endpoint: Optional[str] = Field(None, alias="Endpoint")
 
 
 class MessageSender(OrderCloudModel, Generic[XP]):
     """An OrderCloud MessageSender.
 
     Attributes:
-        ID:
-        Name:
-        MessageTypes:
-        Description:
-        ElevatedRoles: If additional data not provided by the message sender is needed, provide any elevated roles needed to make additional calls.
+        id:
+        name:
+        message_types:
+        description:
+        elevated_roles: If additional data not provided by the message sender is needed, provide any elevated roles needed to make additional calls.
         xp:
-        DeliveryConfigID:
-        AllowAllBuyers: Allow message sender to trigger for all buyers without creating explicit assignments.
+        delivery_config_id:
+        allow_all_buyers: Allow message sender to trigger for all buyers without creating explicit assignments.
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    MessageTypes: Optional[list[MessageType]] = None
-    Description: Optional[str] = None
-    ElevatedRoles: Optional[list[ApiRole]] = None
-    xp: Optional[XP] = None
-    DeliveryConfigID: Optional[str] = None
-    AllowAllBuyers: bool = False
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    message_types: Optional[list[MessageType]] = Field(None, alias="MessageTypes")
+    description: Optional[str] = Field(None, alias="Description")
+    elevated_roles: Optional[list[ApiRole]] = Field(None, alias="ElevatedRoles")
+    xp: Optional[XP] = Field(None, alias="xp")
+    delivery_config_id: Optional[str] = Field(None, alias="DeliveryConfigID")
+    allow_all_buyers: bool = Field(False, alias="AllowAllBuyers")

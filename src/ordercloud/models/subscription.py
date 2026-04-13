@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudEnum, OrderCloudModel, XP
 from .misc import ApiRole
@@ -30,95 +31,95 @@ class SubscriptionPayment(OrderCloudModel):
     """An OrderCloud SubscriptionPayment.
 
     Attributes:
-        Type:
-        CreditCardID:
-        SpendingAccountID:
+        type:
+        credit_card_id:
+        spending_account_id:
     """
 
-    Type: Optional[PaymentType] = None
-    CreditCardID: Optional[str] = None
-    SpendingAccountID: Optional[str] = None
+    type: Optional[PaymentType] = Field(None, alias="Type")
+    credit_card_id: Optional[str] = Field(None, alias="CreditCardID")
+    spending_account_id: Optional[str] = Field(None, alias="SpendingAccountID")
 
 
 class SubscriptionIntegration(OrderCloudModel, Generic[XP]):
     """An OrderCloud SubscriptionIntegration.
 
     Attributes:
-        ApiClientID: ID of the API client that will be used to generate the token passed to your hosted application via subscription integration.
-        HashKey: Security feature that allows your middleware to verify the digital signature in the request header to ensure you only accept trusted data.
-        ElevatedRoles:
-        Active:
-        NotificationDays:
-        Url:
+        api_client_id: ID of the API client that will be used to generate the token passed to your hosted application via subscription integration.
+        hash_key: Security feature that allows your middleware to verify the digital signature in the request header to ensure you only accept trusted data.
+        elevated_roles:
+        active:
+        notification_days:
+        url:
         xp:
-        CustomAuthHeaderName: The header name that can be passed to your middleware.
-        CustomAuthHeaderValue: The header value that can be passed to your middleware.
+        custom_auth_header_name: The header name that can be passed to your middleware.
+        custom_auth_header_value: The header value that can be passed to your middleware.
     """
 
-    ApiClientID: Optional[str] = None
-    HashKey: Optional[str] = None
-    ElevatedRoles: Optional[list[ApiRole]] = None
-    Active: Optional[bool] = None
-    NotificationDays: Optional[int] = None
-    Url: Optional[str] = None
-    xp: Optional[XP] = None
-    CustomAuthHeaderName: Optional[str] = None
-    CustomAuthHeaderValue: Optional[str] = None
+    api_client_id: Optional[str] = Field(None, alias="ApiClientID")
+    hash_key: Optional[str] = Field(None, alias="HashKey")
+    elevated_roles: Optional[list[ApiRole]] = Field(None, alias="ElevatedRoles")
+    active: Optional[bool] = Field(None, alias="Active")
+    notification_days: Optional[int] = Field(None, alias="NotificationDays")
+    url: Optional[str] = Field(None, alias="Url")
+    xp: Optional[XP] = Field(None, alias="xp")
+    custom_auth_header_name: Optional[str] = Field(None, alias="CustomAuthHeaderName")
+    custom_auth_header_value: Optional[str] = Field(None, alias="CustomAuthHeaderValue")
 
 
 class SubscriptionIntegrationResponse(OrderCloudModel, Generic[XP]):
     """An OrderCloud SubscriptionIntegrationResponse.
 
     Attributes:
-        HttpStatusCode:
-        UnhandledErrorBody:
+        http_status_code:
+        unhandled_error_body:
         xp:
-        Succeeded:
+        succeeded:
     """
 
-    HttpStatusCode: Optional[int] = None
-    UnhandledErrorBody: Optional[str] = None
-    xp: Optional[XP] = None
-    Succeeded: Optional[bool] = None
+    http_status_code: Optional[int] = Field(None, alias="HttpStatusCode")
+    unhandled_error_body: Optional[str] = Field(None, alias="UnhandledErrorBody")
+    xp: Optional[XP] = Field(None, alias="xp")
+    succeeded: Optional[bool] = Field(None, alias="Succeeded")
 
 
 class Subscription(OrderCloudModel, Generic[XP]):
     """An OrderCloud Subscription.
 
     Attributes:
-        ID:
-        Frequency: Used to define how often to process the subscription. The subscription will process once every {Frequency} {Interval}.
-        Interval: Used to define how often to process the subscription. The subscription will process once every {Frequency} {Interval}.
-        NextOrderDate: Next order date of the subscription. The hourly process that creates subscription orders will query for subscriptions with a NextOrderDate between now and five hours ago.
-        LastOrderDate:  (read-only)
-        NotificationDate: Date that subscription order reminder message sender will be triggered if used. Value is the result of NextOrderDate less NotificationDays on the subscription integration. (read-only)
-        DateCreated:  (read-only)
-        EndDate:
-        Active:
-        FromCompanyID: Only use when creating a subscription on behalf of another user. ID of the buyer or marketplace owner placing the order.
-        FromUserID: Only use when creating a subscription on behalf of a another user.
-        ToCompanyID: ID of the marketplace owner or supplier receiving the order created by this subscription, only writable on create.
-        Payment:
-        BillingAddressID:
-        ShippingAddressID:
-        ProjectedSubtotal: Tentative subtotal of next subscription order. Based on current known pricing; avoid if product or pricing is provided by an external integration. (read-only)
+        id:
+        frequency: Used to define how often to process the subscription. The subscription will process once every {Frequency} {Interval}.
+        interval: Used to define how often to process the subscription. The subscription will process once every {Frequency} {Interval}.
+        next_order_date: Next order date of the subscription. The hourly process that creates subscription orders will query for subscriptions with a NextOrderDate between now and five hours ago.
+        last_order_date:  (read-only)
+        notification_date: Date that subscription order reminder message sender will be triggered if used. Value is the result of NextOrderDate less NotificationDays on the subscription integration. (read-only)
+        date_created:  (read-only)
+        end_date:
+        active:
+        from_company_id: Only use when creating a subscription on behalf of another user. ID of the buyer or marketplace owner placing the order.
+        from_user_id: Only use when creating a subscription on behalf of a another user.
+        to_company_id: ID of the marketplace owner or supplier receiving the order created by this subscription, only writable on create.
+        payment:
+        billing_address_id:
+        shipping_address_id:
+        projected_subtotal: Tentative subtotal of next subscription order. Based on current known pricing; avoid if product or pricing is provided by an external integration. (read-only)
         xp:
     """
 
-    ID: Optional[str] = None
-    Frequency: Optional[int] = None
-    Interval: Optional[SubscriptionInterval] = None
-    NextOrderDate: Optional[str] = None
-    LastOrderDate: Optional[str] = None
-    NotificationDate: Optional[str] = None
-    DateCreated: Optional[str] = None
-    EndDate: Optional[str] = None
-    Active: bool = True
-    FromCompanyID: Optional[str] = None
-    FromUserID: Optional[str] = None
-    ToCompanyID: Optional[str] = None
-    Payment: Optional[SubscriptionPayment] = None
-    BillingAddressID: Optional[str] = None
-    ShippingAddressID: Optional[str] = None
-    ProjectedSubtotal: float = 0.0
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    frequency: Optional[int] = Field(None, alias="Frequency")
+    interval: Optional[SubscriptionInterval] = Field(None, alias="Interval")
+    next_order_date: Optional[str] = Field(None, alias="NextOrderDate")
+    last_order_date: Optional[str] = Field(None, alias="LastOrderDate")
+    notification_date: Optional[str] = Field(None, alias="NotificationDate")
+    date_created: Optional[str] = Field(None, alias="DateCreated")
+    end_date: Optional[str] = Field(None, alias="EndDate")
+    active: bool = Field(True, alias="Active")
+    from_company_id: Optional[str] = Field(None, alias="FromCompanyID")
+    from_user_id: Optional[str] = Field(None, alias="FromUserID")
+    to_company_id: Optional[str] = Field(None, alias="ToCompanyID")
+    payment: Optional[SubscriptionPayment] = Field(None, alias="Payment")
+    billing_address_id: Optional[str] = Field(None, alias="BillingAddressID")
+    shipping_address_id: Optional[str] = Field(None, alias="ShippingAddressID")
+    projected_subtotal: float = Field(0.0, alias="ProjectedSubtotal")
+    xp: Optional[XP] = Field(None, alias="xp")

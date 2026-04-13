@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 
@@ -14,19 +15,19 @@ class Catalog(OrderCloudModel, Generic[XP]):
     """An OrderCloud Catalog.
 
     Attributes:
-        ID:
-        OwnerID: ID of the organization that owns the catalog. Only the marketplace owner can override the OwnerID on create.
-        Name:
-        Description:
-        Active: Categories and products within to this catalog will not be visible to buyer users if false.
-        CategoryCount:  (read-only)
+        id:
+        owner_id: ID of the organization that owns the catalog. Only the marketplace owner can override the OwnerID on create.
+        name:
+        description:
+        active: Categories and products within to this catalog will not be visible to buyer users if false.
+        category_count:  (read-only)
         xp:
     """
 
-    ID: Optional[str] = None
-    OwnerID: Optional[str] = None
-    Name: Optional[str] = None
-    Description: Optional[str] = None
-    Active: Optional[bool] = None
-    CategoryCount: int = 0
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    owner_id: Optional[str] = Field(None, alias="OwnerID")
+    name: Optional[str] = Field(None, alias="Name")
+    description: Optional[str] = Field(None, alias="Description")
+    active: Optional[bool] = Field(None, alias="Active")
+    category_count: int = Field(0, alias="CategoryCount")
+    xp: Optional[XP] = Field(None, alias="xp")

@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 from .address import Address
@@ -16,79 +17,79 @@ class BundleItems(OrderCloudModel):
     """An OrderCloud BundleItems.
 
     Attributes:
-        LineItems:
+        line_items:
     """
 
-    LineItems: Optional[list[LineItem]] = None
+    line_items: Optional[list[LineItem]] = Field(None, alias="LineItems")
 
 
 class LineItem(OrderCloudModel, Generic[XP]):
     """An OrderCloud LineItem.
 
     Attributes:
-        ID:
-        ProductID:
-        Quantity:
-        BundleItemID: The ID of the line item that represents the bundle. Signifies that the product is being purchased as part of a bundle. (read-only)
-        IsBundle: When true, this item represents a bundle being purchased. (read-only)
-        DateAdded:  (read-only)
-        QuantityShipped: Sum of QuantityShipped from all shipment items. (read-only)
-        UnitPrice: Auto calculated price per quantity. Modification requires OverrideUnitPrice role.
-        PromotionDiscount: Sum of all line item level promotion discount amounts applied. (read-only)
-        BaseDiscount: Discount amount from discount assignments applied to this line item. (read-only)
-        DiscountID: ID of the discount applied to this line item. (read-only)
-        LineTotal: LineSubtotal - BaseDiscount - PromotionDiscount (read-only)
-        LineSubtotal: UnitPrice x Quantity (read-only)
-        CostCenter: For reference only, does not influence any OrderCloud behavior.
-        DateNeeded:
-        ShippingAccount: For reference only, does not influence any OrderCloud behavior.
-        ShippingAddressID:
-        ShipFromAddressID: Marketplace owner or supplier AddressID where the product will be shipped from. Can be used to calculate shipping costs.
-        Product:  (read-only)
-        Variant:  (read-only)
-        ShippingAddress:  (read-only)
-        ShipFromAddress:  (read-only)
-        SupplierID:  (read-only)
-        InventoryRecordID: InventoryRecordID of which product inventory location to use. Cannot be modified once an order is submitted.
-        PriceScheduleID: PriceScheduleID used to determine unit price. (read-only)
-        IsOnSale: True when the price schedule and price break has an active SalePrice. (read-only)
-        PriceOverridden: If true, UnitPrice was overridden. (read-only)
-        Specs:
-        IncomingOrderID: ID of the original order. Only returns a value for the marketplace owner. (read-only)
-        OutgoingOrderID: ID of the split or forwarded order. Only returns a value for the marketplace owner. (read-only)
-        InvitationID:  (read-only)
+        id:
+        product_id:
+        quantity:
+        bundle_item_id: The ID of the line item that represents the bundle. Signifies that the product is being purchased as part of a bundle. (read-only)
+        is_bundle: When true, this item represents a bundle being purchased. (read-only)
+        date_added:  (read-only)
+        quantity_shipped: Sum of QuantityShipped from all shipment items. (read-only)
+        unit_price: Auto calculated price per quantity. Modification requires OverrideUnitPrice role.
+        promotion_discount: Sum of all line item level promotion discount amounts applied. (read-only)
+        base_discount: Discount amount from discount assignments applied to this line item. (read-only)
+        discount_id: ID of the discount applied to this line item. (read-only)
+        line_total: LineSubtotal - BaseDiscount - PromotionDiscount (read-only)
+        line_subtotal: UnitPrice x Quantity (read-only)
+        cost_center: For reference only, does not influence any OrderCloud behavior.
+        date_needed:
+        shipping_account: For reference only, does not influence any OrderCloud behavior.
+        shipping_address_id:
+        ship_from_address_id: Marketplace owner or supplier AddressID where the product will be shipped from. Can be used to calculate shipping costs.
+        product:  (read-only)
+        variant:  (read-only)
+        shipping_address:  (read-only)
+        ship_from_address:  (read-only)
+        supplier_id:  (read-only)
+        inventory_record_id: InventoryRecordID of which product inventory location to use. Cannot be modified once an order is submitted.
+        price_schedule_id: PriceScheduleID used to determine unit price. (read-only)
+        is_on_sale: True when the price schedule and price break has an active SalePrice. (read-only)
+        price_overridden: If true, UnitPrice was overridden. (read-only)
+        specs:
+        incoming_order_id: ID of the original order. Only returns a value for the marketplace owner. (read-only)
+        outgoing_order_id: ID of the split or forwarded order. Only returns a value for the marketplace owner. (read-only)
+        invitation_id:  (read-only)
         xp:
     """
 
-    ID: Optional[str] = None
-    ProductID: Optional[str] = None
-    Quantity: int = 1
-    BundleItemID: Optional[str] = None
-    IsBundle: Optional[bool] = None
-    DateAdded: Optional[str] = None
-    QuantityShipped: int = 0
-    UnitPrice: Optional[float] = None
-    PromotionDiscount: float = 0.0
-    BaseDiscount: float = 0.0
-    DiscountID: Optional[str] = None
-    LineTotal: float = 0.0
-    LineSubtotal: float = 0.0
-    CostCenter: Optional[str] = None
-    DateNeeded: Optional[str] = None
-    ShippingAccount: Optional[str] = None
-    ShippingAddressID: Optional[str] = None
-    ShipFromAddressID: Optional[str] = None
-    Product: Optional[LineItemProduct] = None
-    Variant: Optional[LineItemVariant] = None
-    ShippingAddress: Optional[Address] = None
-    ShipFromAddress: Optional[Address] = None
-    SupplierID: Optional[str] = None
-    InventoryRecordID: Optional[str] = None
-    PriceScheduleID: Optional[str] = None
-    IsOnSale: Optional[bool] = None
-    PriceOverridden: Optional[bool] = None
-    Specs: Optional[list[LineItemSpec]] = None
-    IncomingOrderID: Optional[str] = None
-    OutgoingOrderID: Optional[str] = None
-    InvitationID: Optional[str] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    product_id: Optional[str] = Field(None, alias="ProductID")
+    quantity: int = Field(1, alias="Quantity")
+    bundle_item_id: Optional[str] = Field(None, alias="BundleItemID")
+    is_bundle: Optional[bool] = Field(None, alias="IsBundle")
+    date_added: Optional[str] = Field(None, alias="DateAdded")
+    quantity_shipped: int = Field(0, alias="QuantityShipped")
+    unit_price: Optional[float] = Field(None, alias="UnitPrice")
+    promotion_discount: float = Field(0.0, alias="PromotionDiscount")
+    base_discount: float = Field(0.0, alias="BaseDiscount")
+    discount_id: Optional[str] = Field(None, alias="DiscountID")
+    line_total: float = Field(0.0, alias="LineTotal")
+    line_subtotal: float = Field(0.0, alias="LineSubtotal")
+    cost_center: Optional[str] = Field(None, alias="CostCenter")
+    date_needed: Optional[str] = Field(None, alias="DateNeeded")
+    shipping_account: Optional[str] = Field(None, alias="ShippingAccount")
+    shipping_address_id: Optional[str] = Field(None, alias="ShippingAddressID")
+    ship_from_address_id: Optional[str] = Field(None, alias="ShipFromAddressID")
+    product: Optional[LineItemProduct] = Field(None, alias="Product")
+    variant: Optional[LineItemVariant] = Field(None, alias="Variant")
+    shipping_address: Optional[Address] = Field(None, alias="ShippingAddress")
+    ship_from_address: Optional[Address] = Field(None, alias="ShipFromAddress")
+    supplier_id: Optional[str] = Field(None, alias="SupplierID")
+    inventory_record_id: Optional[str] = Field(None, alias="InventoryRecordID")
+    price_schedule_id: Optional[str] = Field(None, alias="PriceScheduleID")
+    is_on_sale: Optional[bool] = Field(None, alias="IsOnSale")
+    price_overridden: Optional[bool] = Field(None, alias="PriceOverridden")
+    specs: Optional[list[LineItemSpec]] = Field(None, alias="Specs")
+    incoming_order_id: Optional[str] = Field(None, alias="IncomingOrderID")
+    outgoing_order_id: Optional[str] = Field(None, alias="OutgoingOrderID")
+    invitation_id: Optional[str] = Field(None, alias="InvitationID")
+    xp: Optional[XP] = Field(None, alias="xp")

@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 
@@ -14,29 +15,29 @@ class SupplierBuyer(OrderCloudModel):
     """An OrderCloud SupplierBuyer.
 
     Attributes:
-        ID:
-        Name:
+        id:
+        name:
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
 
 
 class Supplier(OrderCloudModel, Generic[XP]):
     """An OrderCloud Supplier.
 
     Attributes:
-        ID:
-        Name:
-        Active: If false, all user authentication is blocked.
-        DateCreated:  (read-only)
-        AllBuyersCanOrder: If false, buyers will only be able to set ToCompanyID on an order to the marketplace owner, or suppliers they have an explicit relationship to.
+        id:
+        name:
+        active: If false, all user authentication is blocked.
+        date_created:  (read-only)
+        all_buyers_can_order: If false, buyers will only be able to set ToCompanyID on an order to the marketplace owner, or suppliers they have an explicit relationship to.
         xp:
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    Active: Optional[bool] = None
-    DateCreated: Optional[str] = None
-    AllBuyersCanOrder: Optional[bool] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    active: Optional[bool] = Field(None, alias="Active")
+    date_created: Optional[str] = Field(None, alias="DateCreated")
+    all_buyers_can_order: Optional[bool] = Field(None, alias="AllBuyersCanOrder")
+    xp: Optional[XP] = Field(None, alias="xp")

@@ -36,16 +36,16 @@ class TestOrderCloudModel:
     def test_populate_by_name(self):
         """Fields can be set by name (PascalCase)."""
         p = Product(ID="x", Name="Widget")
-        assert p.ID == "x"
-        assert p.Name == "Widget"
+        assert p.id == "x"
+        assert p.name == "Widget"
 
     def test_exclude_none(self):
         """model_dump(exclude_none=True) drops None fields."""
         p = Product(ID="x")
         dumped = p.model_dump(exclude_none=True)
-        assert "ID" in dumped
-        assert "Name" not in dumped
-        assert "Description" not in dumped
+        assert "id" in dumped
+        assert "name" not in dumped
+        assert "description" not in dumped
 
 
 # ---------------------------------------------------------------------------
@@ -66,20 +66,20 @@ class TestProductModel:
             "xp": {"color": "red", "weight": 1.5},
         }
         p = Product.model_validate(data)
-        assert p.ID == "prod-1"
-        assert p.QuantityMultiplier == 5
-        assert p.SpecCount == 3
+        assert p.id == "prod-1"
+        assert p.quantity_multiplier == 5
+        assert p.spec_count == 3
         assert p.xp == {"color": "red", "weight": 1.5}
 
         dumped = p.model_dump(exclude_none=True)
-        assert dumped["QuantityMultiplier"] == 5
+        assert dumped["quantity_multiplier"] == 5
         assert dumped["xp"]["color"] == "red"
 
     def test_defaults(self):
         p = Product()
-        assert p.QuantityMultiplier == 1
-        assert p.SpecCount == 0
-        assert p.VariantCount == 0
+        assert p.quantity_multiplier == 1
+        assert p.spec_count == 0
+        assert p.variant_count == 0
         assert p.xp is None
 
     def test_inventory_embedded(self):
@@ -88,8 +88,8 @@ class TestProductModel:
             "Inventory": {"Enabled": True, "QuantityAvailable": 50},
         }
         p = Product.model_validate(data)
-        assert p.Inventory is not None
-        assert p.Inventory.Enabled is True
+        assert p.inventory is not None
+        assert p.inventory.enabled is True
 
 
 class TestOrderModel:
@@ -105,14 +105,14 @@ class TestOrderModel:
             "xp": {"priority": "high"},
         }
         o = Order.model_validate(data)
-        assert o.Status == OrderStatus.Unsubmitted
-        assert o.LineItemCount == 3
-        assert o.Subtotal == 99.99
+        assert o.status == OrderStatus.Unsubmitted
+        assert o.line_item_count == 3
+        assert o.subtotal == 99.99
 
     def test_enum_serialises_as_string(self):
         o = Order(Status=OrderStatus.Open)
         dumped = o.model_dump(exclude_none=True)
-        assert dumped["Status"] == "Open"
+        assert dumped["status"] == "Open"
 
     def test_embedded_user(self):
         data = {
@@ -120,8 +120,8 @@ class TestOrderModel:
             "FromUser": {"ID": "user-1", "Username": "buyer@test.com"},
         }
         o = Order.model_validate(data)
-        assert o.FromUser is not None
-        assert o.FromUser.Username == "buyer@test.com"
+        assert o.from_user is not None
+        assert o.from_user.username == "buyer@test.com"
 
     def test_embedded_address(self):
         data = {
@@ -133,7 +133,7 @@ class TestOrderModel:
             },
         }
         o = Order.model_validate(data)
-        assert o.BillingAddress.City == "Portland"
+        assert o.billing_address.city == "Portland"
 
 
 class TestLineItemModel:
@@ -145,12 +145,12 @@ class TestLineItemModel:
             "xp": {"gift_wrap": True},
         }
         li = LineItem.model_validate(data)
-        assert li.ProductID == "prod-1"
-        assert li.Quantity == 3
+        assert li.product_id == "prod-1"
+        assert li.quantity == 3
 
     def test_defaults(self):
         li = LineItem()
-        assert li.Quantity == 1
+        assert li.quantity == 1
 
 
 class TestAddressModel:
@@ -165,29 +165,29 @@ class TestAddressModel:
         }
         a = Address.model_validate(data)
         dumped = a.model_dump(exclude_none=True)
-        assert dumped["Street1"] == "123 Main St"
-        assert dumped["Country"] == "US"
+        assert dumped["street1"] == "123 Main St"
+        assert dumped["country"] == "US"
 
 
 class TestBuyerModel:
     def test_round_trip(self):
         data = {"ID": "buyer-1", "Name": "Acme Corp", "Active": True}
         b = Buyer.model_validate(data)
-        assert b.Name == "Acme Corp"
+        assert b.name == "Acme Corp"
 
 
 class TestCatalogModel:
     def test_round_trip(self):
         data = {"ID": "cat-1", "Name": "Spring 2026", "Active": True}
         c = Catalog.model_validate(data)
-        assert c.Name == "Spring 2026"
+        assert c.name == "Spring 2026"
 
 
 class TestCategoryModel:
     def test_round_trip(self):
         data = {"ID": "category-1", "Name": "Electronics", "Active": True}
         c = Category.model_validate(data)
-        assert c.Name == "Electronics"
+        assert c.name == "Electronics"
 
 
 # ---------------------------------------------------------------------------
@@ -199,9 +199,9 @@ class TestPhase2Models:
     def test_payment_with_enum(self):
         data = {"ID": "pay-1", "Type": "CreditCard", "Amount": 99.99}
         p = Payment.model_validate(data)
-        assert p.Type == PaymentType.CreditCard
+        assert p.type == PaymentType.CreditCard
         dumped = p.model_dump(exclude_none=True)
-        assert dumped["Type"] == "CreditCard"
+        assert dumped["type"] == "CreditCard"
 
     def test_price_schedule_with_breaks(self):
         data = {
@@ -213,8 +213,8 @@ class TestPhase2Models:
             ],
         }
         ps = PriceSchedule.model_validate(data)
-        assert len(ps.PriceBreaks) == 2
-        assert ps.PriceBreaks[1].Price == 8.0
+        assert len(ps.price_breaks) == 2
+        assert ps.price_breaks[1].price == 8.0
 
     def test_promotion(self):
         data = {
@@ -224,7 +224,7 @@ class TestPhase2Models:
             "Active": True,
         }
         p = Promotion.model_validate(data)
-        assert p.Code == "SAVE10"
+        assert p.code == "SAVE10"
 
     def test_shipment(self):
         data = {
@@ -233,12 +233,12 @@ class TestPhase2Models:
             "DateShipped": "2026-04-13T12:00:00Z",
         }
         s = Shipment.model_validate(data)
-        assert s.BuyerID == "buyer-1"
+        assert s.buyer_id == "buyer-1"
 
     def test_security_profile(self):
         data = {"ID": "sp-1", "Name": "Buyer Admin", "Roles": ["BuyerAdmin", "AddressAdmin"]}
         sp = SecurityProfile.model_validate(data)
-        assert "BuyerAdmin" in sp.Roles
+        assert "BuyerAdmin" in sp.roles
 
 
 # ---------------------------------------------------------------------------
@@ -275,7 +275,7 @@ class TestEnums:
 class TestTypedXpGenerics:
     def test_unparameterized_accepts_dict(self):
         """Product without type param still accepts dict xp (backward compat)."""
-        p = Product(Name="Widget", xp={"color": "red", "size": 10})
+        p = Product(Name="Widget", xp={"color": "red", "size": 10})  # PascalCase construction OK
         assert p.xp == {"color": "red", "size": 10}
 
     def test_unparameterized_round_trip(self):
@@ -345,14 +345,14 @@ class TestListPage:
             },
         }
         page = ListPage[Product].model_validate(data)
-        assert len(page.Items) == 2
-        assert page.Meta.TotalCount == 2
-        assert page.Meta.ItemRange == [1, 2]
+        assert len(page.items) == 2
+        assert page.meta.total_count == 2
+        assert page.meta.item_range == [1, 2]
 
     def test_empty_page(self):
         page = ListPage[Product]()
-        assert page.Items == []
-        assert page.Meta.TotalCount == 0
+        assert page.items == []
+        assert page.meta.total_count == 0
 
     def test_meta_with_facets(self):
         meta = MetaWithFacets.model_validate(
@@ -371,5 +371,5 @@ class TestListPage:
                 ],
             }
         )
-        assert len(meta.Facets) == 1
-        assert meta.Facets[0].Values[0].Count == 15
+        assert len(meta.facets) == 1
+        assert meta.facets[0].values[0].count == 15

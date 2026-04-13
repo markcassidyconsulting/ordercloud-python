@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel
 from .message_sender import MessageType
@@ -40,360 +41,362 @@ class AddressAssignment(OrderCloudModel):
     """An OrderCloud AddressAssignment.
 
     Attributes:
-        AddressID:
-        UserID:
-        UserGroupID:
-        IsShipping:
-        IsBilling:
+        address_id:
+        user_id:
+        user_group_id:
+        is_shipping:
+        is_billing:
     """
 
-    AddressID: Optional[str] = None
-    UserID: Optional[str] = None
-    UserGroupID: Optional[str] = None
-    IsShipping: Optional[bool] = None
-    IsBilling: Optional[bool] = None
+    address_id: Optional[str] = Field(None, alias="AddressID")
+    user_id: Optional[str] = Field(None, alias="UserID")
+    user_group_id: Optional[str] = Field(None, alias="UserGroupID")
+    is_shipping: Optional[bool] = Field(None, alias="IsShipping")
+    is_billing: Optional[bool] = Field(None, alias="IsBilling")
 
 
 class ApiClientAssignment(OrderCloudModel):
     """An OrderCloud ApiClientAssignment.
 
     Attributes:
-        ApiClientID:
-        BuyerID:
-        SupplierID:
+        api_client_id:
+        buyer_id:
+        supplier_id:
     """
 
-    ApiClientID: Optional[str] = None
-    BuyerID: Optional[str] = None
-    SupplierID: Optional[str] = None
+    api_client_id: Optional[str] = Field(None, alias="ApiClientID")
+    buyer_id: Optional[str] = Field(None, alias="BuyerID")
+    supplier_id: Optional[str] = Field(None, alias="SupplierID")
 
 
 class BundleAssignment(OrderCloudModel):
     """An OrderCloud BundleAssignment.
 
     Attributes:
-        SellerID: Marketplace owner can write to this property when creating bundle assignments for other sellers.
-        BundleID:
-        BuyerID:
-        UserGroupID:
+        seller_id: Marketplace owner can write to this property when creating bundle assignments for other sellers.
+        bundle_id:
+        buyer_id:
+        user_group_id:
     """
 
-    SellerID: Optional[str] = None
-    BundleID: Optional[str] = None
-    BuyerID: Optional[str] = None
-    UserGroupID: Optional[str] = None
+    seller_id: Optional[str] = Field(None, alias="SellerID")
+    bundle_id: Optional[str] = Field(None, alias="BundleID")
+    buyer_id: Optional[str] = Field(None, alias="BuyerID")
+    user_group_id: Optional[str] = Field(None, alias="UserGroupID")
 
 
 class BundleCatalogAssignment(OrderCloudModel):
     """An OrderCloud BundleCatalogAssignment.
 
     Attributes:
-        CatalogID:
-        BundleID:
+        catalog_id:
+        bundle_id:
     """
 
-    CatalogID: Optional[str] = None
-    BundleID: Optional[str] = None
+    catalog_id: Optional[str] = Field(None, alias="CatalogID")
+    bundle_id: Optional[str] = Field(None, alias="BundleID")
 
 
 class BundleProductAssignment(OrderCloudModel):
     """An OrderCloud BundleProductAssignment.
 
     Attributes:
-        ProductID:
-        BundleID:
-        Required:
-        DefaultQuantity:
+        product_id:
+        bundle_id:
+        required:
+        default_quantity:
     """
 
-    ProductID: Optional[str] = None
-    BundleID: Optional[str] = None
-    Required: Optional[bool] = None
-    DefaultQuantity: Optional[int] = None
+    product_id: Optional[str] = Field(None, alias="ProductID")
+    bundle_id: Optional[str] = Field(None, alias="BundleID")
+    required: Optional[bool] = Field(None, alias="Required")
+    default_quantity: Optional[int] = Field(None, alias="DefaultQuantity")
 
 
 class CatalogAssignment(OrderCloudModel):
     """An OrderCloud CatalogAssignment.
 
     Attributes:
-        CatalogID:
-        BuyerID:
-        BuyerGroupID:
-        ViewAllCategories:
-        ViewAllProducts:
+        catalog_id:
+        buyer_id:
+        buyer_group_id:
+        view_all_categories:
+        view_all_products:
     """
 
-    CatalogID: Optional[str] = None
-    BuyerID: Optional[str] = None
-    BuyerGroupID: Optional[str] = None
-    ViewAllCategories: Optional[bool] = None
-    ViewAllProducts: Optional[bool] = None
+    catalog_id: Optional[str] = Field(None, alias="CatalogID")
+    buyer_id: Optional[str] = Field(None, alias="BuyerID")
+    buyer_group_id: Optional[str] = Field(None, alias="BuyerGroupID")
+    view_all_categories: Optional[bool] = Field(None, alias="ViewAllCategories")
+    view_all_products: Optional[bool] = Field(None, alias="ViewAllProducts")
 
 
 class CategoryAssignment(OrderCloudModel):
     """An OrderCloud CategoryAssignment.
 
     Attributes:
-        CategoryID:
-        BuyerID:
-        UserGroupID:
-        Visible: Set to null to inherit from parent category or catalog level.
-        ViewAllProducts: Set to null to inherit from parent category or catalog level.
+        category_id:
+        buyer_id:
+        user_group_id:
+        visible: Set to null to inherit from parent category or catalog level.
+        view_all_products: Set to null to inherit from parent category or catalog level.
     """
 
-    CategoryID: Optional[str] = None
-    BuyerID: Optional[str] = None
-    UserGroupID: Optional[str] = None
-    Visible: Optional[bool] = None
-    ViewAllProducts: Optional[bool] = None
+    category_id: Optional[str] = Field(None, alias="CategoryID")
+    buyer_id: Optional[str] = Field(None, alias="BuyerID")
+    user_group_id: Optional[str] = Field(None, alias="UserGroupID")
+    visible: Optional[bool] = Field(None, alias="Visible")
+    view_all_products: Optional[bool] = Field(None, alias="ViewAllProducts")
 
 
 class CategoryBundleAssignment(OrderCloudModel):
     """An OrderCloud CategoryBundleAssignment.
 
     Attributes:
-        CategoryID:
-        BundleID:
-        ListOrder:
+        category_id:
+        bundle_id:
+        list_order:
     """
 
-    CategoryID: Optional[str] = None
-    BundleID: Optional[str] = None
-    ListOrder: Optional[int] = None
+    category_id: Optional[str] = Field(None, alias="CategoryID")
+    bundle_id: Optional[str] = Field(None, alias="BundleID")
+    list_order: Optional[int] = Field(None, alias="ListOrder")
 
 
 class CategoryProductAssignment(OrderCloudModel):
     """An OrderCloud CategoryProductAssignment.
 
     Attributes:
-        CategoryID:
-        ProductID:
-        ListOrder:
+        category_id:
+        product_id:
+        list_order:
     """
 
-    CategoryID: Optional[str] = None
-    ProductID: Optional[str] = None
-    ListOrder: Optional[int] = None
+    category_id: Optional[str] = Field(None, alias="CategoryID")
+    product_id: Optional[str] = Field(None, alias="ProductID")
+    list_order: Optional[int] = Field(None, alias="ListOrder")
 
 
 class CostCenterAssignment(OrderCloudModel):
     """An OrderCloud CostCenterAssignment.
 
     Attributes:
-        CostCenterID:
-        UserGroupID:
+        cost_center_id:
+        user_group_id:
     """
 
-    CostCenterID: Optional[str] = None
-    UserGroupID: Optional[str] = None
+    cost_center_id: Optional[str] = Field(None, alias="CostCenterID")
+    user_group_id: Optional[str] = Field(None, alias="UserGroupID")
 
 
 class CreditCardAssignment(OrderCloudModel):
     """An OrderCloud CreditCardAssignment.
 
     Attributes:
-        CreditCardID:
-        UserID:
-        UserGroupID:
+        credit_card_id:
+        user_id:
+        user_group_id:
     """
 
-    CreditCardID: Optional[str] = None
-    UserID: Optional[str] = None
-    UserGroupID: Optional[str] = None
+    credit_card_id: Optional[str] = Field(None, alias="CreditCardID")
+    user_id: Optional[str] = Field(None, alias="UserID")
+    user_group_id: Optional[str] = Field(None, alias="UserGroupID")
 
 
 class DiscountAssignment(OrderCloudModel):
     """An OrderCloud DiscountAssignment.
 
     Attributes:
-        DiscountID:
-        BuyerGroupID: When specified, BuyerID and UserGroupID must be null.
-        BuyerID: Required when BuyerGroupID is null.
-        UserGroupID: Optional. Only valid when BuyerID is specified.
+        discount_id:
+        buyer_group_id: When specified, BuyerID and UserGroupID must be null.
+        buyer_id: Required when BuyerGroupID is null.
+        user_group_id: Optional. Only valid when BuyerID is specified.
     """
 
-    DiscountID: Optional[str] = None
-    BuyerGroupID: Optional[str] = None
-    BuyerID: Optional[str] = None
-    UserGroupID: Optional[str] = None
+    discount_id: Optional[str] = Field(None, alias="DiscountID")
+    buyer_group_id: Optional[str] = Field(None, alias="BuyerGroupID")
+    buyer_id: Optional[str] = Field(None, alias="BuyerID")
+    user_group_id: Optional[str] = Field(None, alias="UserGroupID")
 
 
 class InventoryRecordAssignment(OrderCloudModel):
     """An OrderCloud InventoryRecordAssignment.
 
     Attributes:
-        InventoryRecordID:
-        BuyerID:
-        UserGroupID:
+        inventory_record_id:
+        buyer_id:
+        user_group_id:
     """
 
-    InventoryRecordID: Optional[str] = None
-    BuyerID: Optional[str] = None
-    UserGroupID: Optional[str] = None
+    inventory_record_id: Optional[str] = Field(None, alias="InventoryRecordID")
+    buyer_id: Optional[str] = Field(None, alias="BuyerID")
+    user_group_id: Optional[str] = Field(None, alias="UserGroupID")
 
 
 class LocaleAssignment(OrderCloudModel):
     """An OrderCloud LocaleAssignment.
 
     Attributes:
-        LocaleID:
-        BuyerID:
-        UserGroupID:
+        locale_id:
+        buyer_id:
+        user_group_id:
     """
 
-    LocaleID: Optional[str] = None
-    BuyerID: Optional[str] = None
-    UserGroupID: Optional[str] = None
+    locale_id: Optional[str] = Field(None, alias="LocaleID")
+    buyer_id: Optional[str] = Field(None, alias="BuyerID")
+    user_group_id: Optional[str] = Field(None, alias="UserGroupID")
 
 
 class MessageCCListenerAssignment(OrderCloudModel):
     """An OrderCloud MessageCCListenerAssignment.
 
     Attributes:
-        MessageSenderAssignment:
-        MessageConfigName:  (read-only)
-        MessageConfigDescription:  (read-only)
-        MessageType:
-        BuyerID:
-        SupplierID:
-        UserGroupID:
-        UserID:
+        message_sender_assignment:
+        message_config_name:  (read-only)
+        message_config_description:  (read-only)
+        message_type:
+        buyer_id:
+        supplier_id:
+        user_group_id:
+        user_id:
     """
 
-    MessageSenderAssignment: Optional[_MessageSenderAssignment] = None
-    MessageConfigName: Optional[str] = None
-    MessageConfigDescription: Optional[str] = None
-    MessageType: Optional[_MessageType] = None
-    BuyerID: Optional[str] = None
-    SupplierID: Optional[str] = None
-    UserGroupID: Optional[str] = None
-    UserID: Optional[str] = None
+    message_sender_assignment: Optional[_MessageSenderAssignment] = Field(
+        None, alias="MessageSenderAssignment"
+    )
+    message_config_name: Optional[str] = Field(None, alias="MessageConfigName")
+    message_config_description: Optional[str] = Field(None, alias="MessageConfigDescription")
+    message_type: Optional[_MessageType] = Field(None, alias="MessageType")
+    buyer_id: Optional[str] = Field(None, alias="BuyerID")
+    supplier_id: Optional[str] = Field(None, alias="SupplierID")
+    user_group_id: Optional[str] = Field(None, alias="UserGroupID")
+    user_id: Optional[str] = Field(None, alias="UserID")
 
 
 class MessageSenderAssignment(OrderCloudModel):
     """An OrderCloud MessageSenderAssignment.
 
     Attributes:
-        MessageSenderID:
-        BuyerID:
-        SupplierID:
-        UserGroupID:
-        MessageConfigName:  (read-only)
-        MessageConfigDescription:  (read-only)
+        message_sender_id:
+        buyer_id:
+        supplier_id:
+        user_group_id:
+        message_config_name:  (read-only)
+        message_config_description:  (read-only)
     """
 
-    MessageSenderID: Optional[str] = None
-    BuyerID: Optional[str] = None
-    SupplierID: Optional[str] = None
-    UserGroupID: Optional[str] = None
-    MessageConfigName: Optional[str] = None
-    MessageConfigDescription: Optional[str] = None
+    message_sender_id: Optional[str] = Field(None, alias="MessageSenderID")
+    buyer_id: Optional[str] = Field(None, alias="BuyerID")
+    supplier_id: Optional[str] = Field(None, alias="SupplierID")
+    user_group_id: Optional[str] = Field(None, alias="UserGroupID")
+    message_config_name: Optional[str] = Field(None, alias="MessageConfigName")
+    message_config_description: Optional[str] = Field(None, alias="MessageConfigDescription")
 
 
 class ProductAssignment(OrderCloudModel):
     """An OrderCloud ProductAssignment.
 
     Attributes:
-        SellerID: Only the marketplace owner can override the SellerID on create. A price schedule owned by the supplier is required in order to write to this property.
-        ProductID:
-        BuyerID:
-        UserGroupID:
-        PriceScheduleID:
+        seller_id: Only the marketplace owner can override the SellerID on create. A price schedule owned by the supplier is required in order to write to this property.
+        product_id:
+        buyer_id:
+        user_group_id:
+        price_schedule_id:
     """
 
-    SellerID: Optional[str] = None
-    ProductID: Optional[str] = None
-    BuyerID: Optional[str] = None
-    UserGroupID: Optional[str] = None
-    PriceScheduleID: Optional[str] = None
+    seller_id: Optional[str] = Field(None, alias="SellerID")
+    product_id: Optional[str] = Field(None, alias="ProductID")
+    buyer_id: Optional[str] = Field(None, alias="BuyerID")
+    user_group_id: Optional[str] = Field(None, alias="UserGroupID")
+    price_schedule_id: Optional[str] = Field(None, alias="PriceScheduleID")
 
 
 class ProductCatalogAssignment(OrderCloudModel):
     """An OrderCloud ProductCatalogAssignment.
 
     Attributes:
-        CatalogID:
-        ProductID:
+        catalog_id:
+        product_id:
     """
 
-    CatalogID: Optional[str] = None
-    ProductID: Optional[str] = None
+    catalog_id: Optional[str] = Field(None, alias="CatalogID")
+    product_id: Optional[str] = Field(None, alias="ProductID")
 
 
 class PromotionAssignment(OrderCloudModel):
     """An OrderCloud PromotionAssignment.
 
     Attributes:
-        PromotionID:
-        BuyerID:
-        UserGroupID:
+        promotion_id:
+        buyer_id:
+        user_group_id:
     """
 
-    PromotionID: Optional[str] = None
-    BuyerID: Optional[str] = None
-    UserGroupID: Optional[str] = None
+    promotion_id: Optional[str] = Field(None, alias="PromotionID")
+    buyer_id: Optional[str] = Field(None, alias="BuyerID")
+    user_group_id: Optional[str] = Field(None, alias="UserGroupID")
 
 
 class SecurityProfileAssignment(OrderCloudModel):
     """An OrderCloud SecurityProfileAssignment.
 
     Attributes:
-        SecurityProfileID:
-        BuyerID:
-        SupplierID:
-        UserID:
-        UserGroupID:
+        security_profile_id:
+        buyer_id:
+        supplier_id:
+        user_id:
+        user_group_id:
     """
 
-    SecurityProfileID: Optional[str] = None
-    BuyerID: Optional[str] = None
-    SupplierID: Optional[str] = None
-    UserID: Optional[str] = None
-    UserGroupID: Optional[str] = None
+    security_profile_id: Optional[str] = Field(None, alias="SecurityProfileID")
+    buyer_id: Optional[str] = Field(None, alias="BuyerID")
+    supplier_id: Optional[str] = Field(None, alias="SupplierID")
+    user_id: Optional[str] = Field(None, alias="UserID")
+    user_group_id: Optional[str] = Field(None, alias="UserGroupID")
 
 
 class SpecProductAssignment(OrderCloudModel):
     """An OrderCloud SpecProductAssignment.
 
     Attributes:
-        SpecID:
-        ProductID:
-        DefaultValue: When defined, overrides the DefaultValue set on the spec for this product only.
-        DefaultOptionID: When defined, overrides the DefaultOptionID set on the spec for this product only.
+        spec_id:
+        product_id:
+        default_value: When defined, overrides the DefaultValue set on the spec for this product only.
+        default_option_id: When defined, overrides the DefaultOptionID set on the spec for this product only.
     """
 
-    SpecID: Optional[str] = None
-    ProductID: Optional[str] = None
-    DefaultValue: Optional[str] = None
-    DefaultOptionID: Optional[str] = None
+    spec_id: Optional[str] = Field(None, alias="SpecID")
+    product_id: Optional[str] = Field(None, alias="ProductID")
+    default_value: Optional[str] = Field(None, alias="DefaultValue")
+    default_option_id: Optional[str] = Field(None, alias="DefaultOptionID")
 
 
 class SpendingAccountAssignment(OrderCloudModel):
     """An OrderCloud SpendingAccountAssignment.
 
     Attributes:
-        SpendingAccountID:
-        UserID:
-        UserGroupID:
-        AllowExceed: If true, a user can place an order for an amount greater than the available balance, causing the balance to go negative.
+        spending_account_id:
+        user_id:
+        user_group_id:
+        allow_exceed: If true, a user can place an order for an amount greater than the available balance, causing the balance to go negative.
     """
 
-    SpendingAccountID: Optional[str] = None
-    UserID: Optional[str] = None
-    UserGroupID: Optional[str] = None
-    AllowExceed: Optional[bool] = None
+    spending_account_id: Optional[str] = Field(None, alias="SpendingAccountID")
+    user_id: Optional[str] = Field(None, alias="UserID")
+    user_group_id: Optional[str] = Field(None, alias="UserGroupID")
+    allow_exceed: Optional[bool] = Field(None, alias="AllowExceed")
 
 
 class UserGroupAssignment(OrderCloudModel):
     """An OrderCloud UserGroupAssignment.
 
     Attributes:
-        UserGroupID:
-        UserID:
+        user_group_id:
+        user_id:
     """
 
-    UserGroupID: Optional[str] = None
-    UserID: Optional[str] = None
+    user_group_id: Optional[str] = Field(None, alias="UserGroupID")
+    user_id: Optional[str] = Field(None, alias="UserID")
 
 
 _MessageSenderAssignment = MessageSenderAssignment

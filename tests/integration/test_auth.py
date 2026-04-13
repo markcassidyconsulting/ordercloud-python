@@ -19,8 +19,8 @@ class TestAuth:
         """A simple API call succeeds, proving client_credentials auth works."""
         page = await async_client.products.list(page_size=1)
         # If auth failed, we'd never get here — an exception would be raised.
-        assert page.Meta.Page >= 1
-        assert page.Meta.PageSize >= 1
+        assert page.meta.page >= 1
+        assert page.meta.page_size >= 1
 
     async def test_token_caching(self, async_client: OrderCloudClient) -> None:
         """The same bearer token is reused across consecutive requests."""

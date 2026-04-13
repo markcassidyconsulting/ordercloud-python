@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 
@@ -14,17 +15,17 @@ class Bundle(OrderCloudModel, Generic[XP]):
     """An OrderCloud Bundle.
 
     Attributes:
-        ID:
-        OwnerID: ID of the organization that owns the bundle. Only the ma marketplace owner can override the OwnerID on create.
-        Name:
-        Description:
-        Active: If false, bundle is not visible or purchasable from a buyer's perspective.
+        id:
+        owner_id: ID of the organization that owns the bundle. Only the ma marketplace owner can override the OwnerID on create.
+        name:
+        description:
+        active: If false, bundle is not visible or purchasable from a buyer's perspective.
         xp: Consider keeping bundle and product xp schemas consistent. Defining conflicting xp types will result in indexing problems.
     """
 
-    ID: Optional[str] = None
-    OwnerID: Optional[str] = None
-    Name: Optional[str] = None
-    Description: Optional[str] = None
-    Active: Optional[bool] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    owner_id: Optional[str] = Field(None, alias="OwnerID")
+    name: Optional[str] = Field(None, alias="Name")
+    description: Optional[str] = Field(None, alias="Description")
+    active: Optional[bool] = Field(None, alias="Active")
+    xp: Optional[XP] = Field(None, alias="xp")

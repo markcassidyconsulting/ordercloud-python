@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel
 from .misc import ApiRole
@@ -29,10 +30,10 @@ class AccessToken(OrderCloudModel):
         refresh_token:
     """
 
-    access_token: Optional[str] = None
-    expires_in: Optional[int] = None
-    token_type: Optional[str] = None
-    refresh_token: Optional[str] = None
+    access_token: Optional[str] = Field(None, alias="access_token")
+    expires_in: Optional[int] = Field(None, alias="expires_in")
+    token_type: Optional[str] = Field(None, alias="token_type")
+    refresh_token: Optional[str] = Field(None, alias="refresh_token")
 
 
 class AccessTokenBasic(OrderCloudModel):
@@ -42,72 +43,72 @@ class AccessTokenBasic(OrderCloudModel):
         access_token:
     """
 
-    access_token: Optional[str] = None
+    access_token: Optional[str] = Field(None, alias="access_token")
 
 
 class ImpersonateTokenRequest(OrderCloudModel):
     """An OrderCloud ImpersonateTokenRequest.
 
     Attributes:
-        ClientID:
-        Roles:
-        CustomRoles:
+        client_id:
+        roles:
+        custom_roles:
     """
 
-    ClientID: Optional[str] = None
-    Roles: Optional[list[ApiRole]] = None
-    CustomRoles: Optional[list[str]] = None
+    client_id: Optional[str] = Field(None, alias="ClientID")
+    roles: Optional[list[ApiRole]] = Field(None, alias="Roles")
+    custom_roles: Optional[list[str]] = Field(None, alias="CustomRoles")
 
 
 class OneTimePasswordRequest(OrderCloudModel):
     """An OrderCloud OneTimePasswordRequest.
 
     Attributes:
-        ClientID:
-        Username:
-        Email:
+        client_id:
+        username:
+        email:
     """
 
-    ClientID: Optional[str] = None
-    Username: Optional[str] = None
-    Email: Optional[str] = None
+    client_id: Optional[str] = Field(None, alias="ClientID")
+    username: Optional[str] = Field(None, alias="Username")
+    email: Optional[str] = Field(None, alias="Email")
 
 
 class PasswordReset(OrderCloudModel):
     """An OrderCloud PasswordReset.
 
     Attributes:
-        ClientID:
-        Username:
-        Password:
+        client_id:
+        username:
+        password:
     """
 
-    ClientID: Optional[str] = None
-    Username: Optional[str] = None
-    Password: Optional[str] = None
+    client_id: Optional[str] = Field(None, alias="ClientID")
+    username: Optional[str] = Field(None, alias="Username")
+    password: Optional[str] = Field(None, alias="Password")
 
 
 class PasswordResetRequest(OrderCloudModel):
     """An OrderCloud PasswordResetRequest.
 
     Attributes:
-        ClientID:
-        Email:
-        Username:
-        URL:
+        client_id:
+        email:
+        username:
+        url:
     """
 
-    ClientID: Optional[str] = None
-    Email: Optional[str] = None
-    Username: Optional[str] = None
-    URL: Optional[str] = None
+    client_id: Optional[str] = Field(None, alias="ClientID")
+    email: Optional[str] = Field(None, alias="Email")
+    username: Optional[str] = Field(None, alias="Username")
+    url: Optional[str] = Field(None, alias="URL")
 
 
 class TokenPasswordReset(OrderCloudModel):
     """An OrderCloud TokenPasswordReset.
 
     Attributes:
-        NewPassword:
+        new_password:
     """
 
-    NewPassword: Optional[str] = None
+    new_password: Optional[str] = Field(None, alias="NewPassword")

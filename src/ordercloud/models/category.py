@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 
@@ -14,21 +15,21 @@ class Category(OrderCloudModel, Generic[XP]):
     """An OrderCloud Category.
 
     Attributes:
-        ID:
-        Name:
-        Description:
-        ListOrder: Order that the category appears within its parent or catalog (if root level).
-        Active: If false, buyers cannot see this category or any categories or products under it.
-        ParentID: ID of the parent category.
-        ChildCount: Number of categories that are *immediate* children of this category. (read-only)
+        id:
+        name:
+        description:
+        list_order: Order that the category appears within its parent or catalog (if root level).
+        active: If false, buyers cannot see this category or any categories or products under it.
+        parent_id: ID of the parent category.
+        child_count: Number of categories that are *immediate* children of this category. (read-only)
         xp:
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    Description: Optional[str] = None
-    ListOrder: Optional[int] = None
-    Active: Optional[bool] = None
-    ParentID: Optional[str] = None
-    ChildCount: int = 0
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    description: Optional[str] = Field(None, alias="Description")
+    list_order: Optional[int] = Field(None, alias="ListOrder")
+    active: Optional[bool] = Field(None, alias="Active")
+    parent_id: Optional[str] = Field(None, alias="ParentID")
+    child_count: int = Field(0, alias="ChildCount")
+    xp: Optional[XP] = Field(None, alias="xp")

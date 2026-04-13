@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudEnum, OrderCloudModel, XP
 
@@ -31,176 +32,176 @@ class Locale(OrderCloudModel):
     """An OrderCloud Locale.
 
     Attributes:
-        ID:
-        OwnerID: ID of the organization that owns the Locale. Only the marketplace owner can override the OwnerID on create.
-        Currency: We recommend using ISO-4217 currency codes for compatibility with tax and payment processors.
-        Language: We recommend using ISO-639 language code - ISO-3166 Country code (e.g. en-US).
+        id:
+        owner_id: ID of the organization that owns the Locale. Only the marketplace owner can override the OwnerID on create.
+        currency: We recommend using ISO-4217 currency codes for compatibility with tax and payment processors.
+        language: We recommend using ISO-639 language code - ISO-3166 Country code (e.g. en-US).
     """
 
-    ID: Optional[str] = None
-    OwnerID: Optional[str] = None
-    Currency: Optional[str] = None
-    Language: Optional[str] = None
+    id: Optional[str] = Field(None, alias="ID")
+    owner_id: Optional[str] = Field(None, alias="OwnerID")
+    currency: Optional[str] = Field(None, alias="Currency")
+    language: Optional[str] = Field(None, alias="Language")
 
 
 class MeBuyer(OrderCloudModel):
     """An OrderCloud MeBuyer.
 
     Attributes:
-        ID:  (read-only)
-        DefaultCatalogID:  (read-only)
+        id:  (read-only)
+        default_catalog_id:  (read-only)
     """
 
-    ID: Optional[str] = None
-    DefaultCatalogID: Optional[str] = None
+    id: Optional[str] = Field(None, alias="ID")
+    default_catalog_id: Optional[str] = Field(None, alias="DefaultCatalogID")
 
 
 class MeSeller(OrderCloudModel):
     """An OrderCloud MeSeller.
 
     Attributes:
-        ID:  (read-only)
+        id:  (read-only)
     """
 
-    ID: Optional[str] = None
+    id: Optional[str] = Field(None, alias="ID")
 
 
 class MeSupplier(OrderCloudModel):
     """An OrderCloud MeSupplier.
 
     Attributes:
-        ID:  (read-only)
+        id:  (read-only)
     """
 
-    ID: Optional[str] = None
+    id: Optional[str] = Field(None, alias="ID")
 
 
 class OrderUser(OrderCloudModel, Generic[XP]):
     """An OrderCloud OrderUser.
 
     Attributes:
-        ID:
-        CompanyID:  (read-only)
-        Username: Must be unique across all organizations.
-        Password:
-        FirstName:
-        LastName:
-        Email:
-        Phone:
-        TermsAccepted:
-        Active: If false, authentication is prohibited.
+        id:
+        company_id:  (read-only)
+        username: Must be unique across all organizations.
+        password:
+        first_name:
+        last_name:
+        email:
+        phone:
+        terms_accepted:
+        active: If false, authentication is prohibited.
         xp:
-        AvailableRoles: List of roles currently available to the user via all security profile assignments. (read-only)
-        Locale: Most specific locale assigned to the user, if any. (read-only)
-        DateCreated:  (read-only)
-        LastActive: Accurate within a few minutes. Includes impersonation activity. (read-only)
-        PasswordLastSetDate: Can be used in conjunction with SecurityProfile.PasswordConfig to enforce password reset schedules. (read-only)
+        available_roles: List of roles currently available to the user via all security profile assignments. (read-only)
+        locale: Most specific locale assigned to the user, if any. (read-only)
+        date_created:  (read-only)
+        last_active: Accurate within a few minutes. Includes impersonation activity. (read-only)
+        password_last_set_date: Can be used in conjunction with SecurityProfile.PasswordConfig to enforce password reset schedules. (read-only)
     """
 
-    ID: Optional[str] = None
-    CompanyID: Optional[str] = None
-    Username: Optional[str] = None
-    Password: Optional[str] = None
-    FirstName: Optional[str] = None
-    LastName: Optional[str] = None
-    Email: Optional[str] = None
-    Phone: Optional[str] = None
-    TermsAccepted: Optional[str] = None
-    Active: Optional[bool] = None
-    xp: Optional[XP] = None
-    AvailableRoles: Optional[list[str]] = None
-    Locale: Optional[_Locale] = None
-    DateCreated: Optional[str] = None
-    LastActive: Optional[str] = None
-    PasswordLastSetDate: Optional[str] = None
+    id: Optional[str] = Field(None, alias="ID")
+    company_id: Optional[str] = Field(None, alias="CompanyID")
+    username: Optional[str] = Field(None, alias="Username")
+    password: Optional[str] = Field(None, alias="Password")
+    first_name: Optional[str] = Field(None, alias="FirstName")
+    last_name: Optional[str] = Field(None, alias="LastName")
+    email: Optional[str] = Field(None, alias="Email")
+    phone: Optional[str] = Field(None, alias="Phone")
+    terms_accepted: Optional[str] = Field(None, alias="TermsAccepted")
+    active: Optional[bool] = Field(None, alias="Active")
+    xp: Optional[XP] = Field(None, alias="xp")
+    available_roles: Optional[list[str]] = Field(None, alias="AvailableRoles")
+    locale: Optional[_Locale] = Field(None, alias="Locale")
+    date_created: Optional[str] = Field(None, alias="DateCreated")
+    last_active: Optional[str] = Field(None, alias="LastActive")
+    password_last_set_date: Optional[str] = Field(None, alias="PasswordLastSetDate")
 
 
 class MeUser(OrderCloudModel, Generic[XP]):
     """An OrderCloud MeUser.
 
     Attributes:
-        Buyer:  (read-only)
-        Supplier:  (read-only)
-        Seller:  (read-only)
-        ID:
-        CompanyID:  (read-only)
-        Username: Must be unique across all organizations.
-        Password:
-        FirstName:
-        LastName:
-        Email:
-        Phone:
-        TermsAccepted:
-        Active: If false, authentication is prohibited.
+        buyer:  (read-only)
+        supplier:  (read-only)
+        seller:  (read-only)
+        id:
+        company_id:  (read-only)
+        username: Must be unique across all organizations.
+        password:
+        first_name:
+        last_name:
+        email:
+        phone:
+        terms_accepted:
+        active: If false, authentication is prohibited.
         xp:
-        AvailableRoles: List of roles currently available to the user via all security profile assignments. (read-only)
-        Locale: Most specific locale assigned to the user, if any. (read-only)
-        DateCreated:  (read-only)
-        LastActive: Accurate within a few minutes. Includes impersonation activity. (read-only)
-        PasswordLastSetDate: Can be used in conjunction with SecurityProfile.PasswordConfig to enforce password reset schedules. (read-only)
+        available_roles: List of roles currently available to the user via all security profile assignments. (read-only)
+        locale: Most specific locale assigned to the user, if any. (read-only)
+        date_created:  (read-only)
+        last_active: Accurate within a few minutes. Includes impersonation activity. (read-only)
+        password_last_set_date: Can be used in conjunction with SecurityProfile.PasswordConfig to enforce password reset schedules. (read-only)
     """
 
-    Buyer: Optional[MeBuyer] = None
-    Supplier: Optional[MeSupplier] = None
-    Seller: Optional[MeSeller] = None
-    ID: Optional[str] = None
-    CompanyID: Optional[str] = None
-    Username: Optional[str] = None
-    Password: Optional[str] = None
-    FirstName: Optional[str] = None
-    LastName: Optional[str] = None
-    Email: Optional[str] = None
-    Phone: Optional[str] = None
-    TermsAccepted: Optional[str] = None
-    Active: Optional[bool] = None
-    xp: Optional[XP] = None
-    AvailableRoles: Optional[list[str]] = None
-    Locale: Optional[_Locale] = None
-    DateCreated: Optional[str] = None
-    LastActive: Optional[str] = None
-    PasswordLastSetDate: Optional[str] = None
+    buyer: Optional[MeBuyer] = Field(None, alias="Buyer")
+    supplier: Optional[MeSupplier] = Field(None, alias="Supplier")
+    seller: Optional[MeSeller] = Field(None, alias="Seller")
+    id: Optional[str] = Field(None, alias="ID")
+    company_id: Optional[str] = Field(None, alias="CompanyID")
+    username: Optional[str] = Field(None, alias="Username")
+    password: Optional[str] = Field(None, alias="Password")
+    first_name: Optional[str] = Field(None, alias="FirstName")
+    last_name: Optional[str] = Field(None, alias="LastName")
+    email: Optional[str] = Field(None, alias="Email")
+    phone: Optional[str] = Field(None, alias="Phone")
+    terms_accepted: Optional[str] = Field(None, alias="TermsAccepted")
+    active: Optional[bool] = Field(None, alias="Active")
+    xp: Optional[XP] = Field(None, alias="xp")
+    available_roles: Optional[list[str]] = Field(None, alias="AvailableRoles")
+    locale: Optional[_Locale] = Field(None, alias="Locale")
+    date_created: Optional[str] = Field(None, alias="DateCreated")
+    last_active: Optional[str] = Field(None, alias="LastActive")
+    password_last_set_date: Optional[str] = Field(None, alias="PasswordLastSetDate")
 
 
 class User(OrderCloudModel, Generic[XP]):
     """An OrderCloud User.
 
     Attributes:
-        FailedLoginAttempts: Number of times the user failed authentication due to incorrect password since last successful attempt, or since being unlocked. (read-only)
-        ID:
-        CompanyID:  (read-only)
-        Username: Must be unique across all organizations.
-        Password:
-        FirstName:
-        LastName:
-        Email:
-        Phone:
-        TermsAccepted:
-        Active: If false, authentication is prohibited.
+        failed_login_attempts: Number of times the user failed authentication due to incorrect password since last successful attempt, or since being unlocked. (read-only)
+        id:
+        company_id:  (read-only)
+        username: Must be unique across all organizations.
+        password:
+        first_name:
+        last_name:
+        email:
+        phone:
+        terms_accepted:
+        active: If false, authentication is prohibited.
         xp:
-        AvailableRoles: List of roles currently available to the user via all security profile assignments. (read-only)
-        Locale: Most specific locale assigned to the user, if any. (read-only)
-        DateCreated:  (read-only)
-        LastActive: Accurate within a few minutes. Includes impersonation activity. (read-only)
-        PasswordLastSetDate: Can be used in conjunction with SecurityProfile.PasswordConfig to enforce password reset schedules. (read-only)
+        available_roles: List of roles currently available to the user via all security profile assignments. (read-only)
+        locale: Most specific locale assigned to the user, if any. (read-only)
+        date_created:  (read-only)
+        last_active: Accurate within a few minutes. Includes impersonation activity. (read-only)
+        password_last_set_date: Can be used in conjunction with SecurityProfile.PasswordConfig to enforce password reset schedules. (read-only)
     """
 
-    FailedLoginAttempts: int = 0
-    ID: Optional[str] = None
-    CompanyID: Optional[str] = None
-    Username: Optional[str] = None
-    Password: Optional[str] = None
-    FirstName: Optional[str] = None
-    LastName: Optional[str] = None
-    Email: Optional[str] = None
-    Phone: Optional[str] = None
-    TermsAccepted: Optional[str] = None
-    Active: Optional[bool] = None
-    xp: Optional[XP] = None
-    AvailableRoles: Optional[list[str]] = None
-    Locale: Optional[_Locale] = None
-    DateCreated: Optional[str] = None
-    LastActive: Optional[str] = None
-    PasswordLastSetDate: Optional[str] = None
+    failed_login_attempts: int = Field(0, alias="FailedLoginAttempts")
+    id: Optional[str] = Field(None, alias="ID")
+    company_id: Optional[str] = Field(None, alias="CompanyID")
+    username: Optional[str] = Field(None, alias="Username")
+    password: Optional[str] = Field(None, alias="Password")
+    first_name: Optional[str] = Field(None, alias="FirstName")
+    last_name: Optional[str] = Field(None, alias="LastName")
+    email: Optional[str] = Field(None, alias="Email")
+    phone: Optional[str] = Field(None, alias="Phone")
+    terms_accepted: Optional[str] = Field(None, alias="TermsAccepted")
+    active: Optional[bool] = Field(None, alias="Active")
+    xp: Optional[XP] = Field(None, alias="xp")
+    available_roles: Optional[list[str]] = Field(None, alias="AvailableRoles")
+    locale: Optional[_Locale] = Field(None, alias="Locale")
+    date_created: Optional[str] = Field(None, alias="DateCreated")
+    last_active: Optional[str] = Field(None, alias="LastActive")
+    password_last_set_date: Optional[str] = Field(None, alias="PasswordLastSetDate")
 
 
 _Locale = Locale

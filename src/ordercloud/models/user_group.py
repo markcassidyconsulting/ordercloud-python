@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 
@@ -14,13 +15,13 @@ class UserGroup(OrderCloudModel, Generic[XP]):
     """An OrderCloud UserGroup.
 
     Attributes:
-        ID:
-        Name:
-        Description:
+        id:
+        name:
+        description:
         xp:
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    Description: Optional[str] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    description: Optional[str] = Field(None, alias="Description")
+    xp: Optional[XP] = Field(None, alias="xp")

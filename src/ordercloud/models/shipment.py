@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 from .address import Address
@@ -23,127 +24,127 @@ class ShipMethod(OrderCloudModel, Generic[XP]):
     """An OrderCloud ShipMethod.
 
     Attributes:
-        ID:
-        Name:
-        Cost:
-        EstimatedTransitDays:
+        id:
+        name:
+        cost:
+        estimated_transit_days:
         xp:
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    Cost: Optional[float] = None
-    EstimatedTransitDays: Optional[int] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    cost: Optional[float] = Field(None, alias="Cost")
+    estimated_transit_days: Optional[int] = Field(None, alias="EstimatedTransitDays")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class ShipEstimateItem(OrderCloudModel):
     """An OrderCloud ShipEstimateItem.
 
     Attributes:
-        LineItemID:
-        Quantity:
+        line_item_id:
+        quantity:
     """
 
-    LineItemID: Optional[str] = None
-    Quantity: Optional[int] = None
+    line_item_id: Optional[str] = Field(None, alias="LineItemID")
+    quantity: Optional[int] = Field(None, alias="Quantity")
 
 
 class ShipEstimate(OrderCloudModel, Generic[XP]):
     """An OrderCloud ShipEstimate.
 
     Attributes:
-        ID:
+        id:
         xp:
-        SelectedShipMethodID:
-        ShipEstimateItems:
-        ShipMethods:
+        selected_ship_method_id:
+        ship_estimate_items:
+        ship_methods:
     """
 
-    ID: Optional[str] = None
-    xp: Optional[XP] = None
-    SelectedShipMethodID: Optional[str] = None
-    ShipEstimateItems: Optional[list[ShipEstimateItem]] = None
-    ShipMethods: Optional[list[ShipMethod]] = None
+    id: Optional[str] = Field(None, alias="ID")
+    xp: Optional[XP] = Field(None, alias="xp")
+    selected_ship_method_id: Optional[str] = Field(None, alias="SelectedShipMethodID")
+    ship_estimate_items: Optional[list[ShipEstimateItem]] = Field(None, alias="ShipEstimateItems")
+    ship_methods: Optional[list[ShipMethod]] = Field(None, alias="ShipMethods")
 
 
 class ShipEstimateResponse(OrderCloudModel, Generic[XP]):
     """An OrderCloud ShipEstimateResponse.
 
     Attributes:
-        ShipEstimates:
-        HttpStatusCode:
-        UnhandledErrorBody:
+        ship_estimates:
+        http_status_code:
+        unhandled_error_body:
         xp:
-        Succeeded:
+        succeeded:
     """
 
-    ShipEstimates: Optional[list[ShipEstimate]] = None
-    HttpStatusCode: Optional[int] = None
-    UnhandledErrorBody: Optional[str] = None
-    xp: Optional[XP] = None
-    Succeeded: Optional[bool] = None
+    ship_estimates: Optional[list[ShipEstimate]] = Field(None, alias="ShipEstimates")
+    http_status_code: Optional[int] = Field(None, alias="HttpStatusCode")
+    unhandled_error_body: Optional[str] = Field(None, alias="UnhandledErrorBody")
+    xp: Optional[XP] = Field(None, alias="xp")
+    succeeded: Optional[bool] = Field(None, alias="Succeeded")
 
 
 class ShipmentItem(OrderCloudModel, Generic[XP]):
     """An OrderCloud ShipmentItem.
 
     Attributes:
-        OrderID:
-        LineItemID:
-        QuantityShipped:
-        UnitPrice:  (read-only)
-        CostCenter:  (read-only)
-        DateNeeded:  (read-only)
-        Product:  (read-only)
-        Variant:  (read-only)
-        Specs:  (read-only)
+        order_id:
+        line_item_id:
+        quantity_shipped:
+        unit_price:  (read-only)
+        cost_center:  (read-only)
+        date_needed:  (read-only)
+        product:  (read-only)
+        variant:  (read-only)
+        specs:  (read-only)
         xp: For reference only, represents line item XP from the given line item ID (read-only)
     """
 
-    OrderID: Optional[str] = None
-    LineItemID: Optional[str] = None
-    QuantityShipped: Optional[int] = None
-    UnitPrice: float = 0.0
-    CostCenter: Optional[str] = None
-    DateNeeded: Optional[str] = None
-    Product: Optional[LineItemProduct] = None
-    Variant: Optional[LineItemVariant] = None
-    Specs: Optional[list[LineItemSpec]] = None
-    xp: Optional[XP] = None
+    order_id: Optional[str] = Field(None, alias="OrderID")
+    line_item_id: Optional[str] = Field(None, alias="LineItemID")
+    quantity_shipped: Optional[int] = Field(None, alias="QuantityShipped")
+    unit_price: float = Field(0.0, alias="UnitPrice")
+    cost_center: Optional[str] = Field(None, alias="CostCenter")
+    date_needed: Optional[str] = Field(None, alias="DateNeeded")
+    product: Optional[LineItemProduct] = Field(None, alias="Product")
+    variant: Optional[LineItemVariant] = Field(None, alias="Variant")
+    specs: Optional[list[LineItemSpec]] = Field(None, alias="Specs")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class Shipment(OrderCloudModel, Generic[XP]):
     """An OrderCloud Shipment.
 
     Attributes:
-        ID:
-        BuyerID:
-        Shipper: For reference only, does not influence any OrderCloud behavior.
-        DateShipped: In order to properly trigger OrderShipped emails, this date must be NULL on initial create. Update with the date only when all of the Shipment items have been created. Once all of an order's items exist on a shipment that has a DateShipped populated the OrderShipped message sender will trigger and Order.Status will be updated to Complete.
-        DateDelivered:
-        TrackingNumber:
-        Cost: For reference only, does not influence any OrderCloud behavior.
-        OwnerID: ID of the organization that owns the shipment. Only the marketplace owner can override the OwnerID on create.
+        id:
+        buyer_id:
+        shipper: For reference only, does not influence any OrderCloud behavior.
+        date_shipped: In order to properly trigger OrderShipped emails, this date must be NULL on initial create. Update with the date only when all of the Shipment items have been created. Once all of an order's items exist on a shipment that has a DateShipped populated the OrderShipped message sender will trigger and Order.Status will be updated to Complete.
+        date_delivered:
+        tracking_number:
+        cost: For reference only, does not influence any OrderCloud behavior.
+        owner_id: ID of the organization that owns the shipment. Only the marketplace owner can override the OwnerID on create.
         xp:
-        Account:
-        FromAddressID: Marketplace owner or supplier AddressID where the product will be shipped from.
-        ToAddressID:
-        FromAddress:  (read-only)
-        ToAddress:  (read-only)
+        account:
+        from_address_id: Marketplace owner or supplier AddressID where the product will be shipped from.
+        to_address_id:
+        from_address:  (read-only)
+        to_address:  (read-only)
     """
 
-    ID: Optional[str] = None
-    BuyerID: Optional[str] = None
-    Shipper: Optional[str] = None
-    DateShipped: Optional[str] = None
-    DateDelivered: Optional[str] = None
-    TrackingNumber: Optional[str] = None
-    Cost: Optional[float] = None
-    OwnerID: Optional[str] = None
-    xp: Optional[XP] = None
-    Account: Optional[str] = None
-    FromAddressID: Optional[str] = None
-    ToAddressID: Optional[str] = None
-    FromAddress: Optional[Address] = None
-    ToAddress: Optional[Address] = None
+    id: Optional[str] = Field(None, alias="ID")
+    buyer_id: Optional[str] = Field(None, alias="BuyerID")
+    shipper: Optional[str] = Field(None, alias="Shipper")
+    date_shipped: Optional[str] = Field(None, alias="DateShipped")
+    date_delivered: Optional[str] = Field(None, alias="DateDelivered")
+    tracking_number: Optional[str] = Field(None, alias="TrackingNumber")
+    cost: Optional[float] = Field(None, alias="Cost")
+    owner_id: Optional[str] = Field(None, alias="OwnerID")
+    xp: Optional[XP] = Field(None, alias="xp")
+    account: Optional[str] = Field(None, alias="Account")
+    from_address_id: Optional[str] = Field(None, alias="FromAddressID")
+    to_address_id: Optional[str] = Field(None, alias="ToAddressID")
+    from_address: Optional[Address] = Field(None, alias="FromAddress")
+    to_address: Optional[Address] = Field(None, alias="ToAddress")

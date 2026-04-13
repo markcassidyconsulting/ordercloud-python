@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 from .discount import Discount, DiscountedPrices
@@ -28,243 +29,243 @@ class BuyerPriceBreak(OrderCloudModel):
     """An OrderCloud BuyerPriceBreak.
 
     Attributes:
-        Discounted: Calculated discounted prices. Only populated when a discount applies to this price break.
-        Quantity: Most commonly 1, except when offering tiered/bulk pricing.
-        Price: Price per unit.
-        SalePrice: Sale Price per unit. If the current date/time is within the PriceSchedule SaleStart and SaleEnd, this SalePrice will be used.
-        SubscriptionPrice: Subscription Price per unit. If set, this price is used when a subscription order is created.
-        BundlePrice: Bundle Price per unit. If set, this price is used when an item being added to an order is part of a bundle.
+        discounted: Calculated discounted prices. Only populated when a discount applies to this price break.
+        quantity: Most commonly 1, except when offering tiered/bulk pricing.
+        price: Price per unit.
+        sale_price: Sale Price per unit. If the current date/time is within the PriceSchedule SaleStart and SaleEnd, this SalePrice will be used.
+        subscription_price: Subscription Price per unit. If set, this price is used when a subscription order is created.
+        bundle_price: Bundle Price per unit. If set, this price is used when an item being added to an order is part of a bundle.
     """
 
-    Discounted: Optional[DiscountedPrices] = None
-    Quantity: Optional[int] = None
-    Price: Optional[float] = None
-    SalePrice: Optional[float] = None
-    SubscriptionPrice: Optional[float] = None
-    BundlePrice: Optional[float] = None
+    discounted: Optional[DiscountedPrices] = Field(None, alias="Discounted")
+    quantity: Optional[int] = Field(None, alias="Quantity")
+    price: Optional[float] = Field(None, alias="Price")
+    sale_price: Optional[float] = Field(None, alias="SalePrice")
+    subscription_price: Optional[float] = Field(None, alias="SubscriptionPrice")
+    bundle_price: Optional[float] = Field(None, alias="BundlePrice")
 
 
 class BuyerPriceSchedule(OrderCloudModel, Generic[XP]):
     """An OrderCloud BuyerPriceSchedule.
 
     Attributes:
-        PriceBreaks:
-        Discount: The best applicable discount for this buyer. Only populated when a discount applies.
-        OwnerID: ID of the organization that owns the PriceSchedule. Only the marketplace owner can override the OwnerID on create.
-        ID:
-        Name:
-        ApplyTax: For reference only for calculating tax, does not influence any OrderCloud behavior.
-        ApplyShipping: For reference only for calculating shipping cost, does not influence any OrderCloud behavior.
-        MinQuantity: The minimum line item Quantity when UseCumulativeQuantity is false.
-        MaxQuantity: The maximum line item Quantity when UseCumulativeQuantity is false.
-        UseCumulativeQuantity: If true, line item quantities will be aggregated by productID when determining which price break applies, and when Min/Max quantities are met. Else, each line item is treated separately.
-        RestrictedQuantity: If true, this product can only be ordered in quantities that exactly match one of the price breaks on this schedule.
-        Currency: We recommend using ISO-4217 currency codes for compatibility with tax and payment processors.
-        SaleStart: Starting date/time for PriceBreak.SalePrice to be used as the price for the LineItem. Requires that the PriceBreak.SalePrice value is set.
-        SaleEnd: Ending date/time for PriceBreak.SalePrice to be used as the price for the LineItem. Requires that the PriceBreak.SalePrice value is set.
-        IsOnSale: True when at least one PriceBreak has a SalePrice defined, and the current time is between the SaleStart and SaleEnd date. (read-only)
+        price_breaks:
+        discount: The best applicable discount for this buyer. Only populated when a discount applies.
+        owner_id: ID of the organization that owns the PriceSchedule. Only the marketplace owner can override the OwnerID on create.
+        id:
+        name:
+        apply_tax: For reference only for calculating tax, does not influence any OrderCloud behavior.
+        apply_shipping: For reference only for calculating shipping cost, does not influence any OrderCloud behavior.
+        min_quantity: The minimum line item Quantity when UseCumulativeQuantity is false.
+        max_quantity: The maximum line item Quantity when UseCumulativeQuantity is false.
+        use_cumulative_quantity: If true, line item quantities will be aggregated by productID when determining which price break applies, and when Min/Max quantities are met. Else, each line item is treated separately.
+        restricted_quantity: If true, this product can only be ordered in quantities that exactly match one of the price breaks on this schedule.
+        currency: We recommend using ISO-4217 currency codes for compatibility with tax and payment processors.
+        sale_start: Starting date/time for PriceBreak.SalePrice to be used as the price for the LineItem. Requires that the PriceBreak.SalePrice value is set.
+        sale_end: Ending date/time for PriceBreak.SalePrice to be used as the price for the LineItem. Requires that the PriceBreak.SalePrice value is set.
+        is_on_sale: True when at least one PriceBreak has a SalePrice defined, and the current time is between the SaleStart and SaleEnd date. (read-only)
         xp:
     """
 
-    PriceBreaks: Optional[list[BuyerPriceBreak]] = None
-    Discount: Optional[_Discount] = None
-    OwnerID: Optional[str] = None
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    ApplyTax: Optional[bool] = None
-    ApplyShipping: Optional[bool] = None
-    MinQuantity: int = 1
-    MaxQuantity: Optional[int] = None
-    UseCumulativeQuantity: Optional[bool] = None
-    RestrictedQuantity: Optional[bool] = None
-    Currency: Optional[str] = None
-    SaleStart: Optional[str] = None
-    SaleEnd: Optional[str] = None
-    IsOnSale: Optional[bool] = None
-    xp: Optional[XP] = None
+    price_breaks: Optional[list[BuyerPriceBreak]] = Field(None, alias="PriceBreaks")
+    discount: Optional[_Discount] = Field(None, alias="Discount")
+    owner_id: Optional[str] = Field(None, alias="OwnerID")
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    apply_tax: Optional[bool] = Field(None, alias="ApplyTax")
+    apply_shipping: Optional[bool] = Field(None, alias="ApplyShipping")
+    min_quantity: int = Field(1, alias="MinQuantity")
+    max_quantity: Optional[int] = Field(None, alias="MaxQuantity")
+    use_cumulative_quantity: Optional[bool] = Field(None, alias="UseCumulativeQuantity")
+    restricted_quantity: Optional[bool] = Field(None, alias="RestrictedQuantity")
+    currency: Optional[str] = Field(None, alias="Currency")
+    sale_start: Optional[str] = Field(None, alias="SaleStart")
+    sale_end: Optional[str] = Field(None, alias="SaleEnd")
+    is_on_sale: Optional[bool] = Field(None, alias="IsOnSale")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class ProductSeller(OrderCloudModel):
     """An OrderCloud ProductSeller.
 
     Attributes:
-        PriceSchedule:
-        ID:
-        Name:
+        price_schedule:
+        id:
+        name:
     """
 
-    PriceSchedule: Optional[BuyerPriceSchedule] = None
-    ID: Optional[str] = None
-    Name: Optional[str] = None
+    price_schedule: Optional[BuyerPriceSchedule] = Field(None, alias="PriceSchedule")
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
 
 
 class BuyerAddress(OrderCloudModel, Generic[XP]):
     """An OrderCloud BuyerAddress.
 
     Attributes:
-        ID:  (read-only)
-        Shipping: Indicates whether this address can be used as a ShippingAddress on an order or line item.
-        Billing: Indicates whether this address can be used as a BillingAddress on an order.
-        Editable: Indicates whether this address can be edited by the current user. (read-only)
-        DateCreated:  (read-only)
-        CompanyName:
-        FirstName:
-        LastName:
-        Street1:
-        Street2:
-        City:
-        State:
-        Zip:
-        Country:
-        Phone:
-        AddressName:
+        id:  (read-only)
+        shipping: Indicates whether this address can be used as a ShippingAddress on an order or line item.
+        billing: Indicates whether this address can be used as a BillingAddress on an order.
+        editable: Indicates whether this address can be edited by the current user. (read-only)
+        date_created:  (read-only)
+        company_name:
+        first_name:
+        last_name:
+        street1:
+        street2:
+        city:
+        state:
+        zip:
+        country:
+        phone:
+        address_name:
         xp:
     """
 
-    ID: Optional[str] = None
-    Shipping: Optional[bool] = None
-    Billing: Optional[bool] = None
-    Editable: Optional[bool] = None
-    DateCreated: Optional[str] = None
-    CompanyName: Optional[str] = None
-    FirstName: Optional[str] = None
-    LastName: Optional[str] = None
-    Street1: Optional[str] = None
-    Street2: Optional[str] = None
-    City: Optional[str] = None
-    State: Optional[str] = None
-    Zip: Optional[str] = None
-    Country: Optional[str] = None
-    Phone: Optional[str] = None
-    AddressName: Optional[str] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    shipping: Optional[bool] = Field(None, alias="Shipping")
+    billing: Optional[bool] = Field(None, alias="Billing")
+    editable: Optional[bool] = Field(None, alias="Editable")
+    date_created: Optional[str] = Field(None, alias="DateCreated")
+    company_name: Optional[str] = Field(None, alias="CompanyName")
+    first_name: Optional[str] = Field(None, alias="FirstName")
+    last_name: Optional[str] = Field(None, alias="LastName")
+    street1: Optional[str] = Field(None, alias="Street1")
+    street2: Optional[str] = Field(None, alias="Street2")
+    city: Optional[str] = Field(None, alias="City")
+    state: Optional[str] = Field(None, alias="State")
+    zip: Optional[str] = Field(None, alias="Zip")
+    country: Optional[str] = Field(None, alias="Country")
+    phone: Optional[str] = Field(None, alias="Phone")
+    address_name: Optional[str] = Field(None, alias="AddressName")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class BuyerCreditCard(OrderCloudModel, Generic[XP]):
     """An OrderCloud BuyerCreditCard.
 
     Attributes:
-        ID:  (read-only)
-        Editable:  (read-only)
-        Token: Token provided by the credit card processor used to reference the card with that processor.
-        DateCreated:  (read-only)
-        CardType:
-        PartialAccountNumber:
-        CardholderName:
-        ExpirationDate:
+        id:  (read-only)
+        editable:  (read-only)
+        token: Token provided by the credit card processor used to reference the card with that processor.
+        date_created:  (read-only)
+        card_type:
+        partial_account_number:
+        cardholder_name:
+        expiration_date:
         xp:
     """
 
-    ID: Optional[str] = None
-    Editable: Optional[bool] = None
-    Token: Optional[str] = None
-    DateCreated: Optional[str] = None
-    CardType: Optional[str] = None
-    PartialAccountNumber: Optional[str] = None
-    CardholderName: Optional[str] = None
-    ExpirationDate: Optional[str] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    editable: Optional[bool] = Field(None, alias="Editable")
+    token: Optional[str] = Field(None, alias="Token")
+    date_created: Optional[str] = Field(None, alias="DateCreated")
+    card_type: Optional[str] = Field(None, alias="CardType")
+    partial_account_number: Optional[str] = Field(None, alias="PartialAccountNumber")
+    cardholder_name: Optional[str] = Field(None, alias="CardholderName")
+    expiration_date: Optional[str] = Field(None, alias="ExpirationDate")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class BuyerProduct(OrderCloudModel, Generic[XP]):
     """An OrderCloud BuyerProduct.
 
     Attributes:
-        PriceSchedule:  (read-only)
-        ID:
-        ParentID: ID of the parent product. If not null, IsParent should be false
-        IsParent: If true, ParentID must be null, as a parent product cannot have a parent itself.
-        IsBundle: If true, IsParent must be false, as a parent product cannot be a bundle. (read-only)
-        Name:
-        Description:
-        QuantityMultiplier: For reference only, does not influence any OrderCloud behavior. Used to indicate an amount per Quantity.
-        ShipWeight:
-        ShipHeight:
-        ShipWidth:
-        ShipLength:
-        Active: If false, product is not visible or purchasable from a buyer's perspective.
-        SpecCount: Count of specs assigned to the product. (read-only)
-        VariantCount: Count of variants generated from the product/spec combinations. (read-only)
-        ShipFromAddressID: Marketplace owner or supplier AddressID where the product will be shipped from. Can be used to calculate shipping costs.
-        Inventory:
-        DefaultSupplierID: Used for forwarding orders to suppliers.
-        AllSuppliersCanSell: If true, all suppliers are eligible to opt into selling this product.
-        Returnable:
-        DateCreated:  (read-only)
+        price_schedule:  (read-only)
+        id:
+        parent_id: ID of the parent product. If not null, IsParent should be false
+        is_parent: If true, ParentID must be null, as a parent product cannot have a parent itself.
+        is_bundle: If true, IsParent must be false, as a parent product cannot be a bundle. (read-only)
+        name:
+        description:
+        quantity_multiplier: For reference only, does not influence any OrderCloud behavior. Used to indicate an amount per Quantity.
+        ship_weight:
+        ship_height:
+        ship_width:
+        ship_length:
+        active: If false, product is not visible or purchasable from a buyer's perspective.
+        spec_count: Count of specs assigned to the product. (read-only)
+        variant_count: Count of variants generated from the product/spec combinations. (read-only)
+        ship_from_address_id: Marketplace owner or supplier AddressID where the product will be shipped from. Can be used to calculate shipping costs.
+        inventory:
+        default_supplier_id: Used for forwarding orders to suppliers.
+        all_suppliers_can_sell: If true, all suppliers are eligible to opt into selling this product.
+        returnable:
+        date_created:  (read-only)
         xp:
     """
 
-    PriceSchedule: Optional[BuyerPriceSchedule] = None
-    ID: Optional[str] = None
-    ParentID: Optional[str] = None
-    IsParent: Optional[bool] = None
-    IsBundle: Optional[bool] = None
-    Name: Optional[str] = None
-    Description: Optional[str] = None
-    QuantityMultiplier: int = 1
-    ShipWeight: Optional[float] = None
-    ShipHeight: Optional[float] = None
-    ShipWidth: Optional[float] = None
-    ShipLength: Optional[float] = None
-    Active: Optional[bool] = None
-    SpecCount: int = 0
-    VariantCount: int = 0
-    ShipFromAddressID: Optional[str] = None
-    Inventory: Optional[_Inventory] = None
-    DefaultSupplierID: Optional[str] = None
-    AllSuppliersCanSell: Optional[bool] = None
-    Returnable: Optional[bool] = None
-    DateCreated: Optional[str] = None
-    xp: Optional[XP] = None
+    price_schedule: Optional[BuyerPriceSchedule] = Field(None, alias="PriceSchedule")
+    id: Optional[str] = Field(None, alias="ID")
+    parent_id: Optional[str] = Field(None, alias="ParentID")
+    is_parent: Optional[bool] = Field(None, alias="IsParent")
+    is_bundle: Optional[bool] = Field(None, alias="IsBundle")
+    name: Optional[str] = Field(None, alias="Name")
+    description: Optional[str] = Field(None, alias="Description")
+    quantity_multiplier: int = Field(1, alias="QuantityMultiplier")
+    ship_weight: Optional[float] = Field(None, alias="ShipWeight")
+    ship_height: Optional[float] = Field(None, alias="ShipHeight")
+    ship_width: Optional[float] = Field(None, alias="ShipWidth")
+    ship_length: Optional[float] = Field(None, alias="ShipLength")
+    active: Optional[bool] = Field(None, alias="Active")
+    spec_count: int = Field(0, alias="SpecCount")
+    variant_count: int = Field(0, alias="VariantCount")
+    ship_from_address_id: Optional[str] = Field(None, alias="ShipFromAddressID")
+    inventory: Optional[_Inventory] = Field(None, alias="Inventory")
+    default_supplier_id: Optional[str] = Field(None, alias="DefaultSupplierID")
+    all_suppliers_can_sell: Optional[bool] = Field(None, alias="AllSuppliersCanSell")
+    returnable: Optional[bool] = Field(None, alias="Returnable")
+    date_created: Optional[str] = Field(None, alias="DateCreated")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class BuyerSupplier(OrderCloudModel):
     """An OrderCloud BuyerSupplier.
 
     Attributes:
-        ID:
-        Name:
+        id:
+        name:
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
 
 
 class BuyerGroup(OrderCloudModel, Generic[XP]):
     """An OrderCloud BuyerGroup.
 
     Attributes:
-        ID:
-        Name:
-        Description:
-        DefaultCatalogID: If null at the individual buyer level, and buyer is a member of this group, buyer inherits this default catalog.
+        id:
+        name:
+        description:
+        default_catalog_id: If null at the individual buyer level, and buyer is a member of this group, buyer inherits this default catalog.
         xp:
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    Description: Optional[str] = None
-    DefaultCatalogID: Optional[str] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    description: Optional[str] = Field(None, alias="Description")
+    default_catalog_id: Optional[str] = Field(None, alias="DefaultCatalogID")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class Buyer(OrderCloudModel, Generic[XP]):
     """An OrderCloud Buyer.
 
     Attributes:
-        ID:
-        Name:
-        GroupID:
-        DefaultCatalogID: Allows filtering products by category without explicitly providing a CatalogID. Inherits from buyer group if not specified. If neither is specified when buyer is created, a new catalog is automatically created.
-        Active: If false, all user authentication is blocked.
-        DateCreated:  (read-only)
+        id:
+        name:
+        group_id:
+        default_catalog_id: Allows filtering products by category without explicitly providing a CatalogID. Inherits from buyer group if not specified. If neither is specified when buyer is created, a new catalog is automatically created.
+        active: If false, all user authentication is blocked.
+        date_created:  (read-only)
         xp:
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    GroupID: Optional[str] = None
-    DefaultCatalogID: Optional[str] = None
-    Active: Optional[bool] = None
-    DateCreated: Optional[str] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    group_id: Optional[str] = Field(None, alias="GroupID")
+    default_catalog_id: Optional[str] = Field(None, alias="DefaultCatalogID")
+    active: Optional[bool] = Field(None, alias="Active")
+    date_created: Optional[str] = Field(None, alias="DateCreated")
+    xp: Optional[XP] = Field(None, alias="xp")

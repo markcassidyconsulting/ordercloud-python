@@ -1,9 +1,9 @@
 """Shared base classes and pagination types for OrderCloud models.
 
-All OrderCloud API models use PascalCase field names to match the API's
-JSON representation directly.  Python-side access is also PascalCase
-(e.g. ``product.Name``, ``page.Meta.TotalCount``) — this is a deliberate
-trade-off for zero-friction serialisation round-trips.
+Generated models use snake_case field names with ``Field(alias="PascalCase")``
+so that Python-side access is idiomatic (e.g. ``product.name``,
+``page.meta.total_count``) while JSON serialisation still uses PascalCase
+to match the OrderCloud API.
 """
 
 from enum import Enum
@@ -57,73 +57,75 @@ class Meta(BaseModel):
     """Pagination metadata returned with list responses.
 
     Attributes:
-        Page: Current 1-based page number.
-        PageSize: Number of items per page.
-        TotalCount: Total number of items matching the query.
-        TotalPages: Total number of pages.
-        ItemRange: Two-element list ``[first, last]`` item indices on this page.
-        NextPageKey: Opaque key for cursor-based pagination (if available).
+        page: Current 1-based page number.
+        page_size: Number of items per page.
+        total_count: Total number of items matching the query.
+        total_pages: Total number of pages.
+        item_range: Two-element list ``[first, last]`` item indices on this page.
+        next_page_key: Opaque key for cursor-based pagination (if available).
     """
 
-    Page: int = 0
-    PageSize: int = 0
-    TotalCount: int = 0
-    TotalPages: int = 0
-    ItemRange: list[int] = Field(default_factory=list)
-    NextPageKey: Optional[str] = None
+    model_config = ConfigDict(populate_by_name=True)
+
+    page: int = Field(0, alias="Page")
+    page_size: int = Field(0, alias="PageSize")
+    total_count: int = Field(0, alias="TotalCount")
+    total_pages: int = Field(0, alias="TotalPages")
+    item_range: list[int] = Field(default_factory=list, alias="ItemRange")
+    next_page_key: Optional[str] = Field(None, alias="NextPageKey")
 
 
 class ListFacetValue(BaseModel):
     """A single value within a search facet.
 
     Attributes:
-        Value: The facet value string.
-        Count: Number of items matching this facet value.
+        value: The facet value string.
+        count: Number of items matching this facet value.
     """
 
-    Value: str = ""
-    Count: int = 0
+    model_config = ConfigDict(populate_by_name=True)
+
+    value: str = Field("", alias="Value")
+    count: int = Field(0, alias="Count")
 
 
 class ListFacet(BaseModel):
     """A search facet returned with product list responses.
 
     Attributes:
-        Name: The facet field name.
-        XpPath: The extended property path for this facet.
-        Values: The individual facet values and their counts.
+        name: The facet field name.
+        xp_path: The extended property path for this facet.
+        values: The individual facet values and their counts.
         xp: Extended properties (arbitrary custom data).
     """
 
-    Name: str = ""
-    XpPath: str = ""
-    Values: list[ListFacetValue] = Field(default_factory=list)
-    xp: Optional[dict[str, Any]] = None
+    model_config = ConfigDict(populate_by_name=True)
+
+    name: str = Field("", alias="Name")
+    xp_path: str = Field("", alias="XpPath")
+    values: list[ListFacetValue] = Field(default_factory=list, alias="Values")
+    xp: Optional[dict[str, Any]] = Field(None, alias="xp")
 
 
 class MetaWithFacets(Meta):
     """Pagination metadata with search facets (used by product search).
 
     Attributes:
-        Facets: Search facets with value counts for refinement.
+        facets: Search facets with value counts for refinement.
     """
 
-    Facets: list[ListFacet] = Field(default_factory=list)
-
-
-# Type alias so the ListPage.Meta field annotation doesn't collide with
-# the field name itself — Pydantic resolves annotations in the class
-# namespace where the field assignment would shadow the Meta class.
-_Meta = Meta
+    facets: list[ListFacet] = Field(default_factory=list, alias="Facets")
 
 
 class ListPage(BaseModel, Generic[T]):
     """A paginated list of items returned by the OrderCloud API.
 
     Attributes:
-        Items: The items on this page.
-        Meta: Pagination metadata.
+        items: The items on this page.
+        meta: Pagination metadata.
     """
 
-    Items: list[T] = Field(default_factory=list)
-    Meta: _Meta = Field(default_factory=Meta)
+    model_config = ConfigDict(populate_by_name=True)
+
+    items: list[T] = Field(default_factory=list, alias="Items")
+    meta: Meta = Field(default_factory=Meta, alias="Meta")

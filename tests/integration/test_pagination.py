@@ -41,7 +41,7 @@ class TestPagination:
             ):
                 items.append(product)
 
-            returned_ids = {p.ID for p in items}
+            returned_ids = {p.id for p in items}
             for pid in PRODUCT_IDS:
                 assert pid in returned_ids, f"Missing {pid} from paginated results"
 
@@ -55,12 +55,12 @@ class TestPagination:
         """List response Meta fields are populated correctly."""
         page = await async_client.products.list(page=1, page_size=5)
 
-        assert page.Meta.Page == 1
-        assert page.Meta.PageSize == 5
-        assert isinstance(page.Meta.TotalCount, int)
-        assert isinstance(page.Meta.TotalPages, int)
-        assert page.Meta.TotalCount >= 0
-        assert page.Meta.TotalPages >= 0
+        assert page.meta.page == 1
+        assert page.meta.page_size == 5
+        assert isinstance(page.meta.total_count, int)
+        assert isinstance(page.meta.total_pages, int)
+        assert page.meta.total_count >= 0
+        assert page.meta.total_pages >= 0
 
     async def test_search_and_sort(self, async_client: OrderCloudClient) -> None:
         """Search and sort_by query parameters work against the live API."""
@@ -86,6 +86,6 @@ class TestPagination:
                 sort_by="Name",
                 page_size=10,
             )
-            assert any(p.ID == pid for p in page.Items)
+            assert any(p.id == pid for p in page.items)
         finally:
             await async_safe_delete(async_client.products.delete(pid))

@@ -144,7 +144,7 @@ async def wait_for_listed(
     page = None
     while asyncio.get_event_loop().time() < deadline:
         page = await list_fn(*args, **kwargs)
-        if any(getattr(item, "ID", None) == expected_id for item in page.Items):
+        if any(getattr(item, "id", None) == expected_id for item in page.items):
             return page
         await asyncio.sleep(interval)
     return page
@@ -163,7 +163,7 @@ def wait_for_listed_sync(
     page = None
     while time.time() < deadline:
         page = list_fn(*args, **kwargs)
-        if any(getattr(item, "ID", None) == expected_id for item in page.Items):
+        if any(getattr(item, "id", None) == expected_id for item in page.items):
             return page
         time.sleep(interval)
     return page

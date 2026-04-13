@@ -38,16 +38,16 @@ async def paginate(
         from ordercloud.resources import paginate
 
         async for product in paginate(client.products.list, search="widget"):
-            print(product.Name)
+            print(product.name)
     """
     page = 1
     kwargs["page_size"] = page_size
     while True:
         kwargs["page"] = page
         result = await list_method(*args, **kwargs)
-        for item in result.Items:
+        for item in result.items:
             yield item
-        if page >= result.Meta.TotalPages:
+        if page >= result.meta.total_pages:
             break
         page += 1
 
@@ -123,8 +123,8 @@ class BaseResource:
             A ``ListPage`` containing parsed items and pagination metadata.
         """
         return ListPage[model_cls](  # type: ignore[valid-type]
-            Items=[model_cls.model_validate(item) for item in data.get("Items", [])],
-            Meta=meta_cls.model_validate(data.get("Meta", {})),
+            items=[model_cls.model_validate(item) for item in data.get("Items", [])],
+            meta=meta_cls.model_validate(data.get("Meta", {})),
         )
 
     @staticmethod
@@ -141,5 +141,5 @@ class BaseResource:
             A JSON-serialisable dict.
         """
         if isinstance(model, BaseModel):
-            return model.model_dump(exclude_none=True)
+            return model.model_dump(by_alias=True, exclude_none=True)
         return model

@@ -25,13 +25,16 @@ class FieldDef:
     """A single field on a Pydantic model."""
 
     name: str
-    """PascalCase field name matching the API JSON key."""
+    """PascalCase field name matching the API JSON key (used as Pydantic alias)."""
+
+    python_name: str
+    """snake_case Python field name."""
 
     python_type: str
     """Fully-qualified Python type annotation, e.g. ``Optional[str]``."""
 
     default: str
-    """Default value as a Python source literal, e.g. ``None``, ``0``, ``Field(default_factory=list)``."""
+    """Default value as a Python source literal, e.g. ``Field(None, alias="Name")``."""
 
     description: str
     """Human-readable description for docstrings."""

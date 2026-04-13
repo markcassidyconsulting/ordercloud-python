@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel
 from .misc import ApiRole
@@ -15,74 +16,74 @@ class PasswordConfig(OrderCloudModel):
     """An OrderCloud PasswordConfig.
 
     Attributes:
-        LimitPasswordReuse: The number of passwords, including the current password, that are blocked from reuse. For example, if set to 1, any password except the current one can be reused.
-        MaxConsecutiveDupeChars: The maximum number of consecutive repeating characters in a password.
-        MaximumPasswordAge: The password expires after MaximumPasswordAge in days.
-        MinimumPasswordAge: The password may not be changed again until this number of minutes has passed.
-        AllowedFailedAttempts: The number of failed attempts before the account is locked for the LockoutDuration.
-        LockoutDuration: The number of minutes an account is locked when the AllowedFailedAttempts is reached. Use 0 to indicate that lockout should be indefinite, requiring the manual intervention by an admin user.
-        UpperCaseRequired: At least one upper case character is required.
-        LowerCaseRequired: At least one lower case character is required.
-        SpecialCharacterRequired: At least one special character is required.
-        NumericRequired: At least one number is required.
-        MinimumCharacterCount: The minimum length of a password.
+        limit_password_reuse: The number of passwords, including the current password, that are blocked from reuse. For example, if set to 1, any password except the current one can be reused.
+        max_consecutive_dupe_chars: The maximum number of consecutive repeating characters in a password.
+        maximum_password_age: The password expires after MaximumPasswordAge in days.
+        minimum_password_age: The password may not be changed again until this number of minutes has passed.
+        allowed_failed_attempts: The number of failed attempts before the account is locked for the LockoutDuration.
+        lockout_duration: The number of minutes an account is locked when the AllowedFailedAttempts is reached. Use 0 to indicate that lockout should be indefinite, requiring the manual intervention by an admin user.
+        upper_case_required: At least one upper case character is required.
+        lower_case_required: At least one lower case character is required.
+        special_character_required: At least one special character is required.
+        numeric_required: At least one number is required.
+        minimum_character_count: The minimum length of a password.
     """
 
-    LimitPasswordReuse: Optional[int] = None
-    MaxConsecutiveDupeChars: Optional[int] = None
-    MaximumPasswordAge: Optional[int] = None
-    MinimumPasswordAge: Optional[int] = None
-    AllowedFailedAttempts: Optional[int] = None
-    LockoutDuration: Optional[int] = None
-    UpperCaseRequired: Optional[bool] = None
-    LowerCaseRequired: Optional[bool] = None
-    SpecialCharacterRequired: Optional[bool] = None
-    NumericRequired: Optional[bool] = None
-    MinimumCharacterCount: Optional[int] = None
+    limit_password_reuse: Optional[int] = Field(None, alias="LimitPasswordReuse")
+    max_consecutive_dupe_chars: Optional[int] = Field(None, alias="MaxConsecutiveDupeChars")
+    maximum_password_age: Optional[int] = Field(None, alias="MaximumPasswordAge")
+    minimum_password_age: Optional[int] = Field(None, alias="MinimumPasswordAge")
+    allowed_failed_attempts: Optional[int] = Field(None, alias="AllowedFailedAttempts")
+    lockout_duration: Optional[int] = Field(None, alias="LockoutDuration")
+    upper_case_required: Optional[bool] = Field(None, alias="UpperCaseRequired")
+    lower_case_required: Optional[bool] = Field(None, alias="LowerCaseRequired")
+    special_character_required: Optional[bool] = Field(None, alias="SpecialCharacterRequired")
+    numeric_required: Optional[bool] = Field(None, alias="NumericRequired")
+    minimum_character_count: Optional[int] = Field(None, alias="MinimumCharacterCount")
 
 
 class ImpersonationConfig(OrderCloudModel):
     """An OrderCloud ImpersonationConfig.
 
     Attributes:
-        ID:
-        ImpersonationBuyerID: The BuyerID of the impersonator group or user (party doing the impersonating)
-        ImpersonationGroupID: The UserGroupID of the impersonator (party doing the impersonating)
-        ImpersonationUserID: The UserID of the impersonator (party doing the impersonating)
-        BuyerID: The BuyerID of the impersonatee (party being impersonated). If null, the config can be used to impersonate users in any buyer in the marketplace that is able to access the specified API Client.
-        GroupID: The UserGroupID of the impersonatee (party being impersonated)
-        UserID: The UserID of the impersonatee (party being impersonated)
-        SecurityProfileID:
-        ClientID:
+        id:
+        impersonation_buyer_id: The BuyerID of the impersonator group or user (party doing the impersonating)
+        impersonation_group_id: The UserGroupID of the impersonator (party doing the impersonating)
+        impersonation_user_id: The UserID of the impersonator (party doing the impersonating)
+        buyer_id: The BuyerID of the impersonatee (party being impersonated). If null, the config can be used to impersonate users in any buyer in the marketplace that is able to access the specified API Client.
+        group_id: The UserGroupID of the impersonatee (party being impersonated)
+        user_id: The UserID of the impersonatee (party being impersonated)
+        security_profile_id:
+        client_id:
     """
 
-    ID: Optional[str] = None
-    ImpersonationBuyerID: Optional[str] = None
-    ImpersonationGroupID: Optional[str] = None
-    ImpersonationUserID: Optional[str] = None
-    BuyerID: Optional[str] = None
-    GroupID: Optional[str] = None
-    UserID: Optional[str] = None
-    SecurityProfileID: Optional[str] = None
-    ClientID: Optional[str] = None
+    id: Optional[str] = Field(None, alias="ID")
+    impersonation_buyer_id: Optional[str] = Field(None, alias="ImpersonationBuyerID")
+    impersonation_group_id: Optional[str] = Field(None, alias="ImpersonationGroupID")
+    impersonation_user_id: Optional[str] = Field(None, alias="ImpersonationUserID")
+    buyer_id: Optional[str] = Field(None, alias="BuyerID")
+    group_id: Optional[str] = Field(None, alias="GroupID")
+    user_id: Optional[str] = Field(None, alias="UserID")
+    security_profile_id: Optional[str] = Field(None, alias="SecurityProfileID")
+    client_id: Optional[str] = Field(None, alias="ClientID")
 
 
 class SecurityProfile(OrderCloudModel):
     """An OrderCloud SecurityProfile.
 
     Attributes:
-        ID:
-        Name:
-        Roles:
-        CustomRoles:
-        PasswordConfig:
+        id:
+        name:
+        roles:
+        custom_roles:
+        password_config:
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    Roles: Optional[list[ApiRole]] = None
-    CustomRoles: Optional[list[str]] = None
-    PasswordConfig: Optional[_PasswordConfig] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    roles: Optional[list[ApiRole]] = Field(None, alias="Roles")
+    custom_roles: Optional[list[str]] = Field(None, alias="CustomRoles")
+    password_config: Optional[_PasswordConfig] = Field(None, alias="PasswordConfig")
 
 
 _PasswordConfig = PasswordConfig

@@ -43,9 +43,9 @@ class TestCatalogAssignments:
             page = await async_client.catalogs.list_assignments(
                 catalog_id=self.CATALOG_ID, buyer_id=self.BUYER_ID
             )
-            assert page.Meta.TotalCount >= 1
+            assert page.meta.total_count >= 1
             assert any(
-                a.CatalogID == self.CATALOG_ID and a.BuyerID == self.BUYER_ID for a in page.Items
+                a.catalog_id == self.CATALOG_ID and a.buyer_id == self.BUYER_ID for a in page.items
             )
 
             # --- Delete assignment (DELETE with query params) ---
@@ -60,8 +60,8 @@ class TestCatalogAssignments:
             )
             matching = [
                 a
-                for a in page.Items
-                if a.CatalogID == self.CATALOG_ID and a.BuyerID == self.BUYER_ID
+                for a in page.items
+                if a.catalog_id == self.CATALOG_ID and a.buyer_id == self.BUYER_ID
             ]
             assert len(matching) == 0, "Assignment should be deleted"
 
@@ -115,7 +115,7 @@ class TestCategoryAssignments:
             page = await async_client.categories.list_assignments(
                 self.CATALOG_ID, buyer_id=self.BUYER_ID
             )
-            assert page.Meta.TotalCount >= 1
+            assert page.meta.total_count >= 1
 
             # --- Delete (buyer_id as query param on DELETE) ---
             await async_client.categories.delete_assignment(
@@ -130,7 +130,7 @@ class TestCategoryAssignments:
                 category_id=self.CATEGORY_ID,
                 buyer_id=self.BUYER_ID,
             )
-            assert page.Meta.TotalCount == 0
+            assert page.meta.total_count == 0
 
         finally:
             await async_safe_delete(
@@ -175,7 +175,7 @@ class TestProductCatalogAssignments:
             page = await async_client.catalogs.list_product_assignments(
                 catalog_id=self.CATALOG_ID, product_id=self.PRODUCT_ID
             )
-            assert page.Meta.TotalCount >= 1
+            assert page.meta.total_count >= 1
 
             # Remove
             await async_client.catalogs.delete_product_assignment(self.CATALOG_ID, self.PRODUCT_ID)
@@ -184,7 +184,7 @@ class TestProductCatalogAssignments:
             page = await async_client.catalogs.list_product_assignments(
                 catalog_id=self.CATALOG_ID, product_id=self.PRODUCT_ID
             )
-            assert page.Meta.TotalCount == 0
+            assert page.meta.total_count == 0
 
         finally:
             await async_safe_delete(

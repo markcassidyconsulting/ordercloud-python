@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudEnum, OrderCloudModel, XP
 
@@ -29,44 +30,44 @@ class ApprovalRule(OrderCloudModel, Generic[XP]):
     """An OrderCloud ApprovalRule.
 
     Attributes:
-        ID:
-        Name:
-        Description:
-        ApprovingGroupID:
-        RuleExpression: The expression evaluated to determine an order requires approval. See rules engine documentation for formatting details.
+        id:
+        name:
+        description:
+        approving_group_id:
+        rule_expression: The expression evaluated to determine an order requires approval. See rules engine documentation for formatting details.
         xp:
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    Description: Optional[str] = None
-    ApprovingGroupID: Optional[str] = None
-    RuleExpression: Optional[str] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    description: Optional[str] = Field(None, alias="Description")
+    approving_group_id: Optional[str] = Field(None, alias="ApprovingGroupID")
+    rule_expression: Optional[str] = Field(None, alias="RuleExpression")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class SellerApprovalRule(OrderCloudModel, Generic[XP]):
     """An OrderCloud SellerApprovalRule.
 
     Attributes:
-        OwnerID: ID of the organization who owns the rule. Only the marketplace owner can write a value other than their own organization ID. The value is used to look up the ApprovingGroupID.
-        ApprovalType: OrderReturn is the only ApprovalType supported currently.
-        ID:
-        Name:
-        Description:
-        ApprovingGroupID:
-        RuleExpression: The expression evaluated to determine an order requires approval. See rules engine documentation for formatting details.
+        owner_id: ID of the organization who owns the rule. Only the marketplace owner can write a value other than their own organization ID. The value is used to look up the ApprovingGroupID.
+        approval_type: OrderReturn is the only ApprovalType supported currently.
+        id:
+        name:
+        description:
+        approving_group_id:
+        rule_expression: The expression evaluated to determine an order requires approval. See rules engine documentation for formatting details.
         xp:
     """
 
-    OwnerID: Optional[str] = None
-    ApprovalType: Optional[_ApprovalType] = None
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    Description: Optional[str] = None
-    ApprovingGroupID: Optional[str] = None
-    RuleExpression: Optional[str] = None
-    xp: Optional[XP] = None
+    owner_id: Optional[str] = Field(None, alias="OwnerID")
+    approval_type: Optional[_ApprovalType] = Field(None, alias="ApprovalType")
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    description: Optional[str] = Field(None, alias="Description")
+    approving_group_id: Optional[str] = Field(None, alias="ApprovingGroupID")
+    rule_expression: Optional[str] = Field(None, alias="RuleExpression")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 _ApprovalType = ApprovalType

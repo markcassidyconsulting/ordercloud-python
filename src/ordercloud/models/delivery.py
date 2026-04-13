@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Any, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel
 from .message_sender import MessageSenderConfig
@@ -32,236 +33,236 @@ class KafkaConfig(OrderCloudModel):
     """An OrderCloud KafkaConfig.
 
     Attributes:
-        BootstrapServers:
-        SaslUsername:
-        SaslPassword:
-        Topic:
+        bootstrap_servers:
+        sasl_username:
+        sasl_password:
+        topic:
     """
 
-    BootstrapServers: Optional[str] = None
-    SaslUsername: Optional[str] = None
-    SaslPassword: Optional[str] = None
-    Topic: Optional[str] = None
+    bootstrap_servers: Optional[str] = Field(None, alias="BootstrapServers")
+    sasl_username: Optional[str] = Field(None, alias="SaslUsername")
+    sasl_password: Optional[str] = Field(None, alias="SaslPassword")
+    topic: Optional[str] = Field(None, alias="Topic")
 
 
 class HttpConfig(OrderCloudModel):
     """An OrderCloud HttpConfig.
 
     Attributes:
-        Endpoint:
-        Secret:
-        CustomAuthHeaderName:
-        CustomAuthHeaderValue:
+        endpoint:
+        secret:
+        custom_auth_header_name:
+        custom_auth_header_value:
     """
 
-    Endpoint: Optional[str] = None
-    Secret: Optional[str] = None
-    CustomAuthHeaderName: Optional[str] = None
-    CustomAuthHeaderValue: Optional[str] = None
+    endpoint: Optional[str] = Field(None, alias="Endpoint")
+    secret: Optional[str] = Field(None, alias="Secret")
+    custom_auth_header_name: Optional[str] = Field(None, alias="CustomAuthHeaderName")
+    custom_auth_header_value: Optional[str] = Field(None, alias="CustomAuthHeaderValue")
 
 
 class EventHubConfig(OrderCloudModel):
     """An OrderCloud EventHubConfig.
 
     Attributes:
-        EventHubName:
-        ConnectionString:
+        event_hub_name:
+        connection_string:
     """
 
-    EventHubName: Optional[str] = None
-    ConnectionString: Optional[str] = None
+    event_hub_name: Optional[str] = Field(None, alias="EventHubName")
+    connection_string: Optional[str] = Field(None, alias="ConnectionString")
 
 
 class AzureBlobConfig(OrderCloudModel):
     """An OrderCloud AzureBlobConfig.
 
     Attributes:
-        ConnectionString: Storage account connection string.
-        OverrideContainerName:
+        connection_string: Storage account connection string.
+        override_container_name:
     """
 
-    ConnectionString: Optional[str] = None
-    OverrideContainerName: Optional[str] = None
+    connection_string: Optional[str] = Field(None, alias="ConnectionString")
+    override_container_name: Optional[str] = Field(None, alias="OverrideContainerName")
 
 
 class AzureTableConfig(OrderCloudModel):
     """An OrderCloud AzureTableConfig.
 
     Attributes:
-        ConnectionString: Storage account connection string.
-        OverrideTableName:
+        connection_string: Storage account connection string.
+        override_table_name:
     """
 
-    ConnectionString: Optional[str] = None
-    OverrideTableName: Optional[str] = None
+    connection_string: Optional[str] = Field(None, alias="ConnectionString")
+    override_table_name: Optional[str] = Field(None, alias="OverrideTableName")
 
 
 class CosmosDbConfig(OrderCloudModel):
     """An OrderCloud CosmosDbConfig.
 
     Attributes:
-        ConnectionString: Storage account connection string.
-        OverrideDatabaseName:
+        connection_string: Storage account connection string.
+        override_database_name:
     """
 
-    ConnectionString: Optional[str] = None
-    OverrideDatabaseName: Optional[str] = None
+    connection_string: Optional[str] = Field(None, alias="ConnectionString")
+    override_database_name: Optional[str] = Field(None, alias="OverrideDatabaseName")
 
 
 class MailchimpConfig(OrderCloudModel):
     """An OrderCloud MailchimpConfig.
 
     Attributes:
-        ApiKey: The Mailchimp API key. If this property is not set, the default OrderCloud Mailchimp instance is used. The default instance is intended for test purposes only.
+        api_key: The Mailchimp API key. If this property is not set, the default OrderCloud Mailchimp instance is used. The default instance is intended for test purposes only.
     """
 
-    ApiKey: Optional[str] = None
+    api_key: Optional[str] = Field(None, alias="ApiKey")
 
 
 class ContentHubConfig(OrderCloudModel):
     """An OrderCloud ContentHubConfig.
 
     Attributes:
-        ApiKey:
-        Endpoint:
-        TargetSchemaName:
-        ConfigData: Any custom property mapping should be included here.
+        api_key:
+        endpoint:
+        target_schema_name:
+        config_data: Any custom property mapping should be included here.
     """
 
-    ApiKey: Optional[str] = None
-    Endpoint: Optional[str] = None
-    TargetSchemaName: Optional[str] = None
-    ConfigData: Optional[dict[str, Any]] = None
+    api_key: Optional[str] = Field(None, alias="ApiKey")
+    endpoint: Optional[str] = Field(None, alias="Endpoint")
+    target_schema_name: Optional[str] = Field(None, alias="TargetSchemaName")
+    config_data: Optional[dict[str, Any]] = Field(None, alias="ConfigData")
 
 
 class SearchIngestionContent(OrderCloudModel):
     """An OrderCloud SearchIngestionContent.
 
     Attributes:
-        Locales: Supported search ingestion locales.
-        Http:
+        locales: Supported search ingestion locales.
+        http:
     """
 
-    Locales: Optional[list[str]] = None
-    Http: Optional[SearchIngestionHttpContent] = None
+    locales: Optional[list[str]] = Field(None, alias="Locales")
+    http: Optional[SearchIngestionHttpContent] = Field(None, alias="Http")
 
 
 class SearchIngestionHttpContent(OrderCloudModel):
     """An OrderCloud SearchIngestionHttpContent.
 
     Attributes:
-        Endpoint:
-        CustomAuthHeaderName: Security feature that allows your middleware to verify the digital signature in the request header to ensure you only accept trusted data.
-        CustomAuthHeaderValue: The header value that can be passed to your middleware.
+        endpoint:
+        custom_auth_header_name: Security feature that allows your middleware to verify the digital signature in the request header to ensure you only accept trusted data.
+        custom_auth_header_value: The header value that can be passed to your middleware.
     """
 
-    Endpoint: Optional[str] = None
-    CustomAuthHeaderName: Optional[str] = None
-    CustomAuthHeaderValue: Optional[str] = None
+    endpoint: Optional[str] = Field(None, alias="Endpoint")
+    custom_auth_header_name: Optional[str] = Field(None, alias="CustomAuthHeaderName")
+    custom_auth_header_value: Optional[str] = Field(None, alias="CustomAuthHeaderValue")
 
 
 class SearchIngestion(OrderCloudModel):
     """An OrderCloud SearchIngestion.
 
     Attributes:
-        Domain:
-        Source:
-        Endpoint:
-        Entity:
-        ApiKey:
-        Content:
+        domain:
+        source:
+        endpoint:
+        entity:
+        api_key:
+        content:
     """
 
-    Domain: Optional[str] = None
-    Source: Optional[str] = None
-    Endpoint: Optional[str] = None
-    Entity: Optional[str] = None
-    ApiKey: Optional[str] = None
-    Content: Optional[SearchIngestionContent] = None
+    domain: Optional[str] = Field(None, alias="Domain")
+    source: Optional[str] = Field(None, alias="Source")
+    endpoint: Optional[str] = Field(None, alias="Endpoint")
+    entity: Optional[str] = Field(None, alias="Entity")
+    api_key: Optional[str] = Field(None, alias="ApiKey")
+    content: Optional[SearchIngestionContent] = Field(None, alias="Content")
 
 
 class DeliveryTargets(OrderCloudModel):
     """An OrderCloud DeliveryTargets.
 
     Attributes:
-        Kafka:
-        Http:
-        SearchIngestion:
-        SendEvent:
-        DiscoverEvent:
-        EventHub:
-        AzureBlob:
-        AzureTable:
-        CosmosDb:
-        Mailchimp:
-        MessageSender:
-        ContentHub:
+        kafka:
+        http:
+        search_ingestion:
+        send_event:
+        discover_event:
+        event_hub:
+        azure_blob:
+        azure_table:
+        cosmos_db:
+        mailchimp:
+        message_sender:
+        content_hub:
     """
 
-    Kafka: Optional[KafkaConfig] = None
-    Http: Optional[HttpConfig] = None
-    SearchIngestion: Optional[_SearchIngestion] = None
-    SendEvent: Optional[_SendEvent] = None
-    DiscoverEvent: Optional[_DiscoverEvent] = None
-    EventHub: Optional[EventHubConfig] = None
-    AzureBlob: Optional[AzureBlobConfig] = None
-    AzureTable: Optional[AzureTableConfig] = None
-    CosmosDb: Optional[CosmosDbConfig] = None
-    Mailchimp: Optional[MailchimpConfig] = None
-    MessageSender: Optional[MessageSenderConfig] = None
-    ContentHub: Optional[ContentHubConfig] = None
+    kafka: Optional[KafkaConfig] = Field(None, alias="Kafka")
+    http: Optional[HttpConfig] = Field(None, alias="Http")
+    search_ingestion: Optional[_SearchIngestion] = Field(None, alias="SearchIngestion")
+    send_event: Optional[_SendEvent] = Field(None, alias="SendEvent")
+    discover_event: Optional[_DiscoverEvent] = Field(None, alias="DiscoverEvent")
+    event_hub: Optional[EventHubConfig] = Field(None, alias="EventHub")
+    azure_blob: Optional[AzureBlobConfig] = Field(None, alias="AzureBlob")
+    azure_table: Optional[AzureTableConfig] = Field(None, alias="AzureTable")
+    cosmos_db: Optional[CosmosDbConfig] = Field(None, alias="CosmosDb")
+    mailchimp: Optional[MailchimpConfig] = Field(None, alias="Mailchimp")
+    message_sender: Optional[MessageSenderConfig] = Field(None, alias="MessageSender")
+    content_hub: Optional[ContentHubConfig] = Field(None, alias="ContentHub")
 
 
 class DeliveryConfig(OrderCloudModel):
     """An OrderCloud DeliveryConfig.
 
     Attributes:
-        ID:
-        Name:
-        Enabled:
-        DeliveryTargets:
+        id:
+        name:
+        enabled:
+        delivery_targets:
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    Enabled: Optional[bool] = None
-    DeliveryTargets: Optional[_DeliveryTargets] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    enabled: Optional[bool] = Field(None, alias="Enabled")
+    delivery_targets: Optional[_DeliveryTargets] = Field(None, alias="DeliveryTargets")
 
 
 class SendEvent(OrderCloudModel):
     """An OrderCloud SendEvent.
 
     Attributes:
-        SiteID:
-        ServiceEndpoint:
+        site_id:
+        service_endpoint:
     """
 
-    SiteID: Optional[str] = None
-    ServiceEndpoint: Optional[str] = None
+    site_id: Optional[str] = Field(None, alias="SiteID")
+    service_endpoint: Optional[str] = Field(None, alias="ServiceEndpoint")
 
 
 class DiscoverEvent(OrderCloudModel):
     """An OrderCloud DiscoverEvent.
 
     Attributes:
-        ClientID:
-        ApiKey:
-        ServiceEndpoint:
+        client_id:
+        api_key:
+        service_endpoint:
     """
 
-    ClientID: Optional[str] = None
-    ApiKey: Optional[str] = None
-    ServiceEndpoint: Optional[str] = None
+    client_id: Optional[str] = Field(None, alias="ClientID")
+    api_key: Optional[str] = Field(None, alias="ApiKey")
+    service_endpoint: Optional[str] = Field(None, alias="ServiceEndpoint")
 
 
 class ErrorConfig(OrderCloudModel):
     """An OrderCloud ErrorConfig.
 
     Attributes:
-        DeliveryConfigID:
+        delivery_config_id:
     """
 
-    DeliveryConfigID: Optional[str] = None
+    delivery_config_id: Optional[str] = Field(None, alias="DeliveryConfigID")
 
 
 _SearchIngestion = SearchIngestion

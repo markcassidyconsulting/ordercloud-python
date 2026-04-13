@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Any, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel
 
@@ -27,145 +28,145 @@ class EntitySyncConfig(OrderCloudModel):
     """An OrderCloud EntitySyncConfig.
 
     Attributes:
-        DeliveryConfigID:
-        SyncEntityChanged:
-        SyncEntityDeleted:
-        Paused:
+        delivery_config_id:
+        sync_entity_changed:
+        sync_entity_deleted:
+        paused:
     """
 
-    DeliveryConfigID: Optional[str] = None
-    SyncEntityChanged: Optional[bool] = None
-    SyncEntityDeleted: Optional[bool] = None
-    Paused: Optional[bool] = None
+    delivery_config_id: Optional[str] = Field(None, alias="DeliveryConfigID")
+    sync_entity_changed: Optional[bool] = Field(None, alias="SyncEntityChanged")
+    sync_entity_deleted: Optional[bool] = Field(None, alias="SyncEntityDeleted")
+    paused: Optional[bool] = Field(None, alias="Paused")
 
 
 class OrderSyncConfig(OrderCloudModel):
     """An OrderCloud OrderSyncConfig.
 
     Attributes:
-        DeliveryConfigID:
-        ConfigData:
+        delivery_config_id:
+        config_data:
     """
 
-    DeliveryConfigID: Optional[str] = None
-    ConfigData: Optional[dict[str, Any]] = None
+    delivery_config_id: Optional[str] = Field(None, alias="DeliveryConfigID")
+    config_data: Optional[dict[str, Any]] = Field(None, alias="ConfigData")
 
 
 class ProductSyncConfig(OrderCloudModel):
     """An OrderCloud ProductSyncConfig.
 
     Attributes:
-        SyncProductChanged:
-        SyncProductDeleted:
-        DeliveryConfigID:
-        ConfigData:
-        Paused:
-        ExcludePriceSchedules:
+        sync_product_changed:
+        sync_product_deleted:
+        delivery_config_id:
+        config_data:
+        paused:
+        exclude_price_schedules:
     """
 
-    SyncProductChanged: Optional[bool] = None
-    SyncProductDeleted: Optional[bool] = None
-    DeliveryConfigID: Optional[str] = None
-    ConfigData: Optional[dict[str, Any]] = None
-    Paused: Optional[bool] = None
-    ExcludePriceSchedules: Optional[bool] = None
+    sync_product_changed: Optional[bool] = Field(None, alias="SyncProductChanged")
+    sync_product_deleted: Optional[bool] = Field(None, alias="SyncProductDeleted")
+    delivery_config_id: Optional[str] = Field(None, alias="DeliveryConfigID")
+    config_data: Optional[dict[str, Any]] = Field(None, alias="ConfigData")
+    paused: Optional[bool] = Field(None, alias="Paused")
+    exclude_price_schedules: Optional[bool] = Field(None, alias="ExcludePriceSchedules")
 
 
 class SyncAdminUser(OrderCloudModel):
     """An OrderCloud SyncAdminUser.
 
     Attributes:
-        UserID:
+        user_id:
     """
 
-    UserID: Optional[str] = None
+    user_id: Optional[str] = Field(None, alias="UserID")
 
 
 class SyncBuyer(OrderCloudModel):
     """An OrderCloud SyncBuyer.
 
     Attributes:
-        BuyerID:
+        buyer_id:
     """
 
-    BuyerID: Optional[str] = None
+    buyer_id: Optional[str] = Field(None, alias="BuyerID")
 
 
 class SyncBuyerUser(OrderCloudModel):
     """An OrderCloud SyncBuyerUser.
 
     Attributes:
-        BuyerID:
-        UserID:
+        buyer_id:
+        user_id:
     """
 
-    BuyerID: Optional[str] = None
-    UserID: Optional[str] = None
+    buyer_id: Optional[str] = Field(None, alias="BuyerID")
+    user_id: Optional[str] = Field(None, alias="UserID")
 
 
 class SyncBuyerUserGroup(OrderCloudModel):
     """An OrderCloud SyncBuyerUserGroup.
 
     Attributes:
-        BuyerID:
-        UserGroupID:
+        buyer_id:
+        user_group_id:
     """
 
-    BuyerID: Optional[str] = None
-    UserGroupID: Optional[str] = None
+    buyer_id: Optional[str] = Field(None, alias="BuyerID")
+    user_group_id: Optional[str] = Field(None, alias="UserGroupID")
 
 
 class SyncCategory(OrderCloudModel):
     """An OrderCloud SyncCategory.
 
     Attributes:
-        CatalogID:
-        CategoryID:
+        catalog_id:
+        category_id:
     """
 
-    CatalogID: Optional[str] = None
-    CategoryID: Optional[str] = None
+    catalog_id: Optional[str] = Field(None, alias="CatalogID")
+    category_id: Optional[str] = Field(None, alias="CategoryID")
 
 
 class SyncInventoryRecord(OrderCloudModel):
     """An OrderCloud SyncInventoryRecord.
 
     Attributes:
-        ProductID:
-        InventoryRecordID:
+        product_id:
+        inventory_record_id:
     """
 
-    ProductID: Optional[str] = None
-    InventoryRecordID: Optional[str] = None
+    product_id: Optional[str] = Field(None, alias="ProductID")
+    inventory_record_id: Optional[str] = Field(None, alias="InventoryRecordID")
 
 
 class SyncProduct(OrderCloudModel):
     """An OrderCloud SyncProduct.
 
     Attributes:
-        ProductID:
+        product_id:
     """
 
-    ProductID: Optional[str] = None
+    product_id: Optional[str] = Field(None, alias="ProductID")
 
 
 class SyncSupplier(OrderCloudModel):
     """An OrderCloud SyncSupplier.
 
     Attributes:
-        SupplierID:
+        supplier_id:
     """
 
-    SupplierID: Optional[str] = None
+    supplier_id: Optional[str] = Field(None, alias="SupplierID")
 
 
 class SyncSupplierUser(OrderCloudModel):
     """An OrderCloud SyncSupplierUser.
 
     Attributes:
-        SupplierID:
-        UserID:
+        supplier_id:
+        user_id:
     """
 
-    SupplierID: Optional[str] = None
-    UserID: Optional[str] = None
+    supplier_id: Optional[str] = Field(None, alias="SupplierID")
+    user_id: Optional[str] = Field(None, alias="UserID")

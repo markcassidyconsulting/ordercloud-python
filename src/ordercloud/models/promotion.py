@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 
@@ -22,275 +23,275 @@ class PromotionOverride(OrderCloudModel):
     """An OrderCloud PromotionOverride.
 
     Attributes:
-        PromotionID:
-        Amount: Overrides the promotion's calculated discount to this amount.
+        promotion_id:
+        amount: Overrides the promotion's calculated discount to this amount.
     """
 
-    PromotionID: Optional[str] = None
-    Amount: Optional[float] = None
+    promotion_id: Optional[str] = Field(None, alias="PromotionID")
+    amount: Optional[float] = Field(None, alias="Amount")
 
 
 class PromotionIntegration(OrderCloudModel):
     """An OrderCloud PromotionIntegration.
 
     Attributes:
-        HashKey: Security feature that allows your middleware to verify the digital signature in the request header to ensure you only accept trusted data.
-        Url:
-        CustomAuthHeaderName: The header name that can be passed to your middleware.
-        CustomAuthHeaderValue: The header value that can be passed to your middleware.
+        hash_key: Security feature that allows your middleware to verify the digital signature in the request header to ensure you only accept trusted data.
+        url:
+        custom_auth_header_name: The header name that can be passed to your middleware.
+        custom_auth_header_value: The header value that can be passed to your middleware.
     """
 
-    HashKey: Optional[str] = None
-    Url: Optional[str] = None
-    CustomAuthHeaderName: Optional[str] = None
-    CustomAuthHeaderValue: Optional[str] = None
+    hash_key: Optional[str] = Field(None, alias="HashKey")
+    url: Optional[str] = Field(None, alias="Url")
+    custom_auth_header_name: Optional[str] = Field(None, alias="CustomAuthHeaderName")
+    custom_auth_header_value: Optional[str] = Field(None, alias="CustomAuthHeaderValue")
 
 
 class AddedPromo(OrderCloudModel, Generic[XP]):
     """An OrderCloud AddedPromo.
 
     Attributes:
-        LineItemID:
-        Amount:
-        ID:
-        LineItemLevel: If true, certain eligible expression requirements must be met, and the PromotionDiscount will be applied at the line item level.
-        Code: Must be unique. Entered by buyer when adding promo to order.
-        Name:
-        RedemptionLimit: Limit the total number of orders this promotion can be applied to across all users.
-        RedemptionLimitPerUser: Limit the total number of orders this promotion can be applied to per user.
-        RedemptionCount: The number of times this promotion has been applied to an order. (read-only)
-        QuantityLimitPerOrder: Can only be used when LineItemLevel is true and ItemLimitPerOrder does not have a value. When defined the ValueExpression will be the discount applied to each qualifying quantity of eligible items. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
-        ItemLimitPerOrder: Can only be used when LineItemLevel is true and QuantityLimitPerOrder does not have a value. Limits the number of items the promotion will apply to when eligible. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
-        ItemSortBy: Comma delimited list of properties to sort by. Can only be used when ItemLimitPerOrder is true. Used to determine the order in which the promotion is applied to the specified limit of items. Use ! to reverse sort order on a property.
-        Description:
-        FinePrint: For reference only. Terms, conditions, and other legal jargon.
-        StartDate:
-        ExpirationDate:
-        EligibleExpression: The expression evaluated to determine if an item or order is eligible for a promotion. See rules engine documentation for formatting details.
-        ValueExpression: The expression evaluated to determine the discount amount of an eligible promotion. See rules engine documentation for formatting details.
-        CanCombine: If true, the promotion can be applied to an order that already other promotions applied, as long as they can also be combined.
-        AllowAllBuyers: Allow promo to be used by all buyers without creating explicit assignments.
-        OwnerID: ID of the organization that owns the promotion. Only the marketplace owner can override the OwnerID on create.
-        AutoApply:
-        Active:
-        UseIntegration:
-        Priority: Used to control the order in which promotions are applied when calling the auto apply or refresh endpoint.
+        line_item_id:
+        amount:
+        id:
+        line_item_level: If true, certain eligible expression requirements must be met, and the PromotionDiscount will be applied at the line item level.
+        code: Must be unique. Entered by buyer when adding promo to order.
+        name:
+        redemption_limit: Limit the total number of orders this promotion can be applied to across all users.
+        redemption_limit_per_user: Limit the total number of orders this promotion can be applied to per user.
+        redemption_count: The number of times this promotion has been applied to an order. (read-only)
+        quantity_limit_per_order: Can only be used when LineItemLevel is true and ItemLimitPerOrder does not have a value. When defined the ValueExpression will be the discount applied to each qualifying quantity of eligible items. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
+        item_limit_per_order: Can only be used when LineItemLevel is true and QuantityLimitPerOrder does not have a value. Limits the number of items the promotion will apply to when eligible. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
+        item_sort_by: Comma delimited list of properties to sort by. Can only be used when ItemLimitPerOrder is true. Used to determine the order in which the promotion is applied to the specified limit of items. Use ! to reverse sort order on a property.
+        description:
+        fine_print: For reference only. Terms, conditions, and other legal jargon.
+        start_date:
+        expiration_date:
+        eligible_expression: The expression evaluated to determine if an item or order is eligible for a promotion. See rules engine documentation for formatting details.
+        value_expression: The expression evaluated to determine the discount amount of an eligible promotion. See rules engine documentation for formatting details.
+        can_combine: If true, the promotion can be applied to an order that already other promotions applied, as long as they can also be combined.
+        allow_all_buyers: Allow promo to be used by all buyers without creating explicit assignments.
+        owner_id: ID of the organization that owns the promotion. Only the marketplace owner can override the OwnerID on create.
+        auto_apply:
+        active:
+        use_integration:
+        priority: Used to control the order in which promotions are applied when calling the auto apply or refresh endpoint.
         xp:
     """
 
-    LineItemID: Optional[str] = None
-    Amount: Optional[float] = None
-    ID: Optional[str] = None
-    LineItemLevel: Optional[bool] = None
-    Code: Optional[str] = None
-    Name: Optional[str] = None
-    RedemptionLimit: Optional[int] = None
-    RedemptionLimitPerUser: Optional[int] = None
-    RedemptionCount: int = 0
-    QuantityLimitPerOrder: Optional[int] = None
-    ItemLimitPerOrder: Optional[int] = None
-    ItemSortBy: Optional[str] = None
-    Description: Optional[str] = None
-    FinePrint: Optional[str] = None
-    StartDate: Optional[str] = None
-    ExpirationDate: Optional[str] = None
-    EligibleExpression: Optional[str] = None
-    ValueExpression: Optional[str] = None
-    CanCombine: Optional[bool] = None
-    AllowAllBuyers: Optional[bool] = None
-    OwnerID: Optional[str] = None
-    AutoApply: bool = False
-    Active: bool = True
-    UseIntegration: Optional[bool] = None
-    Priority: Optional[int] = None
-    xp: Optional[XP] = None
+    line_item_id: Optional[str] = Field(None, alias="LineItemID")
+    amount: Optional[float] = Field(None, alias="Amount")
+    id: Optional[str] = Field(None, alias="ID")
+    line_item_level: Optional[bool] = Field(None, alias="LineItemLevel")
+    code: Optional[str] = Field(None, alias="Code")
+    name: Optional[str] = Field(None, alias="Name")
+    redemption_limit: Optional[int] = Field(None, alias="RedemptionLimit")
+    redemption_limit_per_user: Optional[int] = Field(None, alias="RedemptionLimitPerUser")
+    redemption_count: int = Field(0, alias="RedemptionCount")
+    quantity_limit_per_order: Optional[int] = Field(None, alias="QuantityLimitPerOrder")
+    item_limit_per_order: Optional[int] = Field(None, alias="ItemLimitPerOrder")
+    item_sort_by: Optional[str] = Field(None, alias="ItemSortBy")
+    description: Optional[str] = Field(None, alias="Description")
+    fine_print: Optional[str] = Field(None, alias="FinePrint")
+    start_date: Optional[str] = Field(None, alias="StartDate")
+    expiration_date: Optional[str] = Field(None, alias="ExpirationDate")
+    eligible_expression: Optional[str] = Field(None, alias="EligibleExpression")
+    value_expression: Optional[str] = Field(None, alias="ValueExpression")
+    can_combine: Optional[bool] = Field(None, alias="CanCombine")
+    allow_all_buyers: Optional[bool] = Field(None, alias="AllowAllBuyers")
+    owner_id: Optional[str] = Field(None, alias="OwnerID")
+    auto_apply: bool = Field(False, alias="AutoApply")
+    active: bool = Field(True, alias="Active")
+    use_integration: Optional[bool] = Field(None, alias="UseIntegration")
+    priority: Optional[int] = Field(None, alias="Priority")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class RemovedPromo(OrderCloudModel, Generic[XP]):
     """An OrderCloud RemovedPromo.
 
     Attributes:
-        ErrorCode:
-        Reason:
-        LineItemID:
-        Amount:
-        ID:
-        LineItemLevel: If true, certain eligible expression requirements must be met, and the PromotionDiscount will be applied at the line item level.
-        Code: Must be unique. Entered by buyer when adding promo to order.
-        Name:
-        RedemptionLimit: Limit the total number of orders this promotion can be applied to across all users.
-        RedemptionLimitPerUser: Limit the total number of orders this promotion can be applied to per user.
-        RedemptionCount: The number of times this promotion has been applied to an order. (read-only)
-        QuantityLimitPerOrder: Can only be used when LineItemLevel is true and ItemLimitPerOrder does not have a value. When defined the ValueExpression will be the discount applied to each qualifying quantity of eligible items. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
-        ItemLimitPerOrder: Can only be used when LineItemLevel is true and QuantityLimitPerOrder does not have a value. Limits the number of items the promotion will apply to when eligible. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
-        ItemSortBy: Comma delimited list of properties to sort by. Can only be used when ItemLimitPerOrder is true. Used to determine the order in which the promotion is applied to the specified limit of items. Use ! to reverse sort order on a property.
-        Description:
-        FinePrint: For reference only. Terms, conditions, and other legal jargon.
-        StartDate:
-        ExpirationDate:
-        EligibleExpression: The expression evaluated to determine if an item or order is eligible for a promotion. See rules engine documentation for formatting details.
-        ValueExpression: The expression evaluated to determine the discount amount of an eligible promotion. See rules engine documentation for formatting details.
-        CanCombine: If true, the promotion can be applied to an order that already other promotions applied, as long as they can also be combined.
-        AllowAllBuyers: Allow promo to be used by all buyers without creating explicit assignments.
-        OwnerID: ID of the organization that owns the promotion. Only the marketplace owner can override the OwnerID on create.
-        AutoApply:
-        Active:
-        UseIntegration:
-        Priority: Used to control the order in which promotions are applied when calling the auto apply or refresh endpoint.
+        error_code:
+        reason:
+        line_item_id:
+        amount:
+        id:
+        line_item_level: If true, certain eligible expression requirements must be met, and the PromotionDiscount will be applied at the line item level.
+        code: Must be unique. Entered by buyer when adding promo to order.
+        name:
+        redemption_limit: Limit the total number of orders this promotion can be applied to across all users.
+        redemption_limit_per_user: Limit the total number of orders this promotion can be applied to per user.
+        redemption_count: The number of times this promotion has been applied to an order. (read-only)
+        quantity_limit_per_order: Can only be used when LineItemLevel is true and ItemLimitPerOrder does not have a value. When defined the ValueExpression will be the discount applied to each qualifying quantity of eligible items. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
+        item_limit_per_order: Can only be used when LineItemLevel is true and QuantityLimitPerOrder does not have a value. Limits the number of items the promotion will apply to when eligible. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
+        item_sort_by: Comma delimited list of properties to sort by. Can only be used when ItemLimitPerOrder is true. Used to determine the order in which the promotion is applied to the specified limit of items. Use ! to reverse sort order on a property.
+        description:
+        fine_print: For reference only. Terms, conditions, and other legal jargon.
+        start_date:
+        expiration_date:
+        eligible_expression: The expression evaluated to determine if an item or order is eligible for a promotion. See rules engine documentation for formatting details.
+        value_expression: The expression evaluated to determine the discount amount of an eligible promotion. See rules engine documentation for formatting details.
+        can_combine: If true, the promotion can be applied to an order that already other promotions applied, as long as they can also be combined.
+        allow_all_buyers: Allow promo to be used by all buyers without creating explicit assignments.
+        owner_id: ID of the organization that owns the promotion. Only the marketplace owner can override the OwnerID on create.
+        auto_apply:
+        active:
+        use_integration:
+        priority: Used to control the order in which promotions are applied when calling the auto apply or refresh endpoint.
         xp:
     """
 
-    ErrorCode: Optional[str] = None
-    Reason: Optional[str] = None
-    LineItemID: Optional[str] = None
-    Amount: Optional[float] = None
-    ID: Optional[str] = None
-    LineItemLevel: Optional[bool] = None
-    Code: Optional[str] = None
-    Name: Optional[str] = None
-    RedemptionLimit: Optional[int] = None
-    RedemptionLimitPerUser: Optional[int] = None
-    RedemptionCount: int = 0
-    QuantityLimitPerOrder: Optional[int] = None
-    ItemLimitPerOrder: Optional[int] = None
-    ItemSortBy: Optional[str] = None
-    Description: Optional[str] = None
-    FinePrint: Optional[str] = None
-    StartDate: Optional[str] = None
-    ExpirationDate: Optional[str] = None
-    EligibleExpression: Optional[str] = None
-    ValueExpression: Optional[str] = None
-    CanCombine: Optional[bool] = None
-    AllowAllBuyers: Optional[bool] = None
-    OwnerID: Optional[str] = None
-    AutoApply: bool = False
-    Active: bool = True
-    UseIntegration: Optional[bool] = None
-    Priority: Optional[int] = None
-    xp: Optional[XP] = None
+    error_code: Optional[str] = Field(None, alias="ErrorCode")
+    reason: Optional[str] = Field(None, alias="Reason")
+    line_item_id: Optional[str] = Field(None, alias="LineItemID")
+    amount: Optional[float] = Field(None, alias="Amount")
+    id: Optional[str] = Field(None, alias="ID")
+    line_item_level: Optional[bool] = Field(None, alias="LineItemLevel")
+    code: Optional[str] = Field(None, alias="Code")
+    name: Optional[str] = Field(None, alias="Name")
+    redemption_limit: Optional[int] = Field(None, alias="RedemptionLimit")
+    redemption_limit_per_user: Optional[int] = Field(None, alias="RedemptionLimitPerUser")
+    redemption_count: int = Field(0, alias="RedemptionCount")
+    quantity_limit_per_order: Optional[int] = Field(None, alias="QuantityLimitPerOrder")
+    item_limit_per_order: Optional[int] = Field(None, alias="ItemLimitPerOrder")
+    item_sort_by: Optional[str] = Field(None, alias="ItemSortBy")
+    description: Optional[str] = Field(None, alias="Description")
+    fine_print: Optional[str] = Field(None, alias="FinePrint")
+    start_date: Optional[str] = Field(None, alias="StartDate")
+    expiration_date: Optional[str] = Field(None, alias="ExpirationDate")
+    eligible_expression: Optional[str] = Field(None, alias="EligibleExpression")
+    value_expression: Optional[str] = Field(None, alias="ValueExpression")
+    can_combine: Optional[bool] = Field(None, alias="CanCombine")
+    allow_all_buyers: Optional[bool] = Field(None, alias="AllowAllBuyers")
+    owner_id: Optional[str] = Field(None, alias="OwnerID")
+    auto_apply: bool = Field(False, alias="AutoApply")
+    active: bool = Field(True, alias="Active")
+    use_integration: Optional[bool] = Field(None, alias="UseIntegration")
+    priority: Optional[int] = Field(None, alias="Priority")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class EligiblePromotion(OrderCloudModel, Generic[XP]):
     """An OrderCloud EligiblePromotion.
 
     Attributes:
-        Amount:  (read-only)
-        ID:
-        LineItemLevel: If true, certain eligible expression requirements must be met, and the PromotionDiscount will be applied at the line item level.
-        Code: Must be unique. Entered by buyer when adding promo to order.
-        Name:
-        RedemptionLimit: Limit the total number of orders this promotion can be applied to across all users.
-        RedemptionLimitPerUser: Limit the total number of orders this promotion can be applied to per user.
-        RedemptionCount: The number of times this promotion has been applied to an order. (read-only)
-        QuantityLimitPerOrder: Can only be used when LineItemLevel is true and ItemLimitPerOrder does not have a value. When defined the ValueExpression will be the discount applied to each qualifying quantity of eligible items. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
-        ItemLimitPerOrder: Can only be used when LineItemLevel is true and QuantityLimitPerOrder does not have a value. Limits the number of items the promotion will apply to when eligible. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
-        ItemSortBy: Comma delimited list of properties to sort by. Can only be used when ItemLimitPerOrder is true. Used to determine the order in which the promotion is applied to the specified limit of items. Use ! to reverse sort order on a property.
-        Description:
-        FinePrint: For reference only. Terms, conditions, and other legal jargon.
-        StartDate:
-        ExpirationDate:
-        EligibleExpression: The expression evaluated to determine if an item or order is eligible for a promotion. See rules engine documentation for formatting details.
-        ValueExpression: The expression evaluated to determine the discount amount of an eligible promotion. See rules engine documentation for formatting details.
-        CanCombine: If true, the promotion can be applied to an order that already other promotions applied, as long as they can also be combined.
-        AllowAllBuyers: Allow promo to be used by all buyers without creating explicit assignments.
-        OwnerID: ID of the organization that owns the promotion. Only the marketplace owner can override the OwnerID on create.
-        AutoApply:
-        Active:
-        UseIntegration:
-        Priority: Used to control the order in which promotions are applied when calling the auto apply or refresh endpoint.
+        amount:  (read-only)
+        id:
+        line_item_level: If true, certain eligible expression requirements must be met, and the PromotionDiscount will be applied at the line item level.
+        code: Must be unique. Entered by buyer when adding promo to order.
+        name:
+        redemption_limit: Limit the total number of orders this promotion can be applied to across all users.
+        redemption_limit_per_user: Limit the total number of orders this promotion can be applied to per user.
+        redemption_count: The number of times this promotion has been applied to an order. (read-only)
+        quantity_limit_per_order: Can only be used when LineItemLevel is true and ItemLimitPerOrder does not have a value. When defined the ValueExpression will be the discount applied to each qualifying quantity of eligible items. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
+        item_limit_per_order: Can only be used when LineItemLevel is true and QuantityLimitPerOrder does not have a value. Limits the number of items the promotion will apply to when eligible. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
+        item_sort_by: Comma delimited list of properties to sort by. Can only be used when ItemLimitPerOrder is true. Used to determine the order in which the promotion is applied to the specified limit of items. Use ! to reverse sort order on a property.
+        description:
+        fine_print: For reference only. Terms, conditions, and other legal jargon.
+        start_date:
+        expiration_date:
+        eligible_expression: The expression evaluated to determine if an item or order is eligible for a promotion. See rules engine documentation for formatting details.
+        value_expression: The expression evaluated to determine the discount amount of an eligible promotion. See rules engine documentation for formatting details.
+        can_combine: If true, the promotion can be applied to an order that already other promotions applied, as long as they can also be combined.
+        allow_all_buyers: Allow promo to be used by all buyers without creating explicit assignments.
+        owner_id: ID of the organization that owns the promotion. Only the marketplace owner can override the OwnerID on create.
+        auto_apply:
+        active:
+        use_integration:
+        priority: Used to control the order in which promotions are applied when calling the auto apply or refresh endpoint.
         xp:
     """
 
-    Amount: float = 0.0
-    ID: Optional[str] = None
-    LineItemLevel: Optional[bool] = None
-    Code: Optional[str] = None
-    Name: Optional[str] = None
-    RedemptionLimit: Optional[int] = None
-    RedemptionLimitPerUser: Optional[int] = None
-    RedemptionCount: int = 0
-    QuantityLimitPerOrder: Optional[int] = None
-    ItemLimitPerOrder: Optional[int] = None
-    ItemSortBy: Optional[str] = None
-    Description: Optional[str] = None
-    FinePrint: Optional[str] = None
-    StartDate: Optional[str] = None
-    ExpirationDate: Optional[str] = None
-    EligibleExpression: Optional[str] = None
-    ValueExpression: Optional[str] = None
-    CanCombine: Optional[bool] = None
-    AllowAllBuyers: Optional[bool] = None
-    OwnerID: Optional[str] = None
-    AutoApply: bool = False
-    Active: bool = True
-    UseIntegration: Optional[bool] = None
-    Priority: Optional[int] = None
-    xp: Optional[XP] = None
+    amount: float = Field(0.0, alias="Amount")
+    id: Optional[str] = Field(None, alias="ID")
+    line_item_level: Optional[bool] = Field(None, alias="LineItemLevel")
+    code: Optional[str] = Field(None, alias="Code")
+    name: Optional[str] = Field(None, alias="Name")
+    redemption_limit: Optional[int] = Field(None, alias="RedemptionLimit")
+    redemption_limit_per_user: Optional[int] = Field(None, alias="RedemptionLimitPerUser")
+    redemption_count: int = Field(0, alias="RedemptionCount")
+    quantity_limit_per_order: Optional[int] = Field(None, alias="QuantityLimitPerOrder")
+    item_limit_per_order: Optional[int] = Field(None, alias="ItemLimitPerOrder")
+    item_sort_by: Optional[str] = Field(None, alias="ItemSortBy")
+    description: Optional[str] = Field(None, alias="Description")
+    fine_print: Optional[str] = Field(None, alias="FinePrint")
+    start_date: Optional[str] = Field(None, alias="StartDate")
+    expiration_date: Optional[str] = Field(None, alias="ExpirationDate")
+    eligible_expression: Optional[str] = Field(None, alias="EligibleExpression")
+    value_expression: Optional[str] = Field(None, alias="ValueExpression")
+    can_combine: Optional[bool] = Field(None, alias="CanCombine")
+    allow_all_buyers: Optional[bool] = Field(None, alias="AllowAllBuyers")
+    owner_id: Optional[str] = Field(None, alias="OwnerID")
+    auto_apply: bool = Field(False, alias="AutoApply")
+    active: bool = Field(True, alias="Active")
+    use_integration: Optional[bool] = Field(None, alias="UseIntegration")
+    priority: Optional[int] = Field(None, alias="Priority")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class RefreshPromosResponse(OrderCloudModel):
     """An OrderCloud RefreshPromosResponse.
 
     Attributes:
-        PromosAdded: Promotions that were auto-applied.
-        PromosRemoved: Promotions that were removed due to ineligibility or other reasons.
+        promos_added: Promotions that were auto-applied.
+        promos_removed: Promotions that were removed due to ineligibility or other reasons.
     """
 
-    PromosAdded: Optional[list[AddedPromo]] = None
-    PromosRemoved: Optional[list[RemovedPromo]] = None
+    promos_added: Optional[list[AddedPromo]] = Field(None, alias="PromosAdded")
+    promos_removed: Optional[list[RemovedPromo]] = Field(None, alias="PromosRemoved")
 
 
 class Promotion(OrderCloudModel, Generic[XP]):
     """An OrderCloud Promotion.
 
     Attributes:
-        ID:
-        LineItemLevel: If true, certain eligible expression requirements must be met, and the PromotionDiscount will be applied at the line item level.
-        Code: Must be unique. Entered by buyer when adding promo to order.
-        Name:
-        RedemptionLimit: Limit the total number of orders this promotion can be applied to across all users.
-        RedemptionLimitPerUser: Limit the total number of orders this promotion can be applied to per user.
-        RedemptionCount: The number of times this promotion has been applied to an order. (read-only)
-        QuantityLimitPerOrder: Can only be used when LineItemLevel is true and ItemLimitPerOrder does not have a value. When defined the ValueExpression will be the discount applied to each qualifying quantity of eligible items. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
-        ItemLimitPerOrder: Can only be used when LineItemLevel is true and QuantityLimitPerOrder does not have a value. Limits the number of items the promotion will apply to when eligible. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
-        ItemSortBy: Comma delimited list of properties to sort by. Can only be used when ItemLimitPerOrder is true. Used to determine the order in which the promotion is applied to the specified limit of items. Use ! to reverse sort order on a property.
-        Description:
-        FinePrint: For reference only. Terms, conditions, and other legal jargon.
-        StartDate:
-        ExpirationDate:
-        EligibleExpression: The expression evaluated to determine if an item or order is eligible for a promotion. See rules engine documentation for formatting details.
-        ValueExpression: The expression evaluated to determine the discount amount of an eligible promotion. See rules engine documentation for formatting details.
-        CanCombine: If true, the promotion can be applied to an order that already other promotions applied, as long as they can also be combined.
-        AllowAllBuyers: Allow promo to be used by all buyers without creating explicit assignments.
-        OwnerID: ID of the organization that owns the promotion. Only the marketplace owner can override the OwnerID on create.
-        AutoApply:
-        Active:
-        UseIntegration:
-        Priority: Used to control the order in which promotions are applied when calling the auto apply or refresh endpoint.
+        id:
+        line_item_level: If true, certain eligible expression requirements must be met, and the PromotionDiscount will be applied at the line item level.
+        code: Must be unique. Entered by buyer when adding promo to order.
+        name:
+        redemption_limit: Limit the total number of orders this promotion can be applied to across all users.
+        redemption_limit_per_user: Limit the total number of orders this promotion can be applied to per user.
+        redemption_count: The number of times this promotion has been applied to an order. (read-only)
+        quantity_limit_per_order: Can only be used when LineItemLevel is true and ItemLimitPerOrder does not have a value. When defined the ValueExpression will be the discount applied to each qualifying quantity of eligible items. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
+        item_limit_per_order: Can only be used when LineItemLevel is true and QuantityLimitPerOrder does not have a value. Limits the number of items the promotion will apply to when eligible. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
+        item_sort_by: Comma delimited list of properties to sort by. Can only be used when ItemLimitPerOrder is true. Used to determine the order in which the promotion is applied to the specified limit of items. Use ! to reverse sort order on a property.
+        description:
+        fine_print: For reference only. Terms, conditions, and other legal jargon.
+        start_date:
+        expiration_date:
+        eligible_expression: The expression evaluated to determine if an item or order is eligible for a promotion. See rules engine documentation for formatting details.
+        value_expression: The expression evaluated to determine the discount amount of an eligible promotion. See rules engine documentation for formatting details.
+        can_combine: If true, the promotion can be applied to an order that already other promotions applied, as long as they can also be combined.
+        allow_all_buyers: Allow promo to be used by all buyers without creating explicit assignments.
+        owner_id: ID of the organization that owns the promotion. Only the marketplace owner can override the OwnerID on create.
+        auto_apply:
+        active:
+        use_integration:
+        priority: Used to control the order in which promotions are applied when calling the auto apply or refresh endpoint.
         xp:
     """
 
-    ID: Optional[str] = None
-    LineItemLevel: Optional[bool] = None
-    Code: Optional[str] = None
-    Name: Optional[str] = None
-    RedemptionLimit: Optional[int] = None
-    RedemptionLimitPerUser: Optional[int] = None
-    RedemptionCount: int = 0
-    QuantityLimitPerOrder: Optional[int] = None
-    ItemLimitPerOrder: Optional[int] = None
-    ItemSortBy: Optional[str] = None
-    Description: Optional[str] = None
-    FinePrint: Optional[str] = None
-    StartDate: Optional[str] = None
-    ExpirationDate: Optional[str] = None
-    EligibleExpression: Optional[str] = None
-    ValueExpression: Optional[str] = None
-    CanCombine: Optional[bool] = None
-    AllowAllBuyers: Optional[bool] = None
-    OwnerID: Optional[str] = None
-    AutoApply: bool = False
-    Active: bool = True
-    UseIntegration: Optional[bool] = None
-    Priority: Optional[int] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    line_item_level: Optional[bool] = Field(None, alias="LineItemLevel")
+    code: Optional[str] = Field(None, alias="Code")
+    name: Optional[str] = Field(None, alias="Name")
+    redemption_limit: Optional[int] = Field(None, alias="RedemptionLimit")
+    redemption_limit_per_user: Optional[int] = Field(None, alias="RedemptionLimitPerUser")
+    redemption_count: int = Field(0, alias="RedemptionCount")
+    quantity_limit_per_order: Optional[int] = Field(None, alias="QuantityLimitPerOrder")
+    item_limit_per_order: Optional[int] = Field(None, alias="ItemLimitPerOrder")
+    item_sort_by: Optional[str] = Field(None, alias="ItemSortBy")
+    description: Optional[str] = Field(None, alias="Description")
+    fine_print: Optional[str] = Field(None, alias="FinePrint")
+    start_date: Optional[str] = Field(None, alias="StartDate")
+    expiration_date: Optional[str] = Field(None, alias="ExpirationDate")
+    eligible_expression: Optional[str] = Field(None, alias="EligibleExpression")
+    value_expression: Optional[str] = Field(None, alias="ValueExpression")
+    can_combine: Optional[bool] = Field(None, alias="CanCombine")
+    allow_all_buyers: Optional[bool] = Field(None, alias="AllowAllBuyers")
+    owner_id: Optional[str] = Field(None, alias="OwnerID")
+    auto_apply: bool = Field(False, alias="AutoApply")
+    active: bool = Field(True, alias="Active")
+    use_integration: Optional[bool] = Field(None, alias="UseIntegration")
+    priority: Optional[int] = Field(None, alias="Priority")
+    xp: Optional[XP] = Field(None, alias="xp")

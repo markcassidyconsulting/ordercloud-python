@@ -41,16 +41,16 @@ async def main():
     ) as client:
         # List products
         products = await client.products.list(page_size=10)
-        for p in products.Items:
-            print(f"{p.ID}: {p.Name}")
+        for p in products.items:
+            print(f"{p.id}: {p.name}")
 
         # Create a product
         from ordercloud.models import Product
         product = await client.products.create(Product(
-            Name="My Product",
-            Active=True,
+            name="My Product",
+            active=True,
         ))
-        print(f"Created: {product.ID}")
+        print(f"Created: {product.id}")
 
 asyncio.run(main())
 ```
@@ -65,8 +65,8 @@ with SyncOrderCloudClient.create(
     client_secret="YOUR_CLIENT_SECRET",
 ) as client:
     products = client.products.list(page_size=10)
-    for p in products.Items:
-        print(f"{p.ID}: {p.Name}")
+    for p in products.items:
+        print(f"{p.id}: {p.name}")
 ```
 
 The sync client wraps the async client internally — same features, same API shape, no `await`.
@@ -109,18 +109,18 @@ class MyProductXp(BaseModel):
 
 # Create with typed xp
 product = Product[MyProductXp](
-    Name="Widget",
+    name="Widget",
     xp=MyProductXp(color="red", weight_kg=1.5),
 )
 product.xp.color  # str, not Any
 
-# Deserialise with typed xp
+# Deserialise with typed xp (API responses use PascalCase — the SDK handles both)
 data = {"Name": "Widget", "xp": {"color": "blue", "weight_kg": 2.0}}
 product = Product[MyProductXp].model_validate(data)
 product.xp.color  # "blue"
 ```
 
-Unparameterized usage (`Product(xp={"anything": True})`) still works — fully backward compatible.
+Unparameterized usage (`Product(xp={"anything": True})`) still works — fully backward compatible. PascalCase field names are accepted as aliases for construction and deserialization (e.g. `Product(Name="Widget")` still works), but snake_case is the canonical Python form.
 
 ## Auto-Pagination
 
@@ -131,11 +131,11 @@ from ordercloud import paginate
 
 # Async
 async for product in paginate(client.products.list, search="widget"):
-    print(product.Name)
+    print(product.name)
 
 # Works with positional args too
 async for order in paginate(client.orders.list, OrderDirection.Incoming):
-    print(order.ID)
+    print(order.id)
 ```
 
 For the sync client:
@@ -144,7 +144,7 @@ For the sync client:
 from ordercloud import paginate_sync
 
 for product in paginate_sync(client.products.list, search="widget"):
-    print(product.Name)
+    print(product.name)
 ```
 
 ## Retry Logic
@@ -280,7 +280,7 @@ products = await client.products.list(
     page=1,
     page_size=20,
 )
-print(f"Found {products.Meta.TotalCount} products")
+print(f"Found {products.meta.total_count} products")
 
 # Get by ID
 product = await client.products.get("my-product-id")
@@ -288,16 +288,16 @@ product = await client.products.get("my-product-id")
 # Create
 from ordercloud.models import Product
 product = await client.products.create(Product(
-    ID="my-product",
-    Name="Widget",
-    Description="A fine widget",
-    Active=True,
+    id="my-product",
+    name="Widget",
+    description="A fine widget",
+    active=True,
 ))
 
 # Update (PUT — full replace)
 product = await client.products.save("my-product", Product(
-    Name="Updated Widget",
-    Active=True,
+    name="Updated Widget",
+    active=True,
 ))
 
 # Patch (partial update)
@@ -318,13 +318,13 @@ orders = await client.orders.list(OrderDirection.Incoming, page_size=50)
 # Create an outgoing order
 order = await client.orders.create(
     OrderDirection.Outgoing,
-    Order(Comments="Rush delivery"),
+    Order(comments="Rush delivery"),
 )
 
 # Order workflow
-order = await client.orders.submit(OrderDirection.Outgoing, order.ID)
-order = await client.orders.approve(OrderDirection.Incoming, order.ID)
-order = await client.orders.complete(OrderDirection.Incoming, order.ID)
+order = await client.orders.submit(OrderDirection.Outgoing, order.id)
+order = await client.orders.approve(OrderDirection.Incoming, order.id)
+order = await client.orders.complete(OrderDirection.Incoming, order.id)
 ```
 
 ### Line Items
@@ -335,13 +335,13 @@ from ordercloud.models import LineItem, OrderDirection
 # Add a line item to an order
 line_item = await client.line_items.create(
     OrderDirection.Outgoing, "order-id",
-    LineItem(ProductID="my-product", Quantity=3),
+    LineItem(product_id="my-product", quantity=3),
 )
 
 # List line items on an order
 line_items = await client.line_items.list(OrderDirection.Outgoing, "order-id")
-for li in line_items.Items:
-    print(f"  {li.ProductID} x{li.Quantity}")
+for li in line_items.items:
+    print(f"  {li.product_id} x{li.quantity}")
 ```
 
 ### Catalogs and Categories
@@ -351,18 +351,18 @@ from ordercloud.models import Catalog, Category
 
 # Create a catalog
 catalog = await client.catalogs.create(Catalog(
-    Name="Spring Collection",
-    Active=True,
+    name="Spring Collection",
+    active=True,
 ))
 
 # Create a category within it
-category = await client.categories.create(catalog.ID, Category(
-    Name="New Arrivals",
-    Active=True,
+category = await client.categories.create(catalog.id, Category(
+    name="New Arrivals",
+    active=True,
 ))
 
 # List categories (with depth control)
-categories = await client.categories.list(catalog.ID, depth="all")
+categories = await client.categories.list(catalog.id, depth="all")
 ```
 
 ### Filtering

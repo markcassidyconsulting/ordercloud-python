@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudEnum, OrderCloudModel, XP
 
@@ -212,68 +213,68 @@ class Incrementor(OrderCloudModel):
     """An OrderCloud Incrementor.
 
     Attributes:
-        ID: The string "{replace-with-incrementor-ID}" can be passed into any ID field to populate the next ID in the sequence. It can also be prefixed with other ID safe characters.
-        Name:
-        LastNumber: Increments as IDs are generated.
-        LeftPaddingCount: Use to enforce a minimum incrementor ID length. For example if your LastNumber is 0 and LeftPaddingCount is 4, your first generated ID will be 0001.
+        id: The string "{replace-with-incrementor-ID}" can be passed into any ID field to populate the next ID in the sequence. It can also be prefixed with other ID safe characters.
+        name:
+        last_number: Increments as IDs are generated.
+        left_padding_count: Use to enforce a minimum incrementor ID length. For example if your LastNumber is 0 and LeftPaddingCount is 4, your first generated ID will be 0001.
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    LastNumber: Optional[int] = None
-    LeftPaddingCount: Optional[int] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    last_number: Optional[int] = Field(None, alias="LastNumber")
+    left_padding_count: Optional[int] = Field(None, alias="LeftPaddingCount")
 
 
 class XpIndex(OrderCloudModel):
     """An OrderCloud XpIndex.
 
     Attributes:
-        ThingType:
-        Key:
+        thing_type:
+        key:
     """
 
-    ThingType: Optional[XpThingType] = None
-    Key: Optional[str] = None
+    thing_type: Optional[XpThingType] = Field(None, alias="ThingType")
+    key: Optional[str] = Field(None, alias="Key")
 
 
 class ProductFacet(OrderCloudModel, Generic[XP]):
     """An OrderCloud ProductFacet.
 
     Attributes:
-        ID:
-        Name:
-        XpPath: Identifies full path to XP field used for this facet. If not provided, facet value assumed to be stored at product.XP.{facet ID}.
-        ListOrder:
-        MinCount: Minimum count required or a facet value to be returned in list metadata. If you want zero-count values returned, set this to 0.
+        id:
+        name:
+        xp_path: Identifies full path to XP field used for this facet. If not provided, facet value assumed to be stored at product.XP.{facet ID}.
+        list_order:
+        min_count: Minimum count required or a facet value to be returned in list metadata. If you want zero-count values returned, set this to 0.
         xp:
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    XpPath: Optional[str] = None
-    ListOrder: Optional[int] = None
-    MinCount: int = 1
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    xp_path: Optional[str] = Field(None, alias="XpPath")
+    list_order: Optional[int] = Field(None, alias="ListOrder")
+    min_count: int = Field(1, alias="MinCount")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class GroupOrderInvitation(OrderCloudModel, Generic[XP]):
     """An OrderCloud GroupOrderInvitation.
 
     Attributes:
-        ID:  (read-only)
-        ExpirationDate: Maximum 1 year.
-        Name:
-        OrderID:
-        OrderStatus:  (read-only)
+        id:  (read-only)
+        expiration_date: Maximum 1 year.
+        name:
+        order_id:
+        order_status:  (read-only)
         xp:
     """
 
-    ID: Optional[str] = None
-    ExpirationDate: Optional[str] = None
-    Name: Optional[str] = None
-    OrderID: Optional[str] = None
-    OrderStatus: Optional[_OrderStatus] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    expiration_date: Optional[str] = Field(None, alias="ExpirationDate")
+    name: Optional[str] = Field(None, alias="Name")
+    order_id: Optional[str] = Field(None, alias="OrderID")
+    order_status: Optional[_OrderStatus] = Field(None, alias="OrderStatus")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 _OrderStatus = OrderStatus

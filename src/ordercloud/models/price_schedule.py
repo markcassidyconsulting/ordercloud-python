@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudEnum, OrderCloudModel, XP
 
@@ -23,53 +24,53 @@ class PriceBreak(OrderCloudModel):
     """An OrderCloud PriceBreak.
 
     Attributes:
-        Quantity: Most commonly 1, except when offering tiered/bulk pricing.
-        Price: Price per unit.
-        SalePrice: Sale Price per unit. If the current date/time is within the PriceSchedule SaleStart and SaleEnd, this SalePrice will be used.
-        SubscriptionPrice: Subscription Price per unit. If set, this price is used when a subscription order is created.
-        BundlePrice: Bundle Price per unit. If set, this price is used when an item being added to an order is part of a bundle.
+        quantity: Most commonly 1, except when offering tiered/bulk pricing.
+        price: Price per unit.
+        sale_price: Sale Price per unit. If the current date/time is within the PriceSchedule SaleStart and SaleEnd, this SalePrice will be used.
+        subscription_price: Subscription Price per unit. If set, this price is used when a subscription order is created.
+        bundle_price: Bundle Price per unit. If set, this price is used when an item being added to an order is part of a bundle.
     """
 
-    Quantity: Optional[int] = None
-    Price: Optional[float] = None
-    SalePrice: Optional[float] = None
-    SubscriptionPrice: Optional[float] = None
-    BundlePrice: Optional[float] = None
+    quantity: Optional[int] = Field(None, alias="Quantity")
+    price: Optional[float] = Field(None, alias="Price")
+    sale_price: Optional[float] = Field(None, alias="SalePrice")
+    subscription_price: Optional[float] = Field(None, alias="SubscriptionPrice")
+    bundle_price: Optional[float] = Field(None, alias="BundlePrice")
 
 
 class PriceSchedule(OrderCloudModel, Generic[XP]):
     """An OrderCloud PriceSchedule.
 
     Attributes:
-        PriceBreaks:
-        OwnerID: ID of the organization that owns the PriceSchedule. Only the marketplace owner can override the OwnerID on create.
-        ID:
-        Name:
-        ApplyTax: For reference only for calculating tax, does not influence any OrderCloud behavior.
-        ApplyShipping: For reference only for calculating shipping cost, does not influence any OrderCloud behavior.
-        MinQuantity: The minimum line item Quantity when UseCumulativeQuantity is false.
-        MaxQuantity: The maximum line item Quantity when UseCumulativeQuantity is false.
-        UseCumulativeQuantity: If true, line item quantities will be aggregated by productID when determining which price break applies, and when Min/Max quantities are met. Else, each line item is treated separately.
-        RestrictedQuantity: If true, this product can only be ordered in quantities that exactly match one of the price breaks on this schedule.
-        Currency: We recommend using ISO-4217 currency codes for compatibility with tax and payment processors.
-        SaleStart: Starting date/time for PriceBreak.SalePrice to be used as the price for the LineItem. Requires that the PriceBreak.SalePrice value is set.
-        SaleEnd: Ending date/time for PriceBreak.SalePrice to be used as the price for the LineItem. Requires that the PriceBreak.SalePrice value is set.
-        IsOnSale: True when at least one PriceBreak has a SalePrice defined, and the current time is between the SaleStart and SaleEnd date. (read-only)
+        price_breaks:
+        owner_id: ID of the organization that owns the PriceSchedule. Only the marketplace owner can override the OwnerID on create.
+        id:
+        name:
+        apply_tax: For reference only for calculating tax, does not influence any OrderCloud behavior.
+        apply_shipping: For reference only for calculating shipping cost, does not influence any OrderCloud behavior.
+        min_quantity: The minimum line item Quantity when UseCumulativeQuantity is false.
+        max_quantity: The maximum line item Quantity when UseCumulativeQuantity is false.
+        use_cumulative_quantity: If true, line item quantities will be aggregated by productID when determining which price break applies, and when Min/Max quantities are met. Else, each line item is treated separately.
+        restricted_quantity: If true, this product can only be ordered in quantities that exactly match one of the price breaks on this schedule.
+        currency: We recommend using ISO-4217 currency codes for compatibility with tax and payment processors.
+        sale_start: Starting date/time for PriceBreak.SalePrice to be used as the price for the LineItem. Requires that the PriceBreak.SalePrice value is set.
+        sale_end: Ending date/time for PriceBreak.SalePrice to be used as the price for the LineItem. Requires that the PriceBreak.SalePrice value is set.
+        is_on_sale: True when at least one PriceBreak has a SalePrice defined, and the current time is between the SaleStart and SaleEnd date. (read-only)
         xp:
     """
 
-    PriceBreaks: Optional[list[PriceBreak]] = None
-    OwnerID: Optional[str] = None
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    ApplyTax: Optional[bool] = None
-    ApplyShipping: Optional[bool] = None
-    MinQuantity: int = 1
-    MaxQuantity: Optional[int] = None
-    UseCumulativeQuantity: Optional[bool] = None
-    RestrictedQuantity: Optional[bool] = None
-    Currency: Optional[str] = None
-    SaleStart: Optional[str] = None
-    SaleEnd: Optional[str] = None
-    IsOnSale: Optional[bool] = None
-    xp: Optional[XP] = None
+    price_breaks: Optional[list[PriceBreak]] = Field(None, alias="PriceBreaks")
+    owner_id: Optional[str] = Field(None, alias="OwnerID")
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    apply_tax: Optional[bool] = Field(None, alias="ApplyTax")
+    apply_shipping: Optional[bool] = Field(None, alias="ApplyShipping")
+    min_quantity: int = Field(1, alias="MinQuantity")
+    max_quantity: Optional[int] = Field(None, alias="MaxQuantity")
+    use_cumulative_quantity: Optional[bool] = Field(None, alias="UseCumulativeQuantity")
+    restricted_quantity: Optional[bool] = Field(None, alias="RestrictedQuantity")
+    currency: Optional[str] = Field(None, alias="Currency")
+    sale_start: Optional[str] = Field(None, alias="SaleStart")
+    sale_end: Optional[str] = Field(None, alias="SaleEnd")
+    is_on_sale: Optional[bool] = Field(None, alias="IsOnSale")
+    xp: Optional[XP] = Field(None, alias="xp")

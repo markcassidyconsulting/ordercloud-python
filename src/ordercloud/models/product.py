@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 from .price_schedule import PriceMarkupType
@@ -25,202 +26,202 @@ class Inventory(OrderCloudModel):
     """An OrderCloud Inventory.
 
     Attributes:
-        Enabled: If true, inventory will be tracked and enforced.
-        NotificationPoint:
-        VariantLevelTracking: If true, QuantityAvailable will be determined at the variant level.
-        OrderCanExceed: If true, a user can create line items and place orders for the product even if there is insufficient QuantityAvailable.
-        QuantityAvailable: Automatically decrements on order submit. If you utilize inventory records either at the product or variant level, this property becomes readonly, and is derived from the sum of all QuantityAvailable of each InventoryRecord. If VariantLevelTracking is enabled, this is the sum of all variant quantities.
-        LastUpdated:  (read-only)
+        enabled: If true, inventory will be tracked and enforced.
+        notification_point:
+        variant_level_tracking: If true, QuantityAvailable will be determined at the variant level.
+        order_can_exceed: If true, a user can create line items and place orders for the product even if there is insufficient QuantityAvailable.
+        quantity_available: Automatically decrements on order submit. If you utilize inventory records either at the product or variant level, this property becomes readonly, and is derived from the sum of all QuantityAvailable of each InventoryRecord. If VariantLevelTracking is enabled, this is the sum of all variant quantities.
+        last_updated:  (read-only)
     """
 
-    Enabled: Optional[bool] = None
-    NotificationPoint: Optional[int] = None
-    VariantLevelTracking: Optional[bool] = None
-    OrderCanExceed: Optional[bool] = None
-    QuantityAvailable: Optional[int] = None
-    LastUpdated: Optional[str] = None
+    enabled: Optional[bool] = Field(None, alias="Enabled")
+    notification_point: Optional[int] = Field(None, alias="NotificationPoint")
+    variant_level_tracking: Optional[bool] = Field(None, alias="VariantLevelTracking")
+    order_can_exceed: Optional[bool] = Field(None, alias="OrderCanExceed")
+    quantity_available: Optional[int] = Field(None, alias="QuantityAvailable")
+    last_updated: Optional[str] = Field(None, alias="LastUpdated")
 
 
 class VariantInventory(OrderCloudModel):
     """An OrderCloud VariantInventory.
 
     Attributes:
-        QuantityAvailable:
-        NotificationPoint:
-        LastUpdated:  (read-only)
+        quantity_available:
+        notification_point:
+        last_updated:  (read-only)
     """
 
-    QuantityAvailable: Optional[int] = None
-    NotificationPoint: Optional[int] = None
-    LastUpdated: Optional[str] = None
+    quantity_available: Optional[int] = Field(None, alias="QuantityAvailable")
+    notification_point: Optional[int] = Field(None, alias="NotificationPoint")
+    last_updated: Optional[str] = Field(None, alias="LastUpdated")
 
 
 class VariantSpec(OrderCloudModel):
     """An OrderCloud VariantSpec.
 
     Attributes:
-        SpecID:
-        Name:  (read-only)
-        OptionID:
-        Value:
-        PriceMarkupType:
-        PriceMarkup:
+        spec_id:
+        name:  (read-only)
+        option_id:
+        value:
+        price_markup_type:
+        price_markup:
     """
 
-    SpecID: Optional[str] = None
-    Name: Optional[str] = None
-    OptionID: Optional[str] = None
-    Value: Optional[str] = None
-    PriceMarkupType: Optional[_PriceMarkupType] = None
-    PriceMarkup: Optional[float] = None
+    spec_id: Optional[str] = Field(None, alias="SpecID")
+    name: Optional[str] = Field(None, alias="Name")
+    option_id: Optional[str] = Field(None, alias="OptionID")
+    value: Optional[str] = Field(None, alias="Value")
+    price_markup_type: Optional[_PriceMarkupType] = Field(None, alias="PriceMarkupType")
+    price_markup: Optional[float] = Field(None, alias="PriceMarkup")
 
 
 class VariantOverrides(OrderCloudModel):
     """An OrderCloud VariantOverrides.
 
     Attributes:
-        Active: Overrides the Active value inherited from the product when generating variants.
+        active: Overrides the Active value inherited from the product when generating variants.
     """
 
-    Active: bool = True
+    active: bool = Field(True, alias="Active")
 
 
 class Variant(OrderCloudModel, Generic[XP]):
     """An OrderCloud Variant.
 
     Attributes:
-        ID:
-        Name:
-        Description:
-        Active: If false, variant is not visible or purchasable from a buyer's perspective.
-        ShipWeight:
-        ShipHeight:
-        ShipWidth:
-        ShipLength:
-        Inventory:
-        Specs:  (read-only)
+        id:
+        name:
+        description:
+        active: If false, variant is not visible or purchasable from a buyer's perspective.
+        ship_weight:
+        ship_height:
+        ship_width:
+        ship_length:
+        inventory:
+        specs:  (read-only)
         xp:
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    Description: Optional[str] = None
-    Active: Optional[bool] = None
-    ShipWeight: Optional[float] = None
-    ShipHeight: Optional[float] = None
-    ShipWidth: Optional[float] = None
-    ShipLength: Optional[float] = None
-    Inventory: Optional[VariantInventory] = None
-    Specs: Optional[list[VariantSpec]] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    description: Optional[str] = Field(None, alias="Description")
+    active: Optional[bool] = Field(None, alias="Active")
+    ship_weight: Optional[float] = Field(None, alias="ShipWeight")
+    ship_height: Optional[float] = Field(None, alias="ShipHeight")
+    ship_width: Optional[float] = Field(None, alias="ShipWidth")
+    ship_length: Optional[float] = Field(None, alias="ShipLength")
+    inventory: Optional[VariantInventory] = Field(None, alias="Inventory")
+    specs: Optional[list[VariantSpec]] = Field(None, alias="Specs")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class AdHocProduct(OrderCloudModel, Generic[XP]):
     """An OrderCloud AdHocProduct.
 
     Attributes:
-        ID:
-        Name:
-        Description:
-        QuantityMultiplier: Informational only, does not influence any OrderCloud behavior. Used to indicate an amount per Quantity.
-        ShipWeight:
-        ShipHeight:
-        ShipWidth:
-        ShipLength:
-        DefaultSupplierID: Used for forwarding orders to suppliers.
-        Returnable:
+        id:
+        name:
+        description:
+        quantity_multiplier: Informational only, does not influence any OrderCloud behavior. Used to indicate an amount per Quantity.
+        ship_weight:
+        ship_height:
+        ship_width:
+        ship_length:
+        default_supplier_id: Used for forwarding orders to suppliers.
+        returnable:
         xp:
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    Description: Optional[str] = None
-    QuantityMultiplier: int = 1
-    ShipWeight: Optional[float] = None
-    ShipHeight: Optional[float] = None
-    ShipWidth: Optional[float] = None
-    ShipLength: Optional[float] = None
-    DefaultSupplierID: Optional[str] = None
-    Returnable: Optional[bool] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    description: Optional[str] = Field(None, alias="Description")
+    quantity_multiplier: int = Field(1, alias="QuantityMultiplier")
+    ship_weight: Optional[float] = Field(None, alias="ShipWeight")
+    ship_height: Optional[float] = Field(None, alias="ShipHeight")
+    ship_width: Optional[float] = Field(None, alias="ShipWidth")
+    ship_length: Optional[float] = Field(None, alias="ShipLength")
+    default_supplier_id: Optional[str] = Field(None, alias="DefaultSupplierID")
+    returnable: Optional[bool] = Field(None, alias="Returnable")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class ProductSupplier(OrderCloudModel, Generic[XP]):
     """An OrderCloud ProductSupplier.
 
     Attributes:
-        DefaultPriceScheduleID:
-        ID:
-        Name:
-        Active: If false, all user authentication is blocked.
-        DateCreated:  (read-only)
-        AllBuyersCanOrder: If false, buyers will only be able to set ToCompanyID on an order to the marketplace owner, or suppliers they have an explicit relationship to.
+        default_price_schedule_id:
+        id:
+        name:
+        active: If false, all user authentication is blocked.
+        date_created:  (read-only)
+        all_buyers_can_order: If false, buyers will only be able to set ToCompanyID on an order to the marketplace owner, or suppliers they have an explicit relationship to.
         xp:
     """
 
-    DefaultPriceScheduleID: Optional[str] = None
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    Active: Optional[bool] = None
-    DateCreated: Optional[str] = None
-    AllBuyersCanOrder: Optional[bool] = None
-    xp: Optional[XP] = None
+    default_price_schedule_id: Optional[str] = Field(None, alias="DefaultPriceScheduleID")
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    active: Optional[bool] = Field(None, alias="Active")
+    date_created: Optional[str] = Field(None, alias="DateCreated")
+    all_buyers_can_order: Optional[bool] = Field(None, alias="AllBuyersCanOrder")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class Product(OrderCloudModel, Generic[XP]):
     """An OrderCloud Product.
 
     Attributes:
-        OwnerID: ID of the organization that owns the product. Only the marketplace owner can override the OwnerID on create.
-        DefaultPriceScheduleID: When provided, no explicit price schedule assignment is required. When a price schedule assignment exists, it will override any default provided.
-        AutoForward: If true, when this product is ordered by a buyer, it will automatically be added to a new order from the marketplace owner to the default supplier and submitted. Requires a valid DefaultSupplierID.
-        ID:
-        ParentID: ID of the parent product. If not null, IsParent should be false
-        IsParent: If true, ParentID must be null, as a parent product cannot have a parent itself.
-        IsBundle: If true, IsParent must be false, as a parent product cannot be a bundle. (read-only)
-        Name:
-        Description:
-        QuantityMultiplier: For reference only, does not influence any OrderCloud behavior. Used to indicate an amount per Quantity.
-        ShipWeight:
-        ShipHeight:
-        ShipWidth:
-        ShipLength:
-        Active: If false, product is not visible or purchasable from a buyer's perspective.
-        SpecCount: Count of specs assigned to the product. (read-only)
-        VariantCount: Count of variants generated from the product/spec combinations. (read-only)
-        ShipFromAddressID: Marketplace owner or supplier AddressID where the product will be shipped from. Can be used to calculate shipping costs.
-        Inventory:
-        DefaultSupplierID: Used for forwarding orders to suppliers.
-        AllSuppliersCanSell: If true, all suppliers are eligible to opt into selling this product.
-        Returnable:
-        DateCreated:  (read-only)
+        owner_id: ID of the organization that owns the product. Only the marketplace owner can override the OwnerID on create.
+        default_price_schedule_id: When provided, no explicit price schedule assignment is required. When a price schedule assignment exists, it will override any default provided.
+        auto_forward: If true, when this product is ordered by a buyer, it will automatically be added to a new order from the marketplace owner to the default supplier and submitted. Requires a valid DefaultSupplierID.
+        id:
+        parent_id: ID of the parent product. If not null, IsParent should be false
+        is_parent: If true, ParentID must be null, as a parent product cannot have a parent itself.
+        is_bundle: If true, IsParent must be false, as a parent product cannot be a bundle. (read-only)
+        name:
+        description:
+        quantity_multiplier: For reference only, does not influence any OrderCloud behavior. Used to indicate an amount per Quantity.
+        ship_weight:
+        ship_height:
+        ship_width:
+        ship_length:
+        active: If false, product is not visible or purchasable from a buyer's perspective.
+        spec_count: Count of specs assigned to the product. (read-only)
+        variant_count: Count of variants generated from the product/spec combinations. (read-only)
+        ship_from_address_id: Marketplace owner or supplier AddressID where the product will be shipped from. Can be used to calculate shipping costs.
+        inventory:
+        default_supplier_id: Used for forwarding orders to suppliers.
+        all_suppliers_can_sell: If true, all suppliers are eligible to opt into selling this product.
+        returnable:
+        date_created:  (read-only)
         xp:
     """
 
-    OwnerID: Optional[str] = None
-    DefaultPriceScheduleID: Optional[str] = None
-    AutoForward: Optional[bool] = None
-    ID: Optional[str] = None
-    ParentID: Optional[str] = None
-    IsParent: Optional[bool] = None
-    IsBundle: Optional[bool] = None
-    Name: Optional[str] = None
-    Description: Optional[str] = None
-    QuantityMultiplier: int = 1
-    ShipWeight: Optional[float] = None
-    ShipHeight: Optional[float] = None
-    ShipWidth: Optional[float] = None
-    ShipLength: Optional[float] = None
-    Active: Optional[bool] = None
-    SpecCount: int = 0
-    VariantCount: int = 0
-    ShipFromAddressID: Optional[str] = None
-    Inventory: Optional[_Inventory] = None
-    DefaultSupplierID: Optional[str] = None
-    AllSuppliersCanSell: Optional[bool] = None
-    Returnable: Optional[bool] = None
-    DateCreated: Optional[str] = None
-    xp: Optional[XP] = None
+    owner_id: Optional[str] = Field(None, alias="OwnerID")
+    default_price_schedule_id: Optional[str] = Field(None, alias="DefaultPriceScheduleID")
+    auto_forward: Optional[bool] = Field(None, alias="AutoForward")
+    id: Optional[str] = Field(None, alias="ID")
+    parent_id: Optional[str] = Field(None, alias="ParentID")
+    is_parent: Optional[bool] = Field(None, alias="IsParent")
+    is_bundle: Optional[bool] = Field(None, alias="IsBundle")
+    name: Optional[str] = Field(None, alias="Name")
+    description: Optional[str] = Field(None, alias="Description")
+    quantity_multiplier: int = Field(1, alias="QuantityMultiplier")
+    ship_weight: Optional[float] = Field(None, alias="ShipWeight")
+    ship_height: Optional[float] = Field(None, alias="ShipHeight")
+    ship_width: Optional[float] = Field(None, alias="ShipWidth")
+    ship_length: Optional[float] = Field(None, alias="ShipLength")
+    active: Optional[bool] = Field(None, alias="Active")
+    spec_count: int = Field(0, alias="SpecCount")
+    variant_count: int = Field(0, alias="VariantCount")
+    ship_from_address_id: Optional[str] = Field(None, alias="ShipFromAddressID")
+    inventory: Optional[_Inventory] = Field(None, alias="Inventory")
+    default_supplier_id: Optional[str] = Field(None, alias="DefaultSupplierID")
+    all_suppliers_can_sell: Optional[bool] = Field(None, alias="AllSuppliersCanSell")
+    returnable: Optional[bool] = Field(None, alias="Returnable")
+    date_created: Optional[str] = Field(None, alias="DateCreated")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 _Inventory = Inventory

@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel
 
@@ -14,31 +15,33 @@ class OpenIdConnect(OrderCloudModel):
     """An OrderCloud OpenIdConnect.
 
     Attributes:
-        ID: ID of this OpenID Connect configuration object. Each object allows authentication to one OrderCloud API Client through one Identity Providing Party.
-        OrderCloudApiClientID: An ID that references an OrderCloud API Client.
-        ConnectClientID: An app ID from the Identity Provider that is required to get JWT tokens.
-        ConnectClientSecret: A secret string from the Identity Provider that grants access to get JWT tokens.
-        AppStartUrl: A URL on your front-end ordering site where users will be redirected after they authenticate through the Identity Provider. Supports placeholders: {0} = OrderCloud access token, {1} = IdP access token, {2} = appStartPath, {3} = OrderCloud refresh token, {4} = IdP refresh token (if available).
-        AuthorizationEndpoint: A publicly known URL from the Identity Provider that redirects to a resource where users enter personal credentials.
-        TokenEndpoint: A publicly known URL from the Identity Provider where agents can get JWT tokens.
-        UrlEncoded: If true, uses a url encoded form post with all auth values. Otherwise, an Authorization header with basic auth is passed with a JSON object in the body.
-        IntegrationEventID: ID of the integration event to call upon authorization request. Used when you haven't pre-populated users into OrderCloud, or need to sync user data.
-        CallSyncUserIntegrationEvent: If true, the integration event is always triggered regardless of if the user already exists in OrderCloud.
-        IntegrationEventName:  (read-only)
-        AdditionalIdpScopes: Any additional scopes needed by the IDP.
-        CustomErrorUrl: A URL on your front-end ordering site where users will be redirected if an error occurs while trying to authenticate.
+        id: ID of this OpenID Connect configuration object. Each object allows authentication to one OrderCloud API Client through one Identity Providing Party.
+        order_cloud_api_client_id: An ID that references an OrderCloud API Client.
+        connect_client_id: An app ID from the Identity Provider that is required to get JWT tokens.
+        connect_client_secret: A secret string from the Identity Provider that grants access to get JWT tokens.
+        app_start_url: A URL on your front-end ordering site where users will be redirected after they authenticate through the Identity Provider. Supports placeholders: {0} = OrderCloud access token, {1} = IdP access token, {2} = appStartPath, {3} = OrderCloud refresh token, {4} = IdP refresh token (if available).
+        authorization_endpoint: A publicly known URL from the Identity Provider that redirects to a resource where users enter personal credentials.
+        token_endpoint: A publicly known URL from the Identity Provider where agents can get JWT tokens.
+        url_encoded: If true, uses a url encoded form post with all auth values. Otherwise, an Authorization header with basic auth is passed with a JSON object in the body.
+        integration_event_id: ID of the integration event to call upon authorization request. Used when you haven't pre-populated users into OrderCloud, or need to sync user data.
+        call_sync_user_integration_event: If true, the integration event is always triggered regardless of if the user already exists in OrderCloud.
+        integration_event_name:  (read-only)
+        additional_idp_scopes: Any additional scopes needed by the IDP.
+        custom_error_url: A URL on your front-end ordering site where users will be redirected if an error occurs while trying to authenticate.
     """
 
-    ID: Optional[str] = None
-    OrderCloudApiClientID: Optional[str] = None
-    ConnectClientID: Optional[str] = None
-    ConnectClientSecret: Optional[str] = None
-    AppStartUrl: Optional[str] = None
-    AuthorizationEndpoint: Optional[str] = None
-    TokenEndpoint: Optional[str] = None
-    UrlEncoded: Optional[bool] = None
-    IntegrationEventID: Optional[str] = None
-    CallSyncUserIntegrationEvent: Optional[bool] = None
-    IntegrationEventName: Optional[str] = None
-    AdditionalIdpScopes: Optional[list[str]] = None
-    CustomErrorUrl: Optional[str] = None
+    id: Optional[str] = Field(None, alias="ID")
+    order_cloud_api_client_id: Optional[str] = Field(None, alias="OrderCloudApiClientID")
+    connect_client_id: Optional[str] = Field(None, alias="ConnectClientID")
+    connect_client_secret: Optional[str] = Field(None, alias="ConnectClientSecret")
+    app_start_url: Optional[str] = Field(None, alias="AppStartUrl")
+    authorization_endpoint: Optional[str] = Field(None, alias="AuthorizationEndpoint")
+    token_endpoint: Optional[str] = Field(None, alias="TokenEndpoint")
+    url_encoded: Optional[bool] = Field(None, alias="UrlEncoded")
+    integration_event_id: Optional[str] = Field(None, alias="IntegrationEventID")
+    call_sync_user_integration_event: Optional[bool] = Field(
+        None, alias="CallSyncUserIntegrationEvent"
+    )
+    integration_event_name: Optional[str] = Field(None, alias="IntegrationEventName")
+    additional_idp_scopes: Optional[list[str]] = Field(None, alias="AdditionalIdpScopes")
+    custom_error_url: Optional[str] = Field(None, alias="CustomErrorUrl")

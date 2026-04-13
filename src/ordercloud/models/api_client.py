@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 from .misc import ApiRole
@@ -15,85 +16,101 @@ class ApiClientSecret(OrderCloudModel):
     """An OrderCloud ApiClientSecret.
 
     Attributes:
-        ID:
-        Name:
-        Expiration:
+        id:
+        name:
+        expiration:
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    Expiration: Optional[str] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    expiration: Optional[str] = Field(None, alias="Expiration")
 
 
 class ApiClientSecretCreateResponse(OrderCloudModel):
     """An OrderCloud ApiClientSecretCreateResponse.
 
     Attributes:
-        ClientSecret:  (read-only)
-        ID:
-        Name:
-        Expiration:
+        client_secret:  (read-only)
+        id:
+        name:
+        expiration:
     """
 
-    ClientSecret: Optional[str] = None
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    Expiration: Optional[str] = None
+    client_secret: Optional[str] = Field(None, alias="ClientSecret")
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    expiration: Optional[str] = Field(None, alias="Expiration")
 
 
 class ApiClient(OrderCloudModel, Generic[XP]):
     """An OrderCloud ApiClient.
 
     Attributes:
-        ID: Used for OAuth 2.0 workflows and impersonation. (read-only)
-        ClientSecret: Enables the OAuth 2.0 client credentials grant type. Required on all OAuth workflows when present.
-        AccessTokenDuration:
-        Active: All user authentication is prohibited if false.
-        AppName:
-        RefreshTokenDuration:
-        AnonymousTokenDuration: Specifies the duration of anonymous tokens, expressed in minutes. This value is only used if the API Client is configured for anonymous shopping.
-        DefaultContextUserName: Optionally define a user that will be used when authenticating with a client credentials grant type flow. This grant type is often used for anonymous browsing on buyer applications and authentication on server integration layers.
+        id: Used for OAuth 2.0 workflows and impersonation. (read-only)
+        client_secret: Enables the OAuth 2.0 client credentials grant type. Required on all OAuth workflows when present.
+        access_token_duration:
+        active: All user authentication is prohibited if false.
+        app_name:
+        refresh_token_duration:
+        anonymous_token_duration: Specifies the duration of anonymous tokens, expressed in minutes. This value is only used if the API Client is configured for anonymous shopping.
+        default_context_user_name: Optionally define a user that will be used when authenticating with a client credentials grant type flow. This grant type is often used for anonymous browsing on buyer applications and authentication on server integration layers.
         xp:
-        AllowAnyBuyer: Allow all buyer users in your organization access to authenticate using this API Client.
-        AllowAnySupplier: Allow all supplier users in your organization access to authenticate using this API Client.
-        AllowSeller: Allow all marketplace owner users in your organization access to authenticate using this API Client.
-        IsAnonBuyer: Enables anonymous shopping when a buyer user is the DefaultContextUser.
-        AssignedBuyerCount:  (read-only)
-        AssignedSupplierCount:  (read-only)
-        OrderCheckoutIntegrationEventID: If populated, an error will be thrown when attempting to submit an order that has not been processed through the OrderCheckout integration.
-        OrderCheckoutIntegrationEventName:  (read-only)
-        OrderReturnIntegrationEventID: If populated, and not overriden by an OrderAdmin, the integration event will be used to calculate ReturnAmount on the order return or each individual return item.
-        OrderReturnIntegrationEventName:  (read-only)
-        AddToCartIntegrationEventID: If populated, the integration event will be used to fetch product information from an external system when a line item is added to an unsubmitted order and the product does not exist in OrderCloud.
-        AddToCartIntegrationEventName:  (read-only)
-        MinimumRequiredRoles:
-        MinimumRequiredCustomRoles:
-        MaximumGrantedRoles:
-        MaximumGrantedCustomRoles:
+        allow_any_buyer: Allow all buyer users in your organization access to authenticate using this API Client.
+        allow_any_supplier: Allow all supplier users in your organization access to authenticate using this API Client.
+        allow_seller: Allow all marketplace owner users in your organization access to authenticate using this API Client.
+        is_anon_buyer: Enables anonymous shopping when a buyer user is the DefaultContextUser.
+        assigned_buyer_count:  (read-only)
+        assigned_supplier_count:  (read-only)
+        order_checkout_integration_event_id: If populated, an error will be thrown when attempting to submit an order that has not been processed through the OrderCheckout integration.
+        order_checkout_integration_event_name:  (read-only)
+        order_return_integration_event_id: If populated, and not overriden by an OrderAdmin, the integration event will be used to calculate ReturnAmount on the order return or each individual return item.
+        order_return_integration_event_name:  (read-only)
+        add_to_cart_integration_event_id: If populated, the integration event will be used to fetch product information from an external system when a line item is added to an unsubmitted order and the product does not exist in OrderCloud.
+        add_to_cart_integration_event_name:  (read-only)
+        minimum_required_roles:
+        minimum_required_custom_roles:
+        maximum_granted_roles:
+        maximum_granted_custom_roles:
     """
 
-    ID: Optional[str] = None
-    ClientSecret: Optional[str] = None
-    AccessTokenDuration: Optional[int] = None
-    Active: Optional[bool] = None
-    AppName: Optional[str] = None
-    RefreshTokenDuration: Optional[int] = None
-    AnonymousTokenDuration: int = 10080
-    DefaultContextUserName: Optional[str] = None
-    xp: Optional[XP] = None
-    AllowAnyBuyer: Optional[bool] = None
-    AllowAnySupplier: Optional[bool] = None
-    AllowSeller: Optional[bool] = None
-    IsAnonBuyer: Optional[bool] = None
-    AssignedBuyerCount: int = 0
-    AssignedSupplierCount: int = 0
-    OrderCheckoutIntegrationEventID: Optional[str] = None
-    OrderCheckoutIntegrationEventName: Optional[str] = None
-    OrderReturnIntegrationEventID: Optional[str] = None
-    OrderReturnIntegrationEventName: Optional[str] = None
-    AddToCartIntegrationEventID: Optional[str] = None
-    AddToCartIntegrationEventName: Optional[str] = None
-    MinimumRequiredRoles: Optional[list[ApiRole]] = None
-    MinimumRequiredCustomRoles: Optional[list[str]] = None
-    MaximumGrantedRoles: Optional[list[ApiRole]] = None
-    MaximumGrantedCustomRoles: Optional[list[str]] = None
+    id: Optional[str] = Field(None, alias="ID")
+    client_secret: Optional[str] = Field(None, alias="ClientSecret")
+    access_token_duration: Optional[int] = Field(None, alias="AccessTokenDuration")
+    active: Optional[bool] = Field(None, alias="Active")
+    app_name: Optional[str] = Field(None, alias="AppName")
+    refresh_token_duration: Optional[int] = Field(None, alias="RefreshTokenDuration")
+    anonymous_token_duration: int = Field(10080, alias="AnonymousTokenDuration")
+    default_context_user_name: Optional[str] = Field(None, alias="DefaultContextUserName")
+    xp: Optional[XP] = Field(None, alias="xp")
+    allow_any_buyer: Optional[bool] = Field(None, alias="AllowAnyBuyer")
+    allow_any_supplier: Optional[bool] = Field(None, alias="AllowAnySupplier")
+    allow_seller: Optional[bool] = Field(None, alias="AllowSeller")
+    is_anon_buyer: Optional[bool] = Field(None, alias="IsAnonBuyer")
+    assigned_buyer_count: int = Field(0, alias="AssignedBuyerCount")
+    assigned_supplier_count: int = Field(0, alias="AssignedSupplierCount")
+    order_checkout_integration_event_id: Optional[str] = Field(
+        None, alias="OrderCheckoutIntegrationEventID"
+    )
+    order_checkout_integration_event_name: Optional[str] = Field(
+        None, alias="OrderCheckoutIntegrationEventName"
+    )
+    order_return_integration_event_id: Optional[str] = Field(
+        None, alias="OrderReturnIntegrationEventID"
+    )
+    order_return_integration_event_name: Optional[str] = Field(
+        None, alias="OrderReturnIntegrationEventName"
+    )
+    add_to_cart_integration_event_id: Optional[str] = Field(
+        None, alias="AddToCartIntegrationEventID"
+    )
+    add_to_cart_integration_event_name: Optional[str] = Field(
+        None, alias="AddToCartIntegrationEventName"
+    )
+    minimum_required_roles: Optional[list[ApiRole]] = Field(None, alias="MinimumRequiredRoles")
+    minimum_required_custom_roles: Optional[list[str]] = Field(
+        None, alias="MinimumRequiredCustomRoles"
+    )
+    maximum_granted_roles: Optional[list[ApiRole]] = Field(None, alias="MaximumGrantedRoles")
+    maximum_granted_custom_roles: Optional[list[str]] = Field(
+        None, alias="MaximumGrantedCustomRoles"
+    )

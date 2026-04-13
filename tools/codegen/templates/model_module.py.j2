@@ -14,7 +14,7 @@ __all__ = [{{ all_names | map("tojson") | join(", ") }}]
 {% for enum in enums %}
 
 
-class {{ enum.name }}(str, Enum):
+class {{ enum.name }}(OrderCloudEnum):
     """{{ enum.description }}"""
 {% for value in enum.values %}
     {{ value | safe_enum_name }} = "{{ value }}"
@@ -32,14 +32,14 @@ class {{ model.name }}(OrderCloudModel):
 
     Attributes:
 {% for field in model.fields %}
-        {{ field.name }}: {{ field.description }}{{ " (read-only)" if field.read_only else "" }}
+        {{ field.python_name }}: {{ field.description }}{{ " (read-only)" if field.read_only else "" }}
 {% endfor %}
     """
 {% if not model.fields %}
     pass
 {% endif %}
 {% for field in model.fields %}
-    {{ field.name }}: {{ field.python_type }} = {{ field.default }}
+    {{ field.python_name }}: {{ field.python_type }} = {{ field.default }}
 {% endfor %}
 {% endfor %}
 {% for alias, original in type_aliases_bottom %}

@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudEnum, OrderCloudModel, XP
 
@@ -22,55 +23,55 @@ class PaymentTransaction(OrderCloudModel, Generic[XP]):
     """An OrderCloud PaymentTransaction.
 
     Attributes:
-        ID:
-        Type:
-        DateExecuted:
-        Currency: Usually the same as Payment.Currency, but can be different. A marketplace owner may capture funds from the buyer user in one currency and process a payout to the seller in another.
-        Amount: Usually the same as Payment.Amount, but can be different. A charge might have a subsequent partial credit, for example.
-        Succeeded:
-        ResultCode:
-        ResultMessage:
+        id:
+        type:
+        date_executed:
+        currency: Usually the same as Payment.Currency, but can be different. A marketplace owner may capture funds from the buyer user in one currency and process a payout to the seller in another.
+        amount: Usually the same as Payment.Amount, but can be different. A charge might have a subsequent partial credit, for example.
+        succeeded:
+        result_code:
+        result_message:
         xp:
     """
 
-    ID: Optional[str] = None
-    Type: Optional[str] = None
-    DateExecuted: Optional[str] = None
-    Currency: Optional[str] = None
-    Amount: Optional[float] = None
-    Succeeded: Optional[bool] = None
-    ResultCode: Optional[str] = None
-    ResultMessage: Optional[str] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    type: Optional[str] = Field(None, alias="Type")
+    date_executed: Optional[str] = Field(None, alias="DateExecuted")
+    currency: Optional[str] = Field(None, alias="Currency")
+    amount: Optional[float] = Field(None, alias="Amount")
+    succeeded: Optional[bool] = Field(None, alias="Succeeded")
+    result_code: Optional[str] = Field(None, alias="ResultCode")
+    result_message: Optional[str] = Field(None, alias="ResultMessage")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class Payment(OrderCloudModel, Generic[XP]):
     """An OrderCloud Payment.
 
     Attributes:
-        ID:
-        Type:
-        DateCreated:  (read-only)
-        CreditCardID: Only writeable on create.
-        SpendingAccountID: Only writeable on create.
-        Description:
-        Currency: Inherited from order. (read-only)
-        Amount: If null, payment applies to order total (or total of specific line items, if set), less any other payments where Amount is set. Value can only be negative if processing a payment for an order return.
-        Accepted: All payments must be Accepted to submit an order. This property should be updated after authorizing or capturing the payment in your middleware by a user with the elevated OrderAdmin role.
-        OrderReturnID: Used to indicate this payment is associated with an order return.
+        id:
+        type:
+        date_created:  (read-only)
+        credit_card_id: Only writeable on create.
+        spending_account_id: Only writeable on create.
+        description:
+        currency: Inherited from order. (read-only)
+        amount: If null, payment applies to order total (or total of specific line items, if set), less any other payments where Amount is set. Value can only be negative if processing a payment for an order return.
+        accepted: All payments must be Accepted to submit an order. This property should be updated after authorizing or capturing the payment in your middleware by a user with the elevated OrderAdmin role.
+        order_return_id: Used to indicate this payment is associated with an order return.
         xp:
-        Transactions:  (read-only)
+        transactions:  (read-only)
     """
 
-    ID: Optional[str] = None
-    Type: Optional[PaymentType] = None
-    DateCreated: Optional[str] = None
-    CreditCardID: Optional[str] = None
-    SpendingAccountID: Optional[str] = None
-    Description: Optional[str] = None
-    Currency: Optional[str] = None
-    Amount: Optional[float] = None
-    Accepted: Optional[bool] = None
-    OrderReturnID: Optional[str] = None
-    xp: Optional[XP] = None
-    Transactions: Optional[list[PaymentTransaction]] = None
+    id: Optional[str] = Field(None, alias="ID")
+    type: Optional[PaymentType] = Field(None, alias="Type")
+    date_created: Optional[str] = Field(None, alias="DateCreated")
+    credit_card_id: Optional[str] = Field(None, alias="CreditCardID")
+    spending_account_id: Optional[str] = Field(None, alias="SpendingAccountID")
+    description: Optional[str] = Field(None, alias="Description")
+    currency: Optional[str] = Field(None, alias="Currency")
+    amount: Optional[float] = Field(None, alias="Amount")
+    accepted: Optional[bool] = Field(None, alias="Accepted")
+    order_return_id: Optional[str] = Field(None, alias="OrderReturnID")
+    xp: Optional[XP] = Field(None, alias="xp")
+    transactions: Optional[list[PaymentTransaction]] = Field(None, alias="Transactions")

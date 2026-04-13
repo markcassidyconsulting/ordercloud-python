@@ -27,20 +27,20 @@ class TestSyncClient:
         product = sync_client.products.save(
             self.PID, {"ID": self.PID, "Name": "Sync Test Product", "Active": True}
         )
-        assert product.ID == self.PID
-        assert product.Name == "Sync Test Product"
+        assert product.id == self.PID
+        assert product.name == "Sync Test Product"
 
         # Get
         fetched = sync_client.products.get(self.PID)
-        assert fetched.ID == self.PID
+        assert fetched.id == self.PID
 
         # Patch
         updated = sync_client.products.patch(self.PID, {"Name": "Sync Updated"})
-        assert updated.Name == "Sync Updated"
+        assert updated.name == "Sync Updated"
 
         # List with filter (retry-based wait for search index)
         page = wait_for_listed_sync(sync_client.products.list, self.PID, filters={"ID": self.PID})
-        assert any(p.ID == self.PID for p in page.Items)
+        assert any(p.id == self.PID for p in page.items)
 
         # Delete
         sync_client.products.delete(self.PID)
@@ -69,7 +69,7 @@ class TestSyncClient:
                     filters={"ID": "inttest-sync-page-*"},
                 )
             )
-            returned_ids = {p.ID for p in items}
+            returned_ids = {p.id for p in items}
             for pid in pids:
                 assert pid in returned_ids, f"Missing {pid} from paginate_sync results"
 

@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Any, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel
 from .misc import ApiRole
@@ -15,43 +16,43 @@ class WebhookRoute(OrderCloudModel):
     """An OrderCloud WebhookRoute.
 
     Attributes:
-        Route:
-        Verb:
+        route:
+        verb:
     """
 
-    Route: Optional[str] = None
-    Verb: Optional[str] = None
+    route: Optional[str] = Field(None, alias="Route")
+    verb: Optional[str] = Field(None, alias="Verb")
 
 
 class Webhook(OrderCloudModel):
     """An OrderCloud Webhook.
 
     Attributes:
-        ID:
-        Name:
-        Description:
-        Url: URL the webhook will POST data to, likely a route within your middleware. Required unless there is a valid DeliveryConfig.
-        HashKey: Security feature that allows your middleware to verify the digital signature in the request header to ensure you only accept trusted data.
-        ElevatedRoles: If you need additional data not provided by the webhook payload, you can request any elevated roles needed to make additional calls.
-        ConfigData:
-        BeforeProcessRequest: If true, the webhook is processed prior to the call being made and OrderCloud waits for a response before proceeding.
-        ApiClientIDs: List of API client IDs the webhook will be triggered for.
-        WebhookRoutes: List of routes the webhook will be triggered for.
-        DeliveryConfigID:
-        CustomAuthHeaderName: The header name that can be passed to your middleware.
-        CustomAuthHeaderValue: The header value that can be passed to your middleware.
+        id:
+        name:
+        description:
+        url: URL the webhook will POST data to, likely a route within your middleware. Required unless there is a valid DeliveryConfig.
+        hash_key: Security feature that allows your middleware to verify the digital signature in the request header to ensure you only accept trusted data.
+        elevated_roles: If you need additional data not provided by the webhook payload, you can request any elevated roles needed to make additional calls.
+        config_data:
+        before_process_request: If true, the webhook is processed prior to the call being made and OrderCloud waits for a response before proceeding.
+        api_client_i_ds: List of API client IDs the webhook will be triggered for.
+        webhook_routes: List of routes the webhook will be triggered for.
+        delivery_config_id:
+        custom_auth_header_name: The header name that can be passed to your middleware.
+        custom_auth_header_value: The header value that can be passed to your middleware.
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    Description: Optional[str] = None
-    Url: Optional[str] = None
-    HashKey: Optional[str] = None
-    ElevatedRoles: Optional[list[ApiRole]] = None
-    ConfigData: Optional[dict[str, Any]] = None
-    BeforeProcessRequest: Optional[bool] = None
-    ApiClientIDs: Optional[list[str]] = None
-    WebhookRoutes: Optional[list[WebhookRoute]] = None
-    DeliveryConfigID: Optional[str] = None
-    CustomAuthHeaderName: Optional[str] = None
-    CustomAuthHeaderValue: Optional[str] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    description: Optional[str] = Field(None, alias="Description")
+    url: Optional[str] = Field(None, alias="Url")
+    hash_key: Optional[str] = Field(None, alias="HashKey")
+    elevated_roles: Optional[list[ApiRole]] = Field(None, alias="ElevatedRoles")
+    config_data: Optional[dict[str, Any]] = Field(None, alias="ConfigData")
+    before_process_request: Optional[bool] = Field(None, alias="BeforeProcessRequest")
+    api_client_i_ds: Optional[list[str]] = Field(None, alias="ApiClientIDs")
+    webhook_routes: Optional[list[WebhookRoute]] = Field(None, alias="WebhookRoutes")
+    delivery_config_id: Optional[str] = Field(None, alias="DeliveryConfigID")
+    custom_auth_header_name: Optional[str] = Field(None, alias="CustomAuthHeaderName")
+    custom_auth_header_value: Optional[str] = Field(None, alias="CustomAuthHeaderValue")

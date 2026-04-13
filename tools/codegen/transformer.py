@@ -95,7 +95,7 @@ def _build_model_groups(
                     for field in model.fields:
                         if field.is_xp:
                             field.python_type = "Optional[XP]"
-                            field.default = "None"
+                            field.default = f'Field(None, alias="{field.name}")'
 
                 # Analyse fields for import needs.
                 for field in model.fields:
@@ -204,9 +204,7 @@ def _build_model_imports(
     """Build the import block for a model module."""
     lines: list[str] = []
 
-    # Standard library.
-    if needs_enum:
-        lines.append("from enum import Enum")
+    # Standard library — no longer needed for enums (uses OrderCloudEnum from shared).
 
     # Typing.
     typing_names: list[str] = []
@@ -227,11 +225,15 @@ def _build_model_imports(
     if lines and (cross_imports or has_models):
         lines.append("")
 
-    # Shared base class (and XP TypeVar when needed).
+    # Shared base classes (OrderCloudModel for models, OrderCloudEnum for enums).
+    shared_imports: list[str] = []
+    if needs_enum:
+        shared_imports.append("OrderCloudEnum")
     if has_models:
-        shared_imports = ["OrderCloudModel"]
-        if needs_xp_typevar:
-            shared_imports.append("XP")
+        shared_imports.append("OrderCloudModel")
+    if needs_xp_typevar:
+        shared_imports.append("XP")
+    if shared_imports:
         lines.append(f"from .shared import {', '.join(sorted(shared_imports))}")
 
     # Cross-module imports (grouped by source module).

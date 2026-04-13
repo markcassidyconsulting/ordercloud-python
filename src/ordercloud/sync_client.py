@@ -157,14 +157,14 @@ def paginate_sync(
 
         with SyncOrderCloudClient.create(...) as client:
             for product in paginate_sync(client.products.list, search="widget"):
-                print(product.Name)
+                print(product.name)
     """
     page = 1
     kwargs["page_size"] = page_size
     while True:
         kwargs["page"] = page
         result = list_method(*args, **kwargs)
-        yield from result.Items
-        if page >= result.Meta.TotalPages:
+        yield from result.items
+        if page >= result.meta.total_pages:
             break
         page += 1

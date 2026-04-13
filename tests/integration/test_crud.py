@@ -32,27 +32,27 @@ class TestProductCRUD:
         product = await async_client.products.save(
             self.PID, {"ID": self.PID, "Name": "Integration Test Product", "Active": True}
         )
-        assert product.ID == self.PID
-        assert product.Name == "Integration Test Product"
+        assert product.id == self.PID
+        assert product.name == "Integration Test Product"
         assert isinstance(product, Product)
 
         # Get
         fetched = await async_client.products.get(self.PID)
-        assert fetched.ID == self.PID
-        assert fetched.Name == "Integration Test Product"
+        assert fetched.id == self.PID
+        assert fetched.name == "Integration Test Product"
 
         # Patch
         updated = await async_client.products.patch(self.PID, {"Name": "Updated Product"})
-        assert updated.Name == "Updated Product"
+        assert updated.name == "Updated Product"
 
         # Verify patch persisted
         refetched = await async_client.products.get(self.PID)
-        assert refetched.Name == "Updated Product"
+        assert refetched.name == "Updated Product"
 
         # List with filter (product search index is eventually consistent)
         page = await wait_for_listed(async_client.products.list, self.PID, filters={"ID": self.PID})
-        assert page.Meta.TotalCount >= 1
-        assert any(p.ID == self.PID for p in page.Items)
+        assert page.meta.total_count >= 1
+        assert any(p.id == self.PID for p in page.items)
 
         # Delete (product GET may lag behind due to eventual consistency,
         # so delete-then-404 is verified on non-product resources below
@@ -66,8 +66,8 @@ class TestProductCRUD:
 
         model = Product(ID=pid, Name="Model Test Product", Active=True)
         created = await async_client.products.save(pid, model)
-        assert created.ID == pid
-        assert created.Name == "Model Test Product"
+        assert created.id == pid
+        assert created.name == "Model Test Product"
 
         await async_client.products.delete(pid)
 
@@ -110,18 +110,18 @@ class TestBuyerCRUD:
         buyer = await async_client.buyers.save(
             self.BID, {"ID": self.BID, "Name": "Integration Test Buyer", "Active": True}
         )
-        assert buyer.ID == self.BID
-        assert buyer.Name == "Integration Test Buyer"
+        assert buyer.id == self.BID
+        assert buyer.name == "Integration Test Buyer"
 
         fetched = await async_client.buyers.get(self.BID)
-        assert fetched.ID == self.BID
+        assert fetched.id == self.BID
 
         updated = await async_client.buyers.patch(self.BID, {"Name": "Updated Buyer"})
-        assert updated.Name == "Updated Buyer"
+        assert updated.name == "Updated Buyer"
 
         page = await async_client.buyers.list(filters={"ID": self.BID})
-        assert page.Meta.TotalCount >= 1
-        assert any(b.ID == self.BID for b in page.Items)
+        assert page.meta.total_count >= 1
+        assert any(b.id == self.BID for b in page.items)
 
         # Cleanup
         await async_cleanup_buyer(async_client, self.BID)
@@ -147,18 +147,18 @@ class TestCatalogCRUD:
         catalog = await async_client.catalogs.save(
             self.CID, {"ID": self.CID, "Name": "Integration Test Catalog", "Active": True}
         )
-        assert catalog.ID == self.CID
-        assert catalog.Name == "Integration Test Catalog"
+        assert catalog.id == self.CID
+        assert catalog.name == "Integration Test Catalog"
 
         fetched = await async_client.catalogs.get(self.CID)
-        assert fetched.Name == "Integration Test Catalog"
+        assert fetched.name == "Integration Test Catalog"
 
         updated = await async_client.catalogs.patch(self.CID, {"Name": "Updated Catalog"})
-        assert updated.Name == "Updated Catalog"
+        assert updated.name == "Updated Catalog"
 
         page = await async_client.catalogs.list(filters={"ID": self.CID})
-        assert page.Meta.TotalCount >= 1
-        assert any(c.ID == self.CID for c in page.Items)
+        assert page.meta.total_count >= 1
+        assert any(c.id == self.CID for c in page.items)
 
         await async_client.catalogs.delete(self.CID)
 
@@ -193,20 +193,20 @@ class TestCategoryCRUD:
             self.CATALOG_ID,
             {"ID": self.CAT_ID, "Name": "Test Category", "Active": True},
         )
-        assert category.ID == self.CAT_ID
-        assert category.Name == "Test Category"
+        assert category.id == self.CAT_ID
+        assert category.name == "Test Category"
 
         fetched = await async_client.categories.get(self.CATALOG_ID, self.CAT_ID)
-        assert fetched.Name == "Test Category"
+        assert fetched.name == "Test Category"
 
         updated = await async_client.categories.patch(
             self.CATALOG_ID, self.CAT_ID, {"Name": "Updated Category"}
         )
-        assert updated.Name == "Updated Category"
+        assert updated.name == "Updated Category"
 
         page = await async_client.categories.list(self.CATALOG_ID)
-        assert page.Meta.TotalCount >= 1
-        assert any(c.ID == self.CAT_ID for c in page.Items)
+        assert page.meta.total_count >= 1
+        assert any(c.id == self.CAT_ID for c in page.items)
 
         # Delete the category
         await async_client.categories.delete(self.CATALOG_ID, self.CAT_ID)
@@ -253,18 +253,18 @@ class TestUserCRUD:
                 "Active": True,
             },
         )
-        assert user.ID == self.UID
-        assert user.Username == "inttest-user-crud"
+        assert user.id == self.UID
+        assert user.username == "inttest-user-crud"
 
         fetched = await async_client.users.get(self.BUYER_ID, self.UID)
-        assert fetched.FirstName == "Test"
+        assert fetched.first_name == "Test"
 
         updated = await async_client.users.patch(self.BUYER_ID, self.UID, {"FirstName": "Updated"})
-        assert updated.FirstName == "Updated"
+        assert updated.first_name == "Updated"
 
         page = await async_client.users.list(self.BUYER_ID)
-        assert page.Meta.TotalCount >= 1
-        assert any(u.ID == self.UID for u in page.Items)
+        assert page.meta.total_count >= 1
+        assert any(u.id == self.UID for u in page.items)
 
         await async_client.users.delete(self.BUYER_ID, self.UID)
 

@@ -266,5 +266,6 @@ from .shared import (  # noqa: F401
     ListPage,
     Meta,
     MetaWithFacets,
+    OrderCloudEnum,
     OrderCloudModel,
 )

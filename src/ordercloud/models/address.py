@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 
@@ -14,33 +15,33 @@ class Address(OrderCloudModel, Generic[XP]):
     """An OrderCloud Address.
 
     Attributes:
-        ID:
-        DateCreated:  (read-only)
-        CompanyName:
-        FirstName:
-        LastName:
-        Street1:
-        Street2:
-        City:
-        State:
-        Zip:
-        Country:
-        Phone:
-        AddressName:
+        id:
+        date_created:  (read-only)
+        company_name:
+        first_name:
+        last_name:
+        street1:
+        street2:
+        city:
+        state:
+        zip:
+        country:
+        phone:
+        address_name:
         xp:
     """
 
-    ID: Optional[str] = None
-    DateCreated: Optional[str] = None
-    CompanyName: Optional[str] = None
-    FirstName: Optional[str] = None
-    LastName: Optional[str] = None
-    Street1: Optional[str] = None
-    Street2: Optional[str] = None
-    City: Optional[str] = None
-    State: Optional[str] = None
-    Zip: Optional[str] = None
-    Country: Optional[str] = None
-    Phone: Optional[str] = None
-    AddressName: Optional[str] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    date_created: Optional[str] = Field(None, alias="DateCreated")
+    company_name: Optional[str] = Field(None, alias="CompanyName")
+    first_name: Optional[str] = Field(None, alias="FirstName")
+    last_name: Optional[str] = Field(None, alias="LastName")
+    street1: Optional[str] = Field(None, alias="Street1")
+    street2: Optional[str] = Field(None, alias="Street2")
+    city: Optional[str] = Field(None, alias="City")
+    state: Optional[str] = Field(None, alias="State")
+    zip: Optional[str] = Field(None, alias="Zip")
+    country: Optional[str] = Field(None, alias="Country")
+    phone: Optional[str] = Field(None, alias="Phone")
+    address_name: Optional[str] = Field(None, alias="AddressName")
+    xp: Optional[XP] = Field(None, alias="xp")

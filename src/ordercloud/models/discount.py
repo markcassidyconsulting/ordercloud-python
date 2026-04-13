@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 
@@ -14,49 +15,49 @@ class DiscountBreak(OrderCloudModel):
     """An OrderCloud DiscountBreak.
 
     Attributes:
-        Quantity: Minimum quantity required for this discount tier.
-        Amount: Percentage discount (e.g., 10.5 for 10.5% off). Must be between 0 and 100.
+        quantity: Minimum quantity required for this discount tier.
+        amount: Percentage discount (e.g., 10.5 for 10.5% off). Must be between 0 and 100.
     """
 
-    Quantity: Optional[int] = None
-    Amount: Optional[float] = None
+    quantity: Optional[int] = Field(None, alias="Quantity")
+    amount: Optional[float] = Field(None, alias="Amount")
 
 
 class DiscountedPrices(OrderCloudModel):
     """An OrderCloud DiscountedPrices.
 
     Attributes:
-        Price: Discounted price per unit.
-        SalePrice: Discounted sale price per unit.
-        SubscriptionPrice: Discounted subscription price per unit.
-        BundlePrice: Discounted bundle price per unit.
+        price: Discounted price per unit.
+        sale_price: Discounted sale price per unit.
+        subscription_price: Discounted subscription price per unit.
+        bundle_price: Discounted bundle price per unit.
     """
 
-    Price: Optional[float] = None
-    SalePrice: Optional[float] = None
-    SubscriptionPrice: Optional[float] = None
-    BundlePrice: Optional[float] = None
+    price: Optional[float] = Field(None, alias="Price")
+    sale_price: Optional[float] = Field(None, alias="SalePrice")
+    subscription_price: Optional[float] = Field(None, alias="SubscriptionPrice")
+    bundle_price: Optional[float] = Field(None, alias="BundlePrice")
 
 
 class Discount(OrderCloudModel, Generic[XP]):
     """An OrderCloud Discount.
 
     Attributes:
-        ID:
-        Description:
-        DiscountBreaks: Quantity-based percentage discount tiers. Each tier specifies a minimum quantity and percentage discount amount.
-        ProductFilter:
-        CatalogID:
-        CategoryID:
-        ProductID:
+        id:
+        description:
+        discount_breaks: Quantity-based percentage discount tiers. Each tier specifies a minimum quantity and percentage discount amount.
+        product_filter:
+        catalog_id:
+        category_id:
+        product_id:
         xp:
     """
 
-    ID: Optional[str] = None
-    Description: Optional[str] = None
-    DiscountBreaks: Optional[list[DiscountBreak]] = None
-    ProductFilter: Optional[str] = None
-    CatalogID: Optional[str] = None
-    CategoryID: Optional[str] = None
-    ProductID: Optional[str] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    description: Optional[str] = Field(None, alias="Description")
+    discount_breaks: Optional[list[DiscountBreak]] = Field(None, alias="DiscountBreaks")
+    product_filter: Optional[str] = Field(None, alias="ProductFilter")
+    catalog_id: Optional[str] = Field(None, alias="CatalogID")
+    category_id: Optional[str] = Field(None, alias="CategoryID")
+    product_id: Optional[str] = Field(None, alias="ProductID")
+    xp: Optional[XP] = Field(None, alias="xp")

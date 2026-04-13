@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 from .address import Address
@@ -45,408 +46,420 @@ class OrderApprovalInfo(OrderCloudModel):
     """An OrderCloud OrderApprovalInfo.
 
     Attributes:
-        AllowResubmit: Only relevant when declining an order. Changes the order Status back to Unsubmitted and allows the user to make changes and resubmit.
-        Comments: Comments to be saved with the order approval or denial.
+        allow_resubmit: Only relevant when declining an order. Changes the order Status back to Unsubmitted and allows the user to make changes and resubmit.
+        comments: Comments to be saved with the order approval or denial.
     """
 
-    AllowResubmit: Optional[bool] = None
-    Comments: Optional[str] = None
+    allow_resubmit: Optional[bool] = Field(None, alias="AllowResubmit")
+    comments: Optional[str] = Field(None, alias="Comments")
 
 
 class ApprovalInfo(OrderCloudModel):
     """An OrderCloud ApprovalInfo.
 
     Attributes:
-        Comments: Comments to be saved with the order approval or denial.
+        comments: Comments to be saved with the order approval or denial.
     """
 
-    Comments: Optional[str] = None
+    comments: Optional[str] = Field(None, alias="Comments")
 
 
 class OrderApproval(OrderCloudModel):
     """An OrderCloud OrderApproval.
 
     Attributes:
-        AllowResubmit: If true, the submitting user will be able to modify the order and resubmit for approval. (read-only)
-        ApprovalRuleID:  (read-only)
-        ApprovingGroupID:  (read-only)
-        Status:  (read-only)
-        DateCreated:  (read-only)
-        DateCompleted:  (read-only)
-        Approver:  (read-only)
-        Comments:  (read-only)
+        allow_resubmit: If true, the submitting user will be able to modify the order and resubmit for approval. (read-only)
+        approval_rule_id:  (read-only)
+        approving_group_id:  (read-only)
+        status:  (read-only)
+        date_created:  (read-only)
+        date_completed:  (read-only)
+        approver:  (read-only)
+        comments:  (read-only)
     """
 
-    AllowResubmit: Optional[bool] = None
-    ApprovalRuleID: Optional[str] = None
-    ApprovingGroupID: Optional[str] = None
-    Status: Optional[ApprovalStatus] = None
-    DateCreated: Optional[str] = None
-    DateCompleted: Optional[str] = None
-    Approver: Optional[User] = None
-    Comments: Optional[str] = None
+    allow_resubmit: Optional[bool] = Field(None, alias="AllowResubmit")
+    approval_rule_id: Optional[str] = Field(None, alias="ApprovalRuleID")
+    approving_group_id: Optional[str] = Field(None, alias="ApprovingGroupID")
+    status: Optional[ApprovalStatus] = Field(None, alias="Status")
+    date_created: Optional[str] = Field(None, alias="DateCreated")
+    date_completed: Optional[str] = Field(None, alias="DateCompleted")
+    approver: Optional[User] = Field(None, alias="Approver")
+    comments: Optional[str] = Field(None, alias="Comments")
 
 
 class OrderPromotion(OrderCloudModel, Generic[XP]):
     """An OrderCloud OrderPromotion.
 
     Attributes:
-        Amount:  (read-only)
-        LineItemID:  (read-only)
-        AmountOverridden: True when the Amount has been set via PromotionOverrides. (read-only)
-        DateApplied:  (read-only)
-        ID:
-        LineItemLevel: If true, certain eligible expression requirements must be met, and the PromotionDiscount will be applied at the line item level.
-        Code: Must be unique. Entered by buyer when adding promo to order.
-        Name:
-        RedemptionLimit: Limit the total number of orders this promotion can be applied to across all users.
-        RedemptionLimitPerUser: Limit the total number of orders this promotion can be applied to per user.
-        RedemptionCount: The number of times this promotion has been applied to an order. (read-only)
-        QuantityLimitPerOrder: Can only be used when LineItemLevel is true and ItemLimitPerOrder does not have a value. When defined the ValueExpression will be the discount applied to each qualifying quantity of eligible items. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
-        ItemLimitPerOrder: Can only be used when LineItemLevel is true and QuantityLimitPerOrder does not have a value. Limits the number of items the promotion will apply to when eligible. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
-        ItemSortBy: Comma delimited list of properties to sort by. Can only be used when ItemLimitPerOrder is true. Used to determine the order in which the promotion is applied to the specified limit of items. Use ! to reverse sort order on a property.
-        Description:
-        FinePrint: For reference only. Terms, conditions, and other legal jargon.
-        StartDate:
-        ExpirationDate:
-        EligibleExpression: The expression evaluated to determine if an item or order is eligible for a promotion. See rules engine documentation for formatting details.
-        ValueExpression: The expression evaluated to determine the discount amount of an eligible promotion. See rules engine documentation for formatting details.
-        CanCombine: If true, the promotion can be applied to an order that already other promotions applied, as long as they can also be combined.
-        AllowAllBuyers: Allow promo to be used by all buyers without creating explicit assignments.
-        OwnerID: ID of the organization that owns the promotion. Only the marketplace owner can override the OwnerID on create.
-        AutoApply:
-        Active:
-        UseIntegration:
-        Priority: Used to control the order in which promotions are applied when calling the auto apply or refresh endpoint.
+        amount:  (read-only)
+        line_item_id:  (read-only)
+        amount_overridden: True when the Amount has been set via PromotionOverrides. (read-only)
+        date_applied:  (read-only)
+        id:
+        line_item_level: If true, certain eligible expression requirements must be met, and the PromotionDiscount will be applied at the line item level.
+        code: Must be unique. Entered by buyer when adding promo to order.
+        name:
+        redemption_limit: Limit the total number of orders this promotion can be applied to across all users.
+        redemption_limit_per_user: Limit the total number of orders this promotion can be applied to per user.
+        redemption_count: The number of times this promotion has been applied to an order. (read-only)
+        quantity_limit_per_order: Can only be used when LineItemLevel is true and ItemLimitPerOrder does not have a value. When defined the ValueExpression will be the discount applied to each qualifying quantity of eligible items. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
+        item_limit_per_order: Can only be used when LineItemLevel is true and QuantityLimitPerOrder does not have a value. Limits the number of items the promotion will apply to when eligible. When no ItemSortBy is defined, items will be sorted by DateAdded ascending.
+        item_sort_by: Comma delimited list of properties to sort by. Can only be used when ItemLimitPerOrder is true. Used to determine the order in which the promotion is applied to the specified limit of items. Use ! to reverse sort order on a property.
+        description:
+        fine_print: For reference only. Terms, conditions, and other legal jargon.
+        start_date:
+        expiration_date:
+        eligible_expression: The expression evaluated to determine if an item or order is eligible for a promotion. See rules engine documentation for formatting details.
+        value_expression: The expression evaluated to determine the discount amount of an eligible promotion. See rules engine documentation for formatting details.
+        can_combine: If true, the promotion can be applied to an order that already other promotions applied, as long as they can also be combined.
+        allow_all_buyers: Allow promo to be used by all buyers without creating explicit assignments.
+        owner_id: ID of the organization that owns the promotion. Only the marketplace owner can override the OwnerID on create.
+        auto_apply:
+        active:
+        use_integration:
+        priority: Used to control the order in which promotions are applied when calling the auto apply or refresh endpoint.
         xp:
     """
 
-    Amount: float = 0.0
-    LineItemID: Optional[str] = None
-    AmountOverridden: Optional[bool] = None
-    DateApplied: Optional[str] = None
-    ID: Optional[str] = None
-    LineItemLevel: Optional[bool] = None
-    Code: Optional[str] = None
-    Name: Optional[str] = None
-    RedemptionLimit: Optional[int] = None
-    RedemptionLimitPerUser: Optional[int] = None
-    RedemptionCount: int = 0
-    QuantityLimitPerOrder: Optional[int] = None
-    ItemLimitPerOrder: Optional[int] = None
-    ItemSortBy: Optional[str] = None
-    Description: Optional[str] = None
-    FinePrint: Optional[str] = None
-    StartDate: Optional[str] = None
-    ExpirationDate: Optional[str] = None
-    EligibleExpression: Optional[str] = None
-    ValueExpression: Optional[str] = None
-    CanCombine: Optional[bool] = None
-    AllowAllBuyers: Optional[bool] = None
-    OwnerID: Optional[str] = None
-    AutoApply: bool = False
-    Active: bool = True
-    UseIntegration: Optional[bool] = None
-    Priority: Optional[int] = None
-    xp: Optional[XP] = None
+    amount: float = Field(0.0, alias="Amount")
+    line_item_id: Optional[str] = Field(None, alias="LineItemID")
+    amount_overridden: Optional[bool] = Field(None, alias="AmountOverridden")
+    date_applied: Optional[str] = Field(None, alias="DateApplied")
+    id: Optional[str] = Field(None, alias="ID")
+    line_item_level: Optional[bool] = Field(None, alias="LineItemLevel")
+    code: Optional[str] = Field(None, alias="Code")
+    name: Optional[str] = Field(None, alias="Name")
+    redemption_limit: Optional[int] = Field(None, alias="RedemptionLimit")
+    redemption_limit_per_user: Optional[int] = Field(None, alias="RedemptionLimitPerUser")
+    redemption_count: int = Field(0, alias="RedemptionCount")
+    quantity_limit_per_order: Optional[int] = Field(None, alias="QuantityLimitPerOrder")
+    item_limit_per_order: Optional[int] = Field(None, alias="ItemLimitPerOrder")
+    item_sort_by: Optional[str] = Field(None, alias="ItemSortBy")
+    description: Optional[str] = Field(None, alias="Description")
+    fine_print: Optional[str] = Field(None, alias="FinePrint")
+    start_date: Optional[str] = Field(None, alias="StartDate")
+    expiration_date: Optional[str] = Field(None, alias="ExpirationDate")
+    eligible_expression: Optional[str] = Field(None, alias="EligibleExpression")
+    value_expression: Optional[str] = Field(None, alias="ValueExpression")
+    can_combine: Optional[bool] = Field(None, alias="CanCombine")
+    allow_all_buyers: Optional[bool] = Field(None, alias="AllowAllBuyers")
+    owner_id: Optional[str] = Field(None, alias="OwnerID")
+    auto_apply: bool = Field(False, alias="AutoApply")
+    active: bool = Field(True, alias="Active")
+    use_integration: Optional[bool] = Field(None, alias="UseIntegration")
+    priority: Optional[int] = Field(None, alias="Priority")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class ShipMethodSelection(OrderCloudModel):
     """An OrderCloud ShipMethodSelection.
 
     Attributes:
-        ShipEstimateID:
-        ShipMethodID:
+        ship_estimate_id:
+        ship_method_id:
     """
 
-    ShipEstimateID: Optional[str] = None
-    ShipMethodID: Optional[str] = None
+    ship_estimate_id: Optional[str] = Field(None, alias="ShipEstimateID")
+    ship_method_id: Optional[str] = Field(None, alias="ShipMethodID")
 
 
 class OrderShipMethodSelection(OrderCloudModel):
     """An OrderCloud OrderShipMethodSelection.
 
     Attributes:
-        ShipMethodSelections:
+        ship_method_selections:
     """
 
-    ShipMethodSelections: Optional[list[ShipMethodSelection]] = None
+    ship_method_selections: Optional[list[ShipMethodSelection]] = Field(
+        None, alias="ShipMethodSelections"
+    )
 
 
 class OrderSplitResult(OrderCloudModel):
     """An OrderCloud OrderSplitResult.
 
     Attributes:
-        OutgoingOrders: The outgoing orders created, one for each unique Product.DefaultSupplierID on the original order.
-        RemainingLineItemIDs: IDs of line items not added to an outgoing order, most likely because Product.DefaultSupplierID is not set.
+        outgoing_orders: The outgoing orders created, one for each unique Product.DefaultSupplierID on the original order.
+        remaining_line_item_i_ds: IDs of line items not added to an outgoing order, most likely because Product.DefaultSupplierID is not set.
     """
 
-    OutgoingOrders: Optional[list[Order]] = None
-    RemainingLineItemIDs: Optional[list[str]] = None
+    outgoing_orders: Optional[list[Order]] = Field(None, alias="OutgoingOrders")
+    remaining_line_item_i_ds: Optional[list[str]] = Field(None, alias="RemainingLineItemIDs")
 
 
 class OrderSubmitResponse(OrderCloudModel, Generic[XP]):
     """An OrderCloud OrderSubmitResponse.
 
     Attributes:
-        HttpStatusCode:
-        UnhandledErrorBody:
+        http_status_code:
+        unhandled_error_body:
         xp:
-        Succeeded:
+        succeeded:
     """
 
-    HttpStatusCode: Optional[int] = None
-    UnhandledErrorBody: Optional[str] = None
-    xp: Optional[XP] = None
-    Succeeded: Optional[bool] = None
+    http_status_code: Optional[int] = Field(None, alias="HttpStatusCode")
+    unhandled_error_body: Optional[str] = Field(None, alias="UnhandledErrorBody")
+    xp: Optional[XP] = Field(None, alias="xp")
+    succeeded: Optional[bool] = Field(None, alias="Succeeded")
 
 
 class OrderSubmitForApprovalResponse(OrderCloudModel, Generic[XP]):
     """An OrderCloud OrderSubmitForApprovalResponse.
 
     Attributes:
-        HttpStatusCode:
-        UnhandledErrorBody:
+        http_status_code:
+        unhandled_error_body:
         xp:
-        Succeeded:
+        succeeded:
     """
 
-    HttpStatusCode: Optional[int] = None
-    UnhandledErrorBody: Optional[str] = None
-    xp: Optional[XP] = None
-    Succeeded: Optional[bool] = None
+    http_status_code: Optional[int] = Field(None, alias="HttpStatusCode")
+    unhandled_error_body: Optional[str] = Field(None, alias="UnhandledErrorBody")
+    xp: Optional[XP] = Field(None, alias="xp")
+    succeeded: Optional[bool] = Field(None, alias="Succeeded")
 
 
 class OrderApprovedResponse(OrderCloudModel, Generic[XP]):
     """An OrderCloud OrderApprovedResponse.
 
     Attributes:
-        HttpStatusCode:
-        UnhandledErrorBody:
+        http_status_code:
+        unhandled_error_body:
         xp:
-        Succeeded:
+        succeeded:
     """
 
-    HttpStatusCode: Optional[int] = None
-    UnhandledErrorBody: Optional[str] = None
-    xp: Optional[XP] = None
-    Succeeded: Optional[bool] = None
+    http_status_code: Optional[int] = Field(None, alias="HttpStatusCode")
+    unhandled_error_body: Optional[str] = Field(None, alias="UnhandledErrorBody")
+    xp: Optional[XP] = Field(None, alias="xp")
+    succeeded: Optional[bool] = Field(None, alias="Succeeded")
 
 
 class OrderCalculateResponse(OrderCloudModel, Generic[XP]):
     """An OrderCloud OrderCalculateResponse.
 
     Attributes:
-        LineItemOverrides:
-        ShippingTotal:
-        TaxTotal:
-        FeeTotal:
-        HttpStatusCode:
-        UnhandledErrorBody:
+        line_item_overrides:
+        shipping_total:
+        tax_total:
+        fee_total:
+        http_status_code:
+        unhandled_error_body:
         xp:
-        Succeeded:
+        succeeded:
     """
 
-    LineItemOverrides: Optional[list[LineItemOverride]] = None
-    ShippingTotal: Optional[float] = None
-    TaxTotal: Optional[float] = None
-    FeeTotal: Optional[float] = None
-    HttpStatusCode: Optional[int] = None
-    UnhandledErrorBody: Optional[str] = None
-    xp: Optional[XP] = None
-    Succeeded: Optional[bool] = None
+    line_item_overrides: Optional[list[LineItemOverride]] = Field(None, alias="LineItemOverrides")
+    shipping_total: Optional[float] = Field(None, alias="ShippingTotal")
+    tax_total: Optional[float] = Field(None, alias="TaxTotal")
+    fee_total: Optional[float] = Field(None, alias="FeeTotal")
+    http_status_code: Optional[int] = Field(None, alias="HttpStatusCode")
+    unhandled_error_body: Optional[str] = Field(None, alias="UnhandledErrorBody")
+    xp: Optional[XP] = Field(None, alias="xp")
+    succeeded: Optional[bool] = Field(None, alias="Succeeded")
 
 
 class LineItemOverride(OrderCloudModel):
     """An OrderCloud LineItemOverride.
 
     Attributes:
-        LineItemID:
-        UnitPrice:
-        Product:
-        PromotionOverrides:
-        InventoryRecordID:
-        Remove:
+        line_item_id:
+        unit_price:
+        product:
+        promotion_overrides:
+        inventory_record_id:
+        remove:
     """
 
-    LineItemID: Optional[str] = None
-    UnitPrice: Optional[float] = None
-    Product: Optional[AdHocProduct] = None
-    PromotionOverrides: Optional[list[PromotionOverride]] = None
-    InventoryRecordID: Optional[str] = None
-    Remove: Optional[bool] = None
+    line_item_id: Optional[str] = Field(None, alias="LineItemID")
+    unit_price: Optional[float] = Field(None, alias="UnitPrice")
+    product: Optional[AdHocProduct] = Field(None, alias="Product")
+    promotion_overrides: Optional[list[PromotionOverride]] = Field(None, alias="PromotionOverrides")
+    inventory_record_id: Optional[str] = Field(None, alias="InventoryRecordID")
+    remove: Optional[bool] = Field(None, alias="Remove")
 
 
 class ExtendedLineItem(OrderCloudModel, Generic[XP]):
     """An OrderCloud ExtendedLineItem.
 
     Attributes:
-        OrderID:
-        Order: Currently unused.
-        ID:
-        ProductID:
-        Quantity:
-        BundleItemID: The ID of the line item that represents the bundle. Signifies that the product is being purchased as part of a bundle. (read-only)
-        IsBundle: When true, this item represents a bundle being purchased. (read-only)
-        DateAdded:  (read-only)
-        QuantityShipped: Sum of QuantityShipped from all shipment items. (read-only)
-        UnitPrice: Auto calculated price per quantity. Modification requires OverrideUnitPrice role.
-        PromotionDiscount: Sum of all line item level promotion discount amounts applied. (read-only)
-        BaseDiscount: Discount amount from discount assignments applied to this line item. (read-only)
-        DiscountID: ID of the discount applied to this line item. (read-only)
-        LineTotal: LineSubtotal - BaseDiscount - PromotionDiscount (read-only)
-        LineSubtotal: UnitPrice x Quantity (read-only)
-        CostCenter: For reference only, does not influence any OrderCloud behavior.
-        DateNeeded:
-        ShippingAccount: For reference only, does not influence any OrderCloud behavior.
-        ShippingAddressID:
-        ShipFromAddressID: Marketplace owner or supplier AddressID where the product will be shipped from. Can be used to calculate shipping costs.
-        Product:  (read-only)
-        Variant:  (read-only)
-        ShippingAddress:  (read-only)
-        ShipFromAddress:  (read-only)
-        SupplierID:  (read-only)
-        InventoryRecordID: InventoryRecordID of which product inventory location to use. Cannot be modified once an order is submitted.
-        PriceScheduleID: PriceScheduleID used to determine unit price. (read-only)
-        IsOnSale: True when the price schedule and price break has an active SalePrice. (read-only)
-        PriceOverridden: If true, UnitPrice was overridden. (read-only)
-        Specs:
-        IncomingOrderID: ID of the original order. Only returns a value for the marketplace owner. (read-only)
-        OutgoingOrderID: ID of the split or forwarded order. Only returns a value for the marketplace owner. (read-only)
-        InvitationID:  (read-only)
+        order_id:
+        order: Currently unused.
+        id:
+        product_id:
+        quantity:
+        bundle_item_id: The ID of the line item that represents the bundle. Signifies that the product is being purchased as part of a bundle. (read-only)
+        is_bundle: When true, this item represents a bundle being purchased. (read-only)
+        date_added:  (read-only)
+        quantity_shipped: Sum of QuantityShipped from all shipment items. (read-only)
+        unit_price: Auto calculated price per quantity. Modification requires OverrideUnitPrice role.
+        promotion_discount: Sum of all line item level promotion discount amounts applied. (read-only)
+        base_discount: Discount amount from discount assignments applied to this line item. (read-only)
+        discount_id: ID of the discount applied to this line item. (read-only)
+        line_total: LineSubtotal - BaseDiscount - PromotionDiscount (read-only)
+        line_subtotal: UnitPrice x Quantity (read-only)
+        cost_center: For reference only, does not influence any OrderCloud behavior.
+        date_needed:
+        shipping_account: For reference only, does not influence any OrderCloud behavior.
+        shipping_address_id:
+        ship_from_address_id: Marketplace owner or supplier AddressID where the product will be shipped from. Can be used to calculate shipping costs.
+        product:  (read-only)
+        variant:  (read-only)
+        shipping_address:  (read-only)
+        ship_from_address:  (read-only)
+        supplier_id:  (read-only)
+        inventory_record_id: InventoryRecordID of which product inventory location to use. Cannot be modified once an order is submitted.
+        price_schedule_id: PriceScheduleID used to determine unit price. (read-only)
+        is_on_sale: True when the price schedule and price break has an active SalePrice. (read-only)
+        price_overridden: If true, UnitPrice was overridden. (read-only)
+        specs:
+        incoming_order_id: ID of the original order. Only returns a value for the marketplace owner. (read-only)
+        outgoing_order_id: ID of the split or forwarded order. Only returns a value for the marketplace owner. (read-only)
+        invitation_id:  (read-only)
         xp:
     """
 
-    OrderID: Optional[str] = None
-    Order: Optional[_Order] = None
-    ID: Optional[str] = None
-    ProductID: Optional[str] = None
-    Quantity: int = 1
-    BundleItemID: Optional[str] = None
-    IsBundle: Optional[bool] = None
-    DateAdded: Optional[str] = None
-    QuantityShipped: int = 0
-    UnitPrice: Optional[float] = None
-    PromotionDiscount: float = 0.0
-    BaseDiscount: float = 0.0
-    DiscountID: Optional[str] = None
-    LineTotal: float = 0.0
-    LineSubtotal: float = 0.0
-    CostCenter: Optional[str] = None
-    DateNeeded: Optional[str] = None
-    ShippingAccount: Optional[str] = None
-    ShippingAddressID: Optional[str] = None
-    ShipFromAddressID: Optional[str] = None
-    Product: Optional[LineItemProduct] = None
-    Variant: Optional[LineItemVariant] = None
-    ShippingAddress: Optional[Address] = None
-    ShipFromAddress: Optional[Address] = None
-    SupplierID: Optional[str] = None
-    InventoryRecordID: Optional[str] = None
-    PriceScheduleID: Optional[str] = None
-    IsOnSale: Optional[bool] = None
-    PriceOverridden: Optional[bool] = None
-    Specs: Optional[list[LineItemSpec]] = None
-    IncomingOrderID: Optional[str] = None
-    OutgoingOrderID: Optional[str] = None
-    InvitationID: Optional[str] = None
-    xp: Optional[XP] = None
+    order_id: Optional[str] = Field(None, alias="OrderID")
+    order: Optional[_Order] = Field(None, alias="Order")
+    id: Optional[str] = Field(None, alias="ID")
+    product_id: Optional[str] = Field(None, alias="ProductID")
+    quantity: int = Field(1, alias="Quantity")
+    bundle_item_id: Optional[str] = Field(None, alias="BundleItemID")
+    is_bundle: Optional[bool] = Field(None, alias="IsBundle")
+    date_added: Optional[str] = Field(None, alias="DateAdded")
+    quantity_shipped: int = Field(0, alias="QuantityShipped")
+    unit_price: Optional[float] = Field(None, alias="UnitPrice")
+    promotion_discount: float = Field(0.0, alias="PromotionDiscount")
+    base_discount: float = Field(0.0, alias="BaseDiscount")
+    discount_id: Optional[str] = Field(None, alias="DiscountID")
+    line_total: float = Field(0.0, alias="LineTotal")
+    line_subtotal: float = Field(0.0, alias="LineSubtotal")
+    cost_center: Optional[str] = Field(None, alias="CostCenter")
+    date_needed: Optional[str] = Field(None, alias="DateNeeded")
+    shipping_account: Optional[str] = Field(None, alias="ShippingAccount")
+    shipping_address_id: Optional[str] = Field(None, alias="ShippingAddressID")
+    ship_from_address_id: Optional[str] = Field(None, alias="ShipFromAddressID")
+    product: Optional[LineItemProduct] = Field(None, alias="Product")
+    variant: Optional[LineItemVariant] = Field(None, alias="Variant")
+    shipping_address: Optional[Address] = Field(None, alias="ShippingAddress")
+    ship_from_address: Optional[Address] = Field(None, alias="ShipFromAddress")
+    supplier_id: Optional[str] = Field(None, alias="SupplierID")
+    inventory_record_id: Optional[str] = Field(None, alias="InventoryRecordID")
+    price_schedule_id: Optional[str] = Field(None, alias="PriceScheduleID")
+    is_on_sale: Optional[bool] = Field(None, alias="IsOnSale")
+    price_overridden: Optional[bool] = Field(None, alias="PriceOverridden")
+    specs: Optional[list[LineItemSpec]] = Field(None, alias="Specs")
+    incoming_order_id: Optional[str] = Field(None, alias="IncomingOrderID")
+    outgoing_order_id: Optional[str] = Field(None, alias="OutgoingOrderID")
+    invitation_id: Optional[str] = Field(None, alias="InvitationID")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class OrderWorksheet(OrderCloudModel):
     """An OrderCloud OrderWorksheet.
 
     Attributes:
-        Order:
-        LineItems:
-        OrderPromotions:
-        Subscription:
-        ShipEstimateResponse:
-        OrderCalculateResponse:
-        OrderSubmitResponse:
-        OrderSubmitForApprovalResponse:
-        OrderApprovedResponse:
-        SubscriptionIntegrationResponse:
+        order:
+        line_items:
+        order_promotions:
+        subscription:
+        ship_estimate_response:
+        order_calculate_response:
+        order_submit_response:
+        order_submit_for_approval_response:
+        order_approved_response:
+        subscription_integration_response:
     """
 
-    Order: Optional[_Order] = None
-    LineItems: Optional[list[LineItem]] = None
-    OrderPromotions: Optional[list[OrderPromotion]] = None
-    Subscription: Optional[_Subscription] = None
-    ShipEstimateResponse: Optional[_ShipEstimateResponse] = None
-    OrderCalculateResponse: Optional[_OrderCalculateResponse] = None
-    OrderSubmitResponse: Optional[_OrderSubmitResponse] = None
-    OrderSubmitForApprovalResponse: Optional[_OrderSubmitForApprovalResponse] = None
-    OrderApprovedResponse: Optional[_OrderApprovedResponse] = None
-    SubscriptionIntegrationResponse: Optional[_SubscriptionIntegrationResponse] = None
+    order: Optional[_Order] = Field(None, alias="Order")
+    line_items: Optional[list[LineItem]] = Field(None, alias="LineItems")
+    order_promotions: Optional[list[OrderPromotion]] = Field(None, alias="OrderPromotions")
+    subscription: Optional[_Subscription] = Field(None, alias="Subscription")
+    ship_estimate_response: Optional[_ShipEstimateResponse] = Field(
+        None, alias="ShipEstimateResponse"
+    )
+    order_calculate_response: Optional[_OrderCalculateResponse] = Field(
+        None, alias="OrderCalculateResponse"
+    )
+    order_submit_response: Optional[_OrderSubmitResponse] = Field(None, alias="OrderSubmitResponse")
+    order_submit_for_approval_response: Optional[_OrderSubmitForApprovalResponse] = Field(
+        None, alias="OrderSubmitForApprovalResponse"
+    )
+    order_approved_response: Optional[_OrderApprovedResponse] = Field(
+        None, alias="OrderApprovedResponse"
+    )
+    subscription_integration_response: Optional[_SubscriptionIntegrationResponse] = Field(
+        None, alias="SubscriptionIntegrationResponse"
+    )
 
 
 class Order(OrderCloudModel, Generic[XP]):
     """An OrderCloud Order.
 
     Attributes:
-        ID:
-        FromUser: User placing the order. (read-only)
-        FromCompanyID: ID of the Buyer placing the order, or the marketplace owner when an order is being forwarded. Mainly useful to the marketplace owner or supplier receiving it.
-        ToCompanyID: ID of the marketplace owner or supplier receiving the order, only writable on create. Mainly useful to the user placing it.
-        FromUserID: This property is only writable when creating an order on behalf of a buyer user.
-        BillingAddressID:
-        BillingAddress:  (read-only)
-        ShippingAddressID: ID of the ShippingAddress for all line items on the order. Null when there are multiple shipping addresses defined.
-        Comments:
-        LineItemCount:  (read-only)
-        Status:  (read-only)
-        DateCreated:  (read-only)
-        DateSubmitted: Null until the order passes from the buyer to the marketplace owner, including when Status is PendingApproval. (read-only)
-        DateApproved:  (read-only)
-        DateDeclined:  (read-only)
-        DateCanceled:  (read-only)
-        DateCompleted: Populated when all items on an order have shipped, or the order is explicitly completed. (read-only)
-        LastUpdated:  (read-only)
-        Subtotal: Sum of all LineItem.LineSubtotals. (read-only)
-        ShippingCost: Modifying requires OverrideShipping role.
-        TaxCost: Modifying requires TaxOverride role.
-        Gratuity:
-        Fees: Fees associated with order or line items (read-only)
-        BaseDiscount: Sum of all discount amounts from discount assignments applied to line items on this order. (read-only)
-        PromotionDiscount: Sum of all promotion amounts applied to the order. (read-only)
-        Currency: Inherited from the user placing the order. (read-only)
-        Total: Subtotal - BaseDiscount - PromotionDiscount + TaxCost + ShippingCost + Gratuity + Fees (read-only)
-        IsSubmitted: True if this order has been passed from the Buyer to the marketplace owner or supplier. (read-only)
-        SubscriptionID: ID of the subscription used to create an order in an automated process. (read-only)
+        id:
+        from_user: User placing the order. (read-only)
+        from_company_id: ID of the Buyer placing the order, or the marketplace owner when an order is being forwarded. Mainly useful to the marketplace owner or supplier receiving it.
+        to_company_id: ID of the marketplace owner or supplier receiving the order, only writable on create. Mainly useful to the user placing it.
+        from_user_id: This property is only writable when creating an order on behalf of a buyer user.
+        billing_address_id:
+        billing_address:  (read-only)
+        shipping_address_id: ID of the ShippingAddress for all line items on the order. Null when there are multiple shipping addresses defined.
+        comments:
+        line_item_count:  (read-only)
+        status:  (read-only)
+        date_created:  (read-only)
+        date_submitted: Null until the order passes from the buyer to the marketplace owner, including when Status is PendingApproval. (read-only)
+        date_approved:  (read-only)
+        date_declined:  (read-only)
+        date_canceled:  (read-only)
+        date_completed: Populated when all items on an order have shipped, or the order is explicitly completed. (read-only)
+        last_updated:  (read-only)
+        subtotal: Sum of all LineItem.LineSubtotals. (read-only)
+        shipping_cost: Modifying requires OverrideShipping role.
+        tax_cost: Modifying requires TaxOverride role.
+        gratuity:
+        fees: Fees associated with order or line items (read-only)
+        base_discount: Sum of all discount amounts from discount assignments applied to line items on this order. (read-only)
+        promotion_discount: Sum of all promotion amounts applied to the order. (read-only)
+        currency: Inherited from the user placing the order. (read-only)
+        total: Subtotal - BaseDiscount - PromotionDiscount + TaxCost + ShippingCost + Gratuity + Fees (read-only)
+        is_submitted: True if this order has been passed from the Buyer to the marketplace owner or supplier. (read-only)
+        subscription_id: ID of the subscription used to create an order in an automated process. (read-only)
         xp:
     """
 
-    ID: Optional[str] = None
-    FromUser: Optional[OrderUser] = None
-    FromCompanyID: Optional[str] = None
-    ToCompanyID: Optional[str] = None
-    FromUserID: Optional[str] = None
-    BillingAddressID: Optional[str] = None
-    BillingAddress: Optional[Address] = None
-    ShippingAddressID: Optional[str] = None
-    Comments: Optional[str] = None
-    LineItemCount: int = 0
-    Status: Optional[OrderStatus] = None
-    DateCreated: Optional[str] = None
-    DateSubmitted: Optional[str] = None
-    DateApproved: Optional[str] = None
-    DateDeclined: Optional[str] = None
-    DateCanceled: Optional[str] = None
-    DateCompleted: Optional[str] = None
-    LastUpdated: Optional[str] = None
-    Subtotal: float = 0.0
-    ShippingCost: Optional[float] = None
-    TaxCost: Optional[float] = None
-    Gratuity: float = 0
-    Fees: float = 0
-    BaseDiscount: float = 0.0
-    PromotionDiscount: float = 0.0
-    Currency: Optional[str] = None
-    Total: float = 0.0
-    IsSubmitted: Optional[bool] = None
-    SubscriptionID: Optional[str] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    from_user: Optional[OrderUser] = Field(None, alias="FromUser")
+    from_company_id: Optional[str] = Field(None, alias="FromCompanyID")
+    to_company_id: Optional[str] = Field(None, alias="ToCompanyID")
+    from_user_id: Optional[str] = Field(None, alias="FromUserID")
+    billing_address_id: Optional[str] = Field(None, alias="BillingAddressID")
+    billing_address: Optional[Address] = Field(None, alias="BillingAddress")
+    shipping_address_id: Optional[str] = Field(None, alias="ShippingAddressID")
+    comments: Optional[str] = Field(None, alias="Comments")
+    line_item_count: int = Field(0, alias="LineItemCount")
+    status: Optional[OrderStatus] = Field(None, alias="Status")
+    date_created: Optional[str] = Field(None, alias="DateCreated")
+    date_submitted: Optional[str] = Field(None, alias="DateSubmitted")
+    date_approved: Optional[str] = Field(None, alias="DateApproved")
+    date_declined: Optional[str] = Field(None, alias="DateDeclined")
+    date_canceled: Optional[str] = Field(None, alias="DateCanceled")
+    date_completed: Optional[str] = Field(None, alias="DateCompleted")
+    last_updated: Optional[str] = Field(None, alias="LastUpdated")
+    subtotal: float = Field(0.0, alias="Subtotal")
+    shipping_cost: Optional[float] = Field(None, alias="ShippingCost")
+    tax_cost: Optional[float] = Field(None, alias="TaxCost")
+    gratuity: float = Field(0, alias="Gratuity")
+    fees: float = Field(0, alias="Fees")
+    base_discount: float = Field(0.0, alias="BaseDiscount")
+    promotion_discount: float = Field(0.0, alias="PromotionDiscount")
+    currency: Optional[str] = Field(None, alias="Currency")
+    total: float = Field(0.0, alias="Total")
+    is_submitted: Optional[bool] = Field(None, alias="IsSubmitted")
+    subscription_id: Optional[str] = Field(None, alias="SubscriptionID")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 _Order = Order

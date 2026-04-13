@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 from .price_schedule import PriceMarkupType
@@ -16,73 +17,73 @@ class LineItemProduct(OrderCloudModel, Generic[XP]):
     """An OrderCloud LineItemProduct.
 
     Attributes:
-        ID:
-        Name:
-        Description:
-        Returnable:
-        QuantityMultiplier:
-        ShipWeight:
-        ShipHeight:
-        ShipWidth:
-        ShipLength:
-        DefaultSupplierID:
-        ParentID:
+        id:
+        name:
+        description:
+        returnable:
+        quantity_multiplier:
+        ship_weight:
+        ship_height:
+        ship_width:
+        ship_length:
+        default_supplier_id:
+        parent_id:
         xp:
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    Description: Optional[str] = None
-    Returnable: Optional[bool] = None
-    QuantityMultiplier: Optional[int] = None
-    ShipWeight: Optional[float] = None
-    ShipHeight: Optional[float] = None
-    ShipWidth: Optional[float] = None
-    ShipLength: Optional[float] = None
-    DefaultSupplierID: Optional[str] = None
-    ParentID: Optional[str] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    description: Optional[str] = Field(None, alias="Description")
+    returnable: Optional[bool] = Field(None, alias="Returnable")
+    quantity_multiplier: Optional[int] = Field(None, alias="QuantityMultiplier")
+    ship_weight: Optional[float] = Field(None, alias="ShipWeight")
+    ship_height: Optional[float] = Field(None, alias="ShipHeight")
+    ship_width: Optional[float] = Field(None, alias="ShipWidth")
+    ship_length: Optional[float] = Field(None, alias="ShipLength")
+    default_supplier_id: Optional[str] = Field(None, alias="DefaultSupplierID")
+    parent_id: Optional[str] = Field(None, alias="ParentID")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class LineItemVariant(OrderCloudModel, Generic[XP]):
     """An OrderCloud LineItemVariant.
 
     Attributes:
-        ID:
-        Name:
-        Description:
-        ShipWeight:
-        ShipHeight:
-        ShipWidth:
-        ShipLength:
+        id:
+        name:
+        description:
+        ship_weight:
+        ship_height:
+        ship_width:
+        ship_length:
         xp:
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    Description: Optional[str] = None
-    ShipWeight: Optional[float] = None
-    ShipHeight: Optional[float] = None
-    ShipWidth: Optional[float] = None
-    ShipLength: Optional[float] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    description: Optional[str] = Field(None, alias="Description")
+    ship_weight: Optional[float] = Field(None, alias="ShipWeight")
+    ship_height: Optional[float] = Field(None, alias="ShipHeight")
+    ship_width: Optional[float] = Field(None, alias="ShipWidth")
+    ship_length: Optional[float] = Field(None, alias="ShipLength")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class LineItemSpec(OrderCloudModel):
     """An OrderCloud LineItemSpec.
 
     Attributes:
-        SpecID:
-        Name:  (read-only)
-        OptionID:
-        Value:
-        PriceMarkupType:
-        PriceMarkup:
+        spec_id:
+        name:  (read-only)
+        option_id:
+        value:
+        price_markup_type:
+        price_markup:
     """
 
-    SpecID: Optional[str] = None
-    Name: Optional[str] = None
-    OptionID: Optional[str] = None
-    Value: Optional[str] = None
-    PriceMarkupType: Optional[_PriceMarkupType] = None
-    PriceMarkup: Optional[float] = None
+    spec_id: Optional[str] = Field(None, alias="SpecID")
+    name: Optional[str] = Field(None, alias="Name")
+    option_id: Optional[str] = Field(None, alias="OptionID")
+    value: Optional[str] = Field(None, alias="Value")
+    price_markup_type: Optional[_PriceMarkupType] = Field(None, alias="PriceMarkupType")
+    price_markup: Optional[float] = Field(None, alias="PriceMarkup")

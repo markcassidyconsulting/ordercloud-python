@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 
@@ -14,21 +15,21 @@ class CreditCard(OrderCloudModel, Generic[XP]):
     """An OrderCloud CreditCard.
 
     Attributes:
-        ID:
-        Token: Token provided by the credit card processor used to reference the card with that processor.
-        DateCreated:  (read-only)
-        CardType:
-        PartialAccountNumber:
-        CardholderName:
-        ExpirationDate:
+        id:
+        token: Token provided by the credit card processor used to reference the card with that processor.
+        date_created:  (read-only)
+        card_type:
+        partial_account_number:
+        cardholder_name:
+        expiration_date:
         xp:
     """
 
-    ID: Optional[str] = None
-    Token: Optional[str] = None
-    DateCreated: Optional[str] = None
-    CardType: Optional[str] = None
-    PartialAccountNumber: Optional[str] = None
-    CardholderName: Optional[str] = None
-    ExpirationDate: Optional[str] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    token: Optional[str] = Field(None, alias="Token")
+    date_created: Optional[str] = Field(None, alias="DateCreated")
+    card_type: Optional[str] = Field(None, alias="CardType")
+    partial_account_number: Optional[str] = Field(None, alias="PartialAccountNumber")
+    cardholder_name: Optional[str] = Field(None, alias="CardholderName")
+    expiration_date: Optional[str] = Field(None, alias="ExpirationDate")
+    xp: Optional[XP] = Field(None, alias="xp")

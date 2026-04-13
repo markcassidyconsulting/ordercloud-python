@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 
@@ -14,19 +15,19 @@ class SpendingAccount(OrderCloudModel, Generic[XP]):
     """An OrderCloud SpendingAccount.
 
     Attributes:
-        ID:
-        Name:
-        Balance:
-        AllowAsPaymentMethod: If true, a payment can be created referencing the SpendingAccountID.
-        StartDate:
-        EndDate:
+        id:
+        name:
+        balance:
+        allow_as_payment_method: If true, a payment can be created referencing the SpendingAccountID.
+        start_date:
+        end_date:
         xp:
     """
 
-    ID: Optional[str] = None
-    Name: Optional[str] = None
-    Balance: Optional[float] = None
-    AllowAsPaymentMethod: Optional[bool] = None
-    StartDate: Optional[str] = None
-    EndDate: Optional[str] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    name: Optional[str] = Field(None, alias="Name")
+    balance: Optional[float] = Field(None, alias="Balance")
+    allow_as_payment_method: Optional[bool] = Field(None, alias="AllowAsPaymentMethod")
+    start_date: Optional[str] = Field(None, alias="StartDate")
+    end_date: Optional[str] = Field(None, alias="EndDate")
+    xp: Optional[XP] = Field(None, alias="xp")

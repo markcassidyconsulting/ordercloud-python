@@ -63,8 +63,8 @@ class TestProductsResource:
         resource = ProductsResource(http_client)
         page = await resource.list(search="widget", page_size=20)
         assert isinstance(page, ListPage)
-        assert len(page.Items) == 1
-        assert page.Items[0].ID == "p1"
+        assert len(page.items) == 1
+        assert page.items[0].id == "p1"
 
     @respx.mock
     async def test_list_passes_search_params(self, http_client: HttpClient):
@@ -97,7 +97,7 @@ class TestProductsResource:
         resource = ProductsResource(http_client)
         product = await resource.get("my-prod")
         assert isinstance(product, Product)
-        assert product.ID == "my-prod"
+        assert product.id == "my-prod"
 
     @respx.mock
     async def test_create(self, http_client: HttpClient):
@@ -106,7 +106,7 @@ class TestProductsResource:
         )
         resource = ProductsResource(http_client)
         product = await resource.create(Product(Name="Widget", Active=True))
-        assert product.ID == "new-id"
+        assert product.id == "new-id"
         body = route.calls[0].request.content.decode()
         assert '"Name"' in body
 
@@ -117,7 +117,7 @@ class TestProductsResource:
         )
         resource = ProductsResource(http_client)
         product = await resource.create({"Name": "Dict Product", "Active": True})
-        assert product.ID == "d1"
+        assert product.id == "d1"
 
     @respx.mock
     async def test_save(self, http_client: HttpClient):
@@ -126,7 +126,7 @@ class TestProductsResource:
         )
         resource = ProductsResource(http_client)
         product = await resource.save("p1", Product(Name="Updated"))
-        assert product.Name == "Updated"
+        assert product.name == "Updated"
 
     @respx.mock
     async def test_patch(self, http_client: HttpClient):
@@ -135,7 +135,7 @@ class TestProductsResource:
         )
         resource = ProductsResource(http_client)
         product = await resource.patch("p1", {"Name": "Patched"})
-        assert product.Name == "Patched"
+        assert product.name == "Patched"
 
     @respx.mock
     async def test_delete(self, http_client: HttpClient):
@@ -159,7 +159,7 @@ class TestOrdersResource:
         )
         resource = OrdersResource(http_client)
         page = await resource.list(OrderDirection.Incoming)
-        assert len(page.Items) == 1
+        assert len(page.items) == 1
 
     @respx.mock
     async def test_get(self, http_client: HttpClient):
@@ -168,7 +168,7 @@ class TestOrdersResource:
         )
         resource = OrdersResource(http_client)
         order = await resource.get(OrderDirection.Outgoing, "ord-1")
-        assert order.Status == OrderStatus.Unsubmitted
+        assert order.status == OrderStatus.Unsubmitted
 
     @respx.mock
     async def test_create(self, http_client: HttpClient):
@@ -177,7 +177,7 @@ class TestOrdersResource:
         )
         resource = OrdersResource(http_client)
         order = await resource.create(OrderDirection.Outgoing, Order(Comments="Rush"))
-        assert order.ID == "new-ord"
+        assert order.id == "new-ord"
 
     @respx.mock
     async def test_submit(self, http_client: HttpClient):
@@ -186,7 +186,7 @@ class TestOrdersResource:
         )
         resource = OrdersResource(http_client)
         order = await resource.submit(OrderDirection.Outgoing, "o1")
-        assert order.Status == OrderStatus.AwaitingApproval
+        assert order.status == OrderStatus.AwaitingApproval
         assert route.called
 
     @respx.mock
@@ -202,7 +202,7 @@ class TestOrdersResource:
             "o1",
             OrderApprovalInfo(Comments="Approved"),
         )
-        assert order.Status == OrderStatus.Open
+        assert order.status == OrderStatus.Open
 
     @respx.mock
     async def test_cancel(self, http_client: HttpClient):
@@ -211,7 +211,7 @@ class TestOrdersResource:
         )
         resource = OrdersResource(http_client)
         order = await resource.cancel(OrderDirection.Incoming, "o1")
-        assert order.Status == OrderStatus.Canceled
+        assert order.status == OrderStatus.Canceled
 
     @respx.mock
     async def test_delete(self, http_client: HttpClient):
@@ -236,8 +236,8 @@ class TestLineItemsResource:
         )
         resource = LineItemsResource(http_client)
         page = await resource.list(OrderDirection.Outgoing, "o1")
-        assert len(page.Items) == 1
-        assert page.Items[0].Quantity == 2
+        assert len(page.items) == 1
+        assert page.items[0].quantity == 2
 
     @respx.mock
     async def test_create(self, http_client: HttpClient):
@@ -248,7 +248,7 @@ class TestLineItemsResource:
         li = await resource.create(
             OrderDirection.Outgoing, "o1", LineItem(ProductID="p1", Quantity=3)
         )
-        assert li.ID == "li-new"
+        assert li.id == "li-new"
 
     @respx.mock
     async def test_get(self, http_client: HttpClient):
@@ -257,7 +257,7 @@ class TestLineItemsResource:
         )
         resource = LineItemsResource(http_client)
         li = await resource.get(OrderDirection.Outgoing, "o1", "li1")
-        assert li.Quantity == 5
+        assert li.quantity == 5
 
 
 # ---------------------------------------------------------------------------
@@ -273,7 +273,7 @@ class TestPhase2Resources:
         )
         resource = BuyersResource(http_client)
         page = await resource.list()
-        assert page.Items[0].Name == "Acme"
+        assert page.items[0].name == "Acme"
 
     @respx.mock
     async def test_promotions_create(self, http_client: HttpClient):
@@ -282,7 +282,7 @@ class TestPhase2Resources:
         )
         resource = PromotionsResource(http_client)
         promo = await resource.create(Promotion(Code="SAVE10", Name="10% Off"))
-        assert promo.Code == "SAVE10"
+        assert promo.code == "SAVE10"
 
     @respx.mock
     async def test_shipments_get(self, http_client: HttpClient):
@@ -291,7 +291,7 @@ class TestPhase2Resources:
         )
         resource = ShipmentsResource(http_client)
         shipment = await resource.get("ship-1")
-        assert shipment.BuyerID == "b1"
+        assert shipment.buyer_id == "b1"
 
 
 # ---------------------------------------------------------------------------
@@ -331,8 +331,8 @@ class TestPagination:
         resource = BuyersResource(http_client)
         items = [item async for item in paginate(resource.list, page_size=2)]
         assert len(items) == 2
-        assert items[0].ID == "b1"
-        assert items[1].ID == "b2"
+        assert items[0].id == "b1"
+        assert items[1].id == "b2"
 
     @respx.mock
     async def test_multiple_pages(self, http_client: HttpClient):
@@ -370,7 +370,7 @@ class TestPagination:
         resource = BuyersResource(http_client)
         items = [item async for item in paginate(resource.list, page_size=2)]
         assert len(items) == 5
-        assert [b.ID for b in items] == ["b1", "b2", "b3", "b4", "b5"]
+        assert [b.id for b in items] == ["b1", "b2", "b3", "b4", "b5"]
         assert route.call_count == 3
 
     @respx.mock
@@ -416,7 +416,7 @@ class TestPagination:
         resource = OrdersResource(http_client)
         items = [item async for item in paginate(resource.list, OrderDirection.Incoming)]
         assert len(items) == 1
-        assert items[0].ID == "o1"
+        assert items[0].id == "o1"
 
 
 # ---------------------------------------------------------------------------
@@ -443,7 +443,7 @@ class TestAsyncClientLifecycle:
         client._token_manager._token = AccessToken("mock-token-12345", expires_in=600)
 
         product = await client.products.get("p1")
-        assert product.ID == "p1"
+        assert product.id == "p1"
         await client.close()
 
     @respx.mock
@@ -465,7 +465,7 @@ class TestAsyncClientLifecycle:
 
         async with client as c:
             product = await c.products.get("p1")
-            assert product.ID == "p1"
+            assert product.id == "p1"
 
     @respx.mock
     async def test_list_with_depth_param(self, http_client: HttpClient):
@@ -480,6 +480,6 @@ class TestAsyncClientLifecycle:
         )
         resource = CategoriesResource(http_client)
         page = await resource.list("cat1", depth="all")
-        assert len(page.Items) == 1
+        assert len(page.items) == 1
         url = str(route.calls[0].request.url)
         assert "depth=all" in url

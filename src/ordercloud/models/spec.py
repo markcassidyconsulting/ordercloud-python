@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from typing import Generic, Optional
+from pydantic import Field
 
 from .shared import OrderCloudModel, XP
 from .price_schedule import PriceMarkupType
@@ -16,51 +17,51 @@ class SpecOption(OrderCloudModel, Generic[XP]):
     """An OrderCloud SpecOption.
 
     Attributes:
-        ID:
-        Value:
-        ListOrder:
-        IsOpenText:
-        PriceMarkupType: Used to change the price of a product when a specific spec option is selected.
-        PriceMarkup:
+        id:
+        value:
+        list_order:
+        is_open_text:
+        price_markup_type: Used to change the price of a product when a specific spec option is selected.
+        price_markup:
         xp:
     """
 
-    ID: Optional[str] = None
-    Value: Optional[str] = None
-    ListOrder: Optional[int] = None
-    IsOpenText: Optional[bool] = None
-    PriceMarkupType: Optional[_PriceMarkupType] = None
-    PriceMarkup: Optional[float] = None
-    xp: Optional[XP] = None
+    id: Optional[str] = Field(None, alias="ID")
+    value: Optional[str] = Field(None, alias="Value")
+    list_order: Optional[int] = Field(None, alias="ListOrder")
+    is_open_text: Optional[bool] = Field(None, alias="IsOpenText")
+    price_markup_type: Optional[_PriceMarkupType] = Field(None, alias="PriceMarkupType")
+    price_markup: Optional[float] = Field(None, alias="PriceMarkup")
+    xp: Optional[XP] = Field(None, alias="xp")
 
 
 class Spec(OrderCloudModel, Generic[XP]):
     """An OrderCloud Spec.
 
     Attributes:
-        OwnerID: ID of the organization that owns the spec. Only the marketplace owner can override the OwnerID on create.
-        ID:
-        ListOrder:
-        Name:
-        DefaultValue: If no value is passed in the line item spec, this value will be used.
-        Required:
-        AllowOpenText: For spec options that are not pre-defined, such as FirstName for a business card.
-        DefaultOptionID: This property can only be written to after both the spec and options have been created. If no Spec.OptionID is passed in the line item spec, this option will be used.
-        DefinesVariant: If true, each unique combinations of this spec's options should map to a unique product variant.
+        owner_id: ID of the organization that owns the spec. Only the marketplace owner can override the OwnerID on create.
+        id:
+        list_order:
+        name:
+        default_value: If no value is passed in the line item spec, this value will be used.
+        required:
+        allow_open_text: For spec options that are not pre-defined, such as FirstName for a business card.
+        default_option_id: This property can only be written to after both the spec and options have been created. If no Spec.OptionID is passed in the line item spec, this option will be used.
+        defines_variant: If true, each unique combinations of this spec's options should map to a unique product variant.
         xp:
-        OptionCount:  (read-only)
-        Options:  (read-only)
+        option_count:  (read-only)
+        options:  (read-only)
     """
 
-    OwnerID: Optional[str] = None
-    ID: Optional[str] = None
-    ListOrder: Optional[int] = None
-    Name: Optional[str] = None
-    DefaultValue: Optional[str] = None
-    Required: Optional[bool] = None
-    AllowOpenText: Optional[bool] = None
-    DefaultOptionID: Optional[str] = None
-    DefinesVariant: Optional[bool] = None
-    xp: Optional[XP] = None
-    OptionCount: int = 0
-    Options: Optional[list[SpecOption]] = None
+    owner_id: Optional[str] = Field(None, alias="OwnerID")
+    id: Optional[str] = Field(None, alias="ID")
+    list_order: Optional[int] = Field(None, alias="ListOrder")
+    name: Optional[str] = Field(None, alias="Name")
+    default_value: Optional[str] = Field(None, alias="DefaultValue")
+    required: Optional[bool] = Field(None, alias="Required")
+    allow_open_text: Optional[bool] = Field(None, alias="AllowOpenText")
+    default_option_id: Optional[str] = Field(None, alias="DefaultOptionID")
+    defines_variant: Optional[bool] = Field(None, alias="DefinesVariant")
+    xp: Optional[XP] = Field(None, alias="xp")
+    option_count: int = Field(0, alias="OptionCount")
+    options: Optional[list[SpecOption]] = Field(None, alias="Options")
