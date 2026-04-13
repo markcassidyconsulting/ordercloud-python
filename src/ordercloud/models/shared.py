@@ -6,6 +6,7 @@ JSON representation directly.  Python-side access is also PascalCase
 trade-off for zero-friction serialisation round-trips.
 """
 
+from enum import Enum
 from typing import Any, Generic, Optional, TypeVar
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -15,6 +16,7 @@ XP = TypeVar("XP")
 
 __all__ = [
     "OrderCloudModel",
+    "OrderCloudEnum",
     "XP",
     "Meta",
     "ListFacetValue",
@@ -22,6 +24,21 @@ __all__ = [
     "MetaWithFacets",
     "ListPage",
 ]
+
+
+class OrderCloudEnum(str, Enum):
+    """Base for all OrderCloud string enums.
+
+    Overrides ``__str__`` and ``__format__`` to return the raw value,
+    ensuring consistent behaviour in f-strings across Python 3.10-3.13.
+    (Python 3.11 changed ``Enum.__format__`` to include the class name.)
+    """
+
+    def __str__(self) -> str:
+        return str(self.value)
+
+    def __format__(self, format_spec: str) -> str:
+        return str(self.value).__format__(format_spec)
 
 
 class OrderCloudModel(BaseModel):

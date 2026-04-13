@@ -3,16 +3,15 @@
 """OrderCloud IntegrationEventType and related models."""
 
 from __future__ import annotations
-from enum import Enum
 from typing import Any, Optional
 
-from .shared import OrderCloudModel
+from .shared import OrderCloudEnum, OrderCloudModel
 from .misc import ApiRole
 
 __all__ = ["IntegrationEventType", "TrackingEventType", "IntegrationEvent", "TrackingEvent"]
 
 
-class IntegrationEventType(str, Enum):
+class IntegrationEventType(OrderCloudEnum):
     """"""
 
     OrderCheckout = "OrderCheckout"
@@ -21,7 +20,7 @@ class IntegrationEventType(str, Enum):
     AddToCart = "AddToCart"
 
 
-class TrackingEventType(str, Enum):
+class TrackingEventType(OrderCloudEnum):
     """"""
 
     UserLoggedIn = "UserLoggedIn"
