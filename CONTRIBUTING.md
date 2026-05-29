@@ -115,3 +115,19 @@ If you need to change how models or resources are structured, the relevant files
 - Include tests for new functionality or bug fixes.
 - All CI checks must pass (lint, format, typecheck, tests across 4 Python versions).
 - Update `CHANGELOG.md` if the change is user-facing.
+
+## Branching & Merging
+
+`main` is protected by a repository ruleset: every change lands through a pull request with all required status checks green. This applies to **everyone, including the maintainer** — there are no direct pushes to `main`, and the ruleset carries no bypass. Force-pushes and branch deletion are blocked.
+
+No reviewing approval is required (this is a single-maintainer project), so the practical flow for a small change is:
+
+```bash
+git checkout -b fix/short-description
+# ...make the change, commit...
+git push -u origin fix/short-description
+gh pr create --fill
+gh pr merge --auto --squash --delete-branch
+```
+
+`--auto` queues the merge to happen the moment CI passes, so there's no need to sit and watch the checks. The full matrix takes a few minutes; a slight delay before merge is expected and accepted. Dependabot PRs follow the same path automatically.
