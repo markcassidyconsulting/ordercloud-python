@@ -16,6 +16,7 @@ __all__ = [
     "SyncBuyer",
     "SyncBuyerUser",
     "SyncBuyerUserGroup",
+    "SyncCatalog",
     "SyncCategory",
     "SyncInventoryRecord",
     "SyncProduct",
@@ -114,6 +115,16 @@ class SyncBuyerUserGroup(OrderCloudModel):
 
     buyer_id: Optional[str] = Field(None, alias="BuyerID")
     user_group_id: Optional[str] = Field(None, alias="UserGroupID")
+
+
+class SyncCatalog(OrderCloudModel):
+    """An OrderCloud SyncCatalog.
+
+    Attributes:
+        catalog_id:
+    """
+
+    catalog_id: Optional[str] = Field(None, alias="CatalogID")
 
 
 class SyncCategory(OrderCloudModel):

@@ -15,6 +15,7 @@ __all__ = [
     "RemovedPromo",
     "EligiblePromotion",
     "RefreshPromosResponse",
+    "PromotionCode",
     "Promotion",
 ]
 
@@ -55,7 +56,7 @@ class AddedPromo(OrderCloudModel, Generic[XP]):
         amount:
         id:
         line_item_level: If true, certain eligible expression requirements must be met, and the PromotionDiscount will be applied at the line item level.
-        code: Must be unique. Entered by buyer when adding promo to order.
+        code: Must be unique within a marketplace. Entered by buyer when adding promo to order. Required when GeneratedCodeCount is 0.
         name:
         redemption_limit: Limit the total number of orders this promotion can be applied to across all users.
         redemption_limit_per_user: Limit the total number of orders this promotion can be applied to per user.
@@ -76,6 +77,9 @@ class AddedPromo(OrderCloudModel, Generic[XP]):
         active:
         use_integration:
         priority: Used to control the order in which promotions are applied when calling the auto apply or refresh endpoint.
+        generated_code_count: Number of platform-generated single-use codes for this promotion. Mutually exclusive with Code.
+        generated_code_length: Character length of each generated code (excluding prefix). Required when GeneratedCodeCount > 0.
+        generated_code_prefix: Optional prefix prepended to generated codes, separated by a dash.
         xp:
     """
 
@@ -104,6 +108,9 @@ class AddedPromo(OrderCloudModel, Generic[XP]):
     active: bool = Field(True, alias="Active")
     use_integration: Optional[bool] = Field(None, alias="UseIntegration")
     priority: Optional[int] = Field(None, alias="Priority")
+    generated_code_count: Optional[int] = Field(None, alias="GeneratedCodeCount")
+    generated_code_length: Optional[int] = Field(None, alias="GeneratedCodeLength")
+    generated_code_prefix: Optional[str] = Field(None, alias="GeneratedCodePrefix")
     xp: Optional[XP] = Field(None, alias="xp")
 
 
@@ -117,7 +124,7 @@ class RemovedPromo(OrderCloudModel, Generic[XP]):
         amount:
         id:
         line_item_level: If true, certain eligible expression requirements must be met, and the PromotionDiscount will be applied at the line item level.
-        code: Must be unique. Entered by buyer when adding promo to order.
+        code: Must be unique within a marketplace. Entered by buyer when adding promo to order. Required when GeneratedCodeCount is 0.
         name:
         redemption_limit: Limit the total number of orders this promotion can be applied to across all users.
         redemption_limit_per_user: Limit the total number of orders this promotion can be applied to per user.
@@ -138,6 +145,9 @@ class RemovedPromo(OrderCloudModel, Generic[XP]):
         active:
         use_integration:
         priority: Used to control the order in which promotions are applied when calling the auto apply or refresh endpoint.
+        generated_code_count: Number of platform-generated single-use codes for this promotion. Mutually exclusive with Code.
+        generated_code_length: Character length of each generated code (excluding prefix). Required when GeneratedCodeCount > 0.
+        generated_code_prefix: Optional prefix prepended to generated codes, separated by a dash.
         xp:
     """
 
@@ -168,6 +178,9 @@ class RemovedPromo(OrderCloudModel, Generic[XP]):
     active: bool = Field(True, alias="Active")
     use_integration: Optional[bool] = Field(None, alias="UseIntegration")
     priority: Optional[int] = Field(None, alias="Priority")
+    generated_code_count: Optional[int] = Field(None, alias="GeneratedCodeCount")
+    generated_code_length: Optional[int] = Field(None, alias="GeneratedCodeLength")
+    generated_code_prefix: Optional[str] = Field(None, alias="GeneratedCodePrefix")
     xp: Optional[XP] = Field(None, alias="xp")
 
 
@@ -178,7 +191,7 @@ class EligiblePromotion(OrderCloudModel, Generic[XP]):
         amount:  (read-only)
         id:
         line_item_level: If true, certain eligible expression requirements must be met, and the PromotionDiscount will be applied at the line item level.
-        code: Must be unique. Entered by buyer when adding promo to order.
+        code: Must be unique within a marketplace. Entered by buyer when adding promo to order. Required when GeneratedCodeCount is 0.
         name:
         redemption_limit: Limit the total number of orders this promotion can be applied to across all users.
         redemption_limit_per_user: Limit the total number of orders this promotion can be applied to per user.
@@ -199,6 +212,9 @@ class EligiblePromotion(OrderCloudModel, Generic[XP]):
         active:
         use_integration:
         priority: Used to control the order in which promotions are applied when calling the auto apply or refresh endpoint.
+        generated_code_count: Number of platform-generated single-use codes for this promotion. Mutually exclusive with Code.
+        generated_code_length: Character length of each generated code (excluding prefix). Required when GeneratedCodeCount > 0.
+        generated_code_prefix: Optional prefix prepended to generated codes, separated by a dash.
         xp:
     """
 
@@ -226,6 +242,9 @@ class EligiblePromotion(OrderCloudModel, Generic[XP]):
     active: bool = Field(True, alias="Active")
     use_integration: Optional[bool] = Field(None, alias="UseIntegration")
     priority: Optional[int] = Field(None, alias="Priority")
+    generated_code_count: Optional[int] = Field(None, alias="GeneratedCodeCount")
+    generated_code_length: Optional[int] = Field(None, alias="GeneratedCodeLength")
+    generated_code_prefix: Optional[str] = Field(None, alias="GeneratedCodePrefix")
     xp: Optional[XP] = Field(None, alias="xp")
 
 
@@ -241,13 +260,25 @@ class RefreshPromosResponse(OrderCloudModel):
     promos_removed: Optional[list[RemovedPromo]] = Field(None, alias="PromosRemoved")
 
 
+class PromotionCode(OrderCloudModel):
+    """An OrderCloud PromotionCode.
+
+    Attributes:
+        code:
+        redeemed:
+    """
+
+    code: Optional[str] = Field(None, alias="Code")
+    redeemed: Optional[bool] = Field(None, alias="Redeemed")
+
+
 class Promotion(OrderCloudModel, Generic[XP]):
     """An OrderCloud Promotion.
 
     Attributes:
         id:
         line_item_level: If true, certain eligible expression requirements must be met, and the PromotionDiscount will be applied at the line item level.
-        code: Must be unique. Entered by buyer when adding promo to order.
+        code: Must be unique within a marketplace. Entered by buyer when adding promo to order. Required when GeneratedCodeCount is 0.
         name:
         redemption_limit: Limit the total number of orders this promotion can be applied to across all users.
         redemption_limit_per_user: Limit the total number of orders this promotion can be applied to per user.
@@ -268,6 +299,9 @@ class Promotion(OrderCloudModel, Generic[XP]):
         active:
         use_integration:
         priority: Used to control the order in which promotions are applied when calling the auto apply or refresh endpoint.
+        generated_code_count: Number of platform-generated single-use codes for this promotion. Mutually exclusive with Code.
+        generated_code_length: Character length of each generated code (excluding prefix). Required when GeneratedCodeCount > 0.
+        generated_code_prefix: Optional prefix prepended to generated codes, separated by a dash.
         xp:
     """
 
@@ -294,4 +328,7 @@ class Promotion(OrderCloudModel, Generic[XP]):
     active: bool = Field(True, alias="Active")
     use_integration: Optional[bool] = Field(None, alias="UseIntegration")
     priority: Optional[int] = Field(None, alias="Priority")
+    generated_code_count: Optional[int] = Field(None, alias="GeneratedCodeCount")
+    generated_code_length: Optional[int] = Field(None, alias="GeneratedCodeLength")
+    generated_code_prefix: Optional[str] = Field(None, alias="GeneratedCodePrefix")
     xp: Optional[XP] = Field(None, alias="xp")

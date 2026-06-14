@@ -10,7 +10,7 @@
 
 A fully typed, async-first Python SDK for [Sitecore OrderCloud](https://ordercloud.io).
 
-**Complete API coverage** — all 632 operations across 60 resources, generated from the official OpenAPI spec. Built for modern Python:
+**Complete API coverage** — all 639 operations across 60 resources, generated from the official OpenAPI spec. Built for modern Python:
 
 - **Async and sync clients** — `async with OrderCloudClient(...)` or `with SyncOrderCloudClient(...)`. Same API shape, your choice of runtime.
 - **Pydantic v2 models** — every API resource is a typed, validated model. snake_case fields, PascalCase aliases for API compatibility.
@@ -20,7 +20,7 @@ A fully typed, async-first Python SDK for [Sitecore OrderCloud](https://orderclo
 - **Middleware hooks** — intercept requests and responses for logging, metrics, or header injection.
 - **Structured logging** — standard Python `logging` module, DEBUG/WARNING levels.
 - **Full type annotations** — `py.typed` marker for downstream type checking with mypy, pyright, etc.
-- **784 tests, 97% coverage** — 759 unit tests (mocked HTTP) + 25 integration tests (live sandbox).
+- **791 tests, 97% coverage** — 766 unit tests (mocked HTTP) + 25 integration tests (live sandbox).
 
 ## Installation
 
@@ -204,14 +204,14 @@ Before-request hooks receive a mutable `RequestContext` — modify `headers`, `p
 
 ## API Coverage
 
-The SDK covers **all 60 resources** and **632 operations** in the OrderCloud API. Models and resource clients are generated from the official OpenAPI v3 spec (version 1.0.445).
+The SDK covers **all 60 resources** and **639 operations** in the OrderCloud API. Models and resource clients are generated from the official OpenAPI v3 spec (version 1.0.454).
 
 ### Core Commerce
 
 | Resource | Operations | Highlights |
 |----------|-----------|------------|
 | Products | 18 | CRUD, variants, specs, suppliers, assignments |
-| Orders | 29 | CRUD, submit, approve, decline, cancel, complete, forward, split, ship, promotions |
+| Orders | 30 | CRUD, submit, approve, decline, cancel, complete, forward, split, ship, repeat, promotions |
 | Line Items | 9 | CRUD, shipping address management, cross-order listing |
 | Cart | 37 | Full shopping cart lifecycle, checkout, payments, promotions |
 | Bundles | 12 | CRUD, product/catalog assignments |
@@ -235,7 +235,7 @@ The SDK covers **all 60 resources** and **632 operations** in the OrderCloud API
 | Resource | Operations | Highlights |
 |----------|-----------|------------|
 | Price Schedules | 8 | CRUD, price breaks |
-| Promotions | 9 | CRUD, assignments |
+| Promotions | 10 | CRUD, assignments, generated codes |
 | Discounts | 9 | CRUD, assignments |
 | Specs | 15 | CRUD, options, product assignments |
 
@@ -267,7 +267,7 @@ The SDK covers **all 60 resources** and **632 operations** in the OrderCloud API
 | Integration Events | 10 | CRUD, calculate, estimate shipping |
 | Message Senders | 11 | CRUD, assignments, CC listeners |
 | Subscriptions | 6 | CRUD |
-| Entity Syncs | 40 | Full sync infrastructure |
+| Entity Syncs | 45 | Full sync infrastructure (incl. catalogs) |
 | Delivery Configurations | 6 | CRUD |
 | Inventory Records | 18 | CRUD, variant records, assignments |
 
@@ -464,9 +464,9 @@ The test suite is self-bootstrapping — it uses the SDK itself to create all te
 
 ### Test Suite
 
-784 tests across 12 modules.
+791 tests across 12 modules.
 
-**Unit tests (759)** — mocked HTTP via [respx](https://lundberg.github.io/respx/), no network calls:
+**Unit tests (766)** — mocked HTTP via [respx](https://lundberg.github.io/respx/), no network calls:
 
 | Module | Tests | Purpose |
 |--------|-------|---------|
@@ -474,7 +474,7 @@ The test suite is self-bootstrapping — it uses the SDK itself to create all te
 | `test_http.py` | 16 | HTTP client, error parsing, retries |
 | `test_models.py` | 28 | Model round-trips, enums, xp, ListPage |
 | `test_resources.py` | 22 | Representative resource operations |
-| `test_resource_coverage.py` | 632 | All 60 resources, all 632 operations |
+| `test_resource_coverage.py` | 639 | All 60 resources, all 639 operations |
 | `test_sync_client.py` | 48 | Sync wrapper, pagination |
 
 **Integration tests (25)** — live sandbox, skipped when credentials are absent:

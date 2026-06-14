@@ -3,7 +3,7 @@
 """OrderCloud AccessLevel and related models."""
 
 from __future__ import annotations
-from typing import Generic, Optional
+from typing import Any, Generic, Optional
 from pydantic import Field
 
 from .shared import OrderCloudEnum, OrderCloudModel, XP
@@ -21,6 +21,7 @@ __all__ = [
     "XpIndex",
     "ProductFacet",
     "GroupOrderInvitation",
+    "ApiError",
 ]
 
 
@@ -47,6 +48,7 @@ class ApiRole(OrderCloudEnum):
     AdminUserReader = "AdminUserReader"
     ApprovalRuleAdmin = "ApprovalRuleAdmin"
     ApprovalRuleReader = "ApprovalRuleReader"
+    BulkReader = "BulkReader"
     BundleAdmin = "BundleAdmin"
     BundleAssignmentAdmin = "BundleAssignmentAdmin"
     BundleReader = "BundleReader"
@@ -275,6 +277,20 @@ class GroupOrderInvitation(OrderCloudModel, Generic[XP]):
     order_id: Optional[str] = Field(None, alias="OrderID")
     order_status: Optional[_OrderStatus] = Field(None, alias="OrderStatus")
     xp: Optional[XP] = Field(None, alias="xp")
+
+
+class ApiError(OrderCloudModel):
+    """An OrderCloud ApiError.
+
+    Attributes:
+        error_code:
+        message:
+        data:
+    """
+
+    error_code: Optional[str] = Field(None, alias="ErrorCode")
+    message: Optional[str] = Field(None, alias="Message")
+    data: Optional[dict[str, Any]] = Field(None, alias="Data")
 
 
 _OrderStatus = OrderStatus

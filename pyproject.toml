@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ordercloud-python"
-version = "2026.4.1"
+version = "2026.6.1"
 description = "Idiomatic Python SDK for Sitecore OrderCloud"
 readme = "README.md"
 license = "MIT"

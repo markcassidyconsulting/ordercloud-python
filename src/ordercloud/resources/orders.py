@@ -7,7 +7,14 @@ from typing import Any, Optional, Union
 
 from ..models.address import Address
 from ..models.misc import OrderDirection, SearchType
-from ..models.order import Order, OrderApproval, OrderApprovalInfo, OrderPromotion, OrderSplitResult
+from ..models.order import (
+    Order,
+    OrderApproval,
+    OrderApprovalInfo,
+    OrderPromotion,
+    OrderRepeatResponse,
+    OrderSplitResult,
+)
 from ..models.promotion import EligiblePromotion, RefreshPromosResponse
 from ..models.shipment import Shipment
 from ..models.user import User
@@ -540,6 +547,27 @@ class OrdersResource(BaseResource):
         """
         resp = await self._http.post(f"/orders/{direction}/{order_id}/refreshpromotions")
         return RefreshPromosResponse(**resp.json())
+
+    async def repeat(
+        self,
+        direction: OrderDirection,
+        order_id: str,
+        order: Union[Order, dict[str, Any]],
+    ) -> OrderRepeatResponse:
+        """Repeat an order
+
+        Args:
+            direction: Direction of the order, from the current user's perspective.
+            order_id: ID of the order.
+            order: A ``Order`` model or dict.
+
+        Returns:
+            The OrderRepeatResponse object.
+        """
+        resp = await self._http.post(
+            f"/orders/{direction}/{order_id}/repeat", json=self._serialize(order)
+        )
+        return OrderRepeatResponse(**resp.json())
 
     async def ship(
         self,

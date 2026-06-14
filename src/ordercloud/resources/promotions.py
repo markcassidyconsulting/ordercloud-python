@@ -6,7 +6,7 @@ from __future__ import annotations
 from typing import Any, Optional, Union
 
 from ..models.assignments import PromotionAssignment
-from ..models.promotion import Promotion
+from ..models.promotion import Promotion, PromotionCode
 from ..models.shared import ListPage
 from .base import BaseResource
 
@@ -57,7 +57,7 @@ class PromotionsResource(BaseResource):
         """Create a promotion
 
         Args:
-            promotion: A ``Promotion`` model or dict. Required fields: Code, EligibleExpression.
+            promotion: A ``Promotion`` model or dict. Required fields: EligibleExpression.
 
         Returns:
             The Promotion object.
@@ -89,7 +89,7 @@ class PromotionsResource(BaseResource):
 
         Args:
             promotion_id: ID of the promotion.
-            promotion: A ``Promotion`` model or dict. Required fields: Code, EligibleExpression.
+            promotion: A ``Promotion`` model or dict. Required fields: EligibleExpression.
 
         Returns:
             The Promotion object.
@@ -152,6 +152,30 @@ class PromotionsResource(BaseResource):
         if user_group_id is not None:
             _params["userGroupID"] = user_group_id
         await self._http.delete(f"/promotions/{promotion_id}/assignments", **_params)
+
+    async def list_codes(
+        self,
+        promotion_id: str,
+        *,
+        page: Optional[int] = None,
+        page_size: Optional[int] = None,
+    ) -> ListPage[PromotionCode]:
+        """List promotion codes
+
+        Args:
+            promotion_id: ID of the promotion.
+            page: Page of results to return. When paginating through many items (> page 30), we recommend the "Last ID" method, as outlined in the Advanced Querying documentation.
+            page_size: Number of results to return per page.
+
+        Returns:
+            A paginated list of PromotionCode objects.
+        """
+        params = self._build_list_params(
+            page=page,
+            page_size=page_size,
+        )
+        resp = await self._http.get(f"/promotions/{promotion_id}/codes", **params)
+        return self._parse_list(resp.json(), PromotionCode)
 
     async def list_assignments(
         self,

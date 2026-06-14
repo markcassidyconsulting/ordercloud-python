@@ -31,6 +31,8 @@ from .order import (  # noqa: F401
     ExtendedLineItem,
     OrderWorksheet,
     Order,
+    UnavailableLineItem,
+    OrderRepeatResponse,
     OrderDirection,
     OrderStatus,
 )
@@ -50,6 +52,7 @@ from .order_return import (  # noqa: F401
 )
 from .buyer import (  # noqa: F401
     BuyerPriceBreak,
+    BuyerDiscount,
     BuyerPriceSchedule,
     ProductSeller,
     BuyerAddress,
@@ -98,6 +101,7 @@ from .promotion import (  # noqa: F401
     RemovedPromo,
     EligiblePromotion,
     RefreshPromosResponse,
+    PromotionCode,
     Promotion,
 )
 from .payment import (  # noqa: F401
@@ -201,6 +205,7 @@ from .sync import (  # noqa: F401
     SyncBuyer,
     SyncBuyerUser,
     SyncBuyerUserGroup,
+    SyncCatalog,
     SyncCategory,
     SyncInventoryRecord,
     SyncProduct,
@@ -259,6 +264,7 @@ from .misc import (  # noqa: F401
     XpIndex,
     ProductFacet,
     GroupOrderInvitation,
+    ApiError,
 )
 from .shared import (  # noqa: F401
     ListFacet,
@@ -266,6 +272,5 @@ from .shared import (  # noqa: F401
     ListPage,
     Meta,
     MetaWithFacets,
-    OrderCloudEnum,
     OrderCloudModel,
 )

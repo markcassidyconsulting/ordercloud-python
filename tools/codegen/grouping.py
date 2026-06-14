@@ -70,6 +70,8 @@ SCHEMA_GROUPS: dict[str, list[str]] = {
         "ExtendedLineItem",
         "OrderWorksheet",
         "Order",
+        "UnavailableLineItem",
+        "OrderRepeatResponse",
     ],
     "line_item": [
         "BundleItems",
@@ -87,6 +89,7 @@ SCHEMA_GROUPS: dict[str, list[str]] = {
     ],
     "buyer": [
         "BuyerPriceBreak",
+        "BuyerDiscount",
         "BuyerPriceSchedule",
         "ProductSeller",
         "BuyerAddress",
@@ -136,6 +139,7 @@ SCHEMA_GROUPS: dict[str, list[str]] = {
         "RemovedPromo",
         "EligiblePromotion",
         "RefreshPromosResponse",
+        "PromotionCode",
         "Promotion",
     ],
     "payment": [
@@ -245,6 +249,7 @@ SCHEMA_GROUPS: dict[str, list[str]] = {
         "SyncBuyer",
         "SyncBuyerUser",
         "SyncBuyerUserGroup",
+        "SyncCatalog",
         "SyncCategory",
         "SyncInventoryRecord",
         "SyncProduct",
@@ -308,6 +313,7 @@ SCHEMA_GROUPS: dict[str, list[str]] = {
         "XpIndex",
         "ProductFacet",
         "GroupOrderInvitation",
+        "ApiError",
     ],
 }
 
