@@ -11,6 +11,7 @@ from ..models.sync import (
     SyncBuyer,
     SyncBuyerUser,
     SyncBuyerUserGroup,
+    SyncCatalog,
     SyncCategory,
     SyncInventoryRecord,
     SyncSupplier,
@@ -275,6 +276,69 @@ class EntitySyncsResource(BaseResource):
         """
         await self._http.post(
             "/integrations/entitysync/buyers/users/sync", json=self._serialize(sync_buyer_user)
+        )
+
+    async def get_catalogs(
+        self,
+    ) -> EntitySyncConfig:
+        """Retrieve the entity sync delivery configuration for catalogs
+
+        Returns:
+            The EntitySyncConfig object.
+        """
+        resp = await self._http.get("/integrations/entitysync/catalogs")
+        return EntitySyncConfig(**resp.json())
+
+    async def save_catalogs(
+        self,
+        entity_sync_config: Union[EntitySyncConfig, dict[str, Any]],
+    ) -> EntitySyncConfig:
+        """Create or update the entity sync delivery configuration for catalogs
+
+        Args:
+            entity_sync_config: A ``EntitySyncConfig`` model or dict. Required fields: DeliveryConfigID, SyncEntityChanged, SyncEntityDeleted.
+
+        Returns:
+            The EntitySyncConfig object.
+        """
+        resp = await self._http.put(
+            "/integrations/entitysync/catalogs",
+            json=self._serialize(entity_sync_config),
+        )
+        return EntitySyncConfig(**resp.json())
+
+    async def delete_catalogs(
+        self,
+    ) -> None:
+        """Delete the entity sync delivery configuration for catalogs"""
+        await self._http.delete("/integrations/entitysync/catalogs")
+
+    async def patch_catalogs(
+        self,
+        partial: dict[str, Any],
+    ) -> EntitySyncConfig:
+        """Partially update the entity sync delivery configuration for catalogs
+
+        Args:
+            partial: A dict of fields to update.
+
+        Returns:
+            The EntitySyncConfig object.
+        """
+        resp = await self._http.patch("/integrations/entitysync/catalogs", json=partial)
+        return EntitySyncConfig(**resp.json())
+
+    async def sync_catalog(
+        self,
+        sync_catalog: Union[SyncCatalog, dict[str, Any]],
+    ) -> None:
+        """Sync a catalog
+
+        Args:
+            sync_catalog: A ``SyncCatalog`` model or dict. Required fields: CatalogID.
+        """
+        await self._http.post(
+            "/integrations/entitysync/catalogs/sync", json=self._serialize(sync_catalog)
         )
 
     async def get_categories(

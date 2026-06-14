@@ -31,12 +31,14 @@ class DiscountedPrices(OrderCloudModel):
         sale_price: Discounted sale price per unit.
         subscription_price: Discounted subscription price per unit.
         bundle_price: Discounted bundle price per unit.
+        percent: The discount percentage applied (e.g., 10 for 10% off).
     """
 
     price: Optional[float] = Field(None, alias="Price")
     sale_price: Optional[float] = Field(None, alias="SalePrice")
     subscription_price: Optional[float] = Field(None, alias="SubscriptionPrice")
     bundle_price: Optional[float] = Field(None, alias="BundlePrice")
+    percent: Optional[float] = Field(None, alias="Percent")
 
 
 class Discount(OrderCloudModel, Generic[XP]):

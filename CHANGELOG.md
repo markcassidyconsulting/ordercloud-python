@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 This project uses [Calendar Versioning](https://calver.org/) — `YYYY.MM.N` where `N` is the release number within that month.
 
+## 2026.6.1 — 2026-06-14
+
+Regenerated from the OrderCloud OpenAPI v3 spec, **version 1.0.445 → 1.0.454**. All changes are additive — no breaking changes to existing models or operations. Coverage now spans **639 operations** (was 632) across the same 60 resources, with **173 models** and 17 enums.
+
+### Added
+
+- **Generated promotion codes** — `Promotions.ListCodes` (`GET /promotions/{promotionID}/codes`), the `PromotionCode` model, and `GeneratedCodeCount` / `GeneratedCodeLength` / `GeneratedCodePrefix` fields on the `Promotion` model family (`Promotion`, `OrderPromotion`, `AddedPromo`, `RemovedPromo`, `EligiblePromotion`).
+- **Repeat order** — `Orders.Repeat` (`POST /orders/{direction}/{orderID}/repeat`) with the `OrderRepeatResponse` and `UnavailableLineItem` models.
+- **Catalog entity sync** — five `EntitySyncs` catalog operations (get / save / patch / delete on `/integrations/entitysync/catalogs`, plus `/catalogs/sync`) and the `SyncCatalog` model.
+- **New models** — `BuyerDiscount` (on `BuyerPriceSchedule`) and `ApiError` (the typed error returned within `UnavailableLineItem`).
+- **New fields / values** — `Percent` on `DiscountedPrices`; `BulkReader` added to the `ApiRole` enum.
+
+### Changed
+
+- Bumped package version to `2026.6.1` (CalVer).
+
 ## 2026.4.1 — 2026-04-13
 
 Initial release. Full SDK for the Sitecore OrderCloud API, generated from the OpenAPI v3 spec (version 1.0.445).

@@ -7,11 +7,12 @@ from typing import Generic, Optional
 from pydantic import Field
 
 from .shared import OrderCloudModel, XP
-from .discount import Discount, DiscountedPrices
+from .discount import DiscountedPrices
 from .product import Inventory
 
 __all__ = [
     "BuyerPriceBreak",
+    "BuyerDiscount",
     "BuyerPriceSchedule",
     "ProductSeller",
     "BuyerAddress",
@@ -21,7 +22,6 @@ __all__ = [
     "BuyerGroup",
     "Buyer",
 ]
-_Discount = Discount
 _Inventory = Inventory
 
 
@@ -43,6 +43,18 @@ class BuyerPriceBreak(OrderCloudModel):
     sale_price: Optional[float] = Field(None, alias="SalePrice")
     subscription_price: Optional[float] = Field(None, alias="SubscriptionPrice")
     bundle_price: Optional[float] = Field(None, alias="BundlePrice")
+
+
+class BuyerDiscount(OrderCloudModel):
+    """An OrderCloud BuyerDiscount.
+
+    Attributes:
+        id: ID of the discount.
+        description: Description of the discount.
+    """
+
+    id: Optional[str] = Field(None, alias="ID")
+    description: Optional[str] = Field(None, alias="Description")
 
 
 class BuyerPriceSchedule(OrderCloudModel, Generic[XP]):
@@ -68,7 +80,7 @@ class BuyerPriceSchedule(OrderCloudModel, Generic[XP]):
     """
 
     price_breaks: Optional[list[BuyerPriceBreak]] = Field(None, alias="PriceBreaks")
-    discount: Optional[_Discount] = Field(None, alias="Discount")
+    discount: Optional[BuyerDiscount] = Field(None, alias="Discount")
     owner_id: Optional[str] = Field(None, alias="OwnerID")
     id: Optional[str] = Field(None, alias="ID")
     name: Optional[str] = Field(None, alias="Name")

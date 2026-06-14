@@ -11,7 +11,7 @@ from .address import Address
 from .approval import ApprovalStatus
 from .line_item import LineItem
 from .line_item_types import LineItemProduct, LineItemSpec, LineItemVariant
-from .misc import OrderDirection, OrderStatus
+from .misc import ApiError, OrderDirection, OrderStatus
 from .product import AdHocProduct
 from .promotion import PromotionOverride
 from .shipment import ShipEstimateResponse
@@ -34,6 +34,8 @@ __all__ = [
     "ExtendedLineItem",
     "OrderWorksheet",
     "Order",
+    "UnavailableLineItem",
+    "OrderRepeatResponse",
     "OrderDirection",
     "OrderStatus",
 ]
@@ -98,7 +100,7 @@ class OrderPromotion(OrderCloudModel, Generic[XP]):
         date_applied:  (read-only)
         id:
         line_item_level: If true, certain eligible expression requirements must be met, and the PromotionDiscount will be applied at the line item level.
-        code: Must be unique. Entered by buyer when adding promo to order.
+        code: Must be unique within a marketplace. Entered by buyer when adding promo to order. Required when GeneratedCodeCount is 0.
         name:
         redemption_limit: Limit the total number of orders this promotion can be applied to across all users.
         redemption_limit_per_user: Limit the total number of orders this promotion can be applied to per user.
@@ -119,6 +121,9 @@ class OrderPromotion(OrderCloudModel, Generic[XP]):
         active:
         use_integration:
         priority: Used to control the order in which promotions are applied when calling the auto apply or refresh endpoint.
+        generated_code_count: Number of platform-generated single-use codes for this promotion. Mutually exclusive with Code.
+        generated_code_length: Character length of each generated code (excluding prefix). Required when GeneratedCodeCount > 0.
+        generated_code_prefix: Optional prefix prepended to generated codes, separated by a dash.
         xp:
     """
 
@@ -149,6 +154,9 @@ class OrderPromotion(OrderCloudModel, Generic[XP]):
     active: bool = Field(True, alias="Active")
     use_integration: Optional[bool] = Field(None, alias="UseIntegration")
     priority: Optional[int] = Field(None, alias="Priority")
+    generated_code_count: Optional[int] = Field(None, alias="GeneratedCodeCount")
+    generated_code_length: Optional[int] = Field(None, alias="GeneratedCodeLength")
+    generated_code_prefix: Optional[str] = Field(None, alias="GeneratedCodePrefix")
     xp: Optional[XP] = Field(None, alias="xp")
 
 
@@ -460,6 +468,30 @@ class Order(OrderCloudModel, Generic[XP]):
     is_submitted: Optional[bool] = Field(None, alias="IsSubmitted")
     subscription_id: Optional[str] = Field(None, alias="SubscriptionID")
     xp: Optional[XP] = Field(None, alias="xp")
+
+
+class UnavailableLineItem(OrderCloudModel):
+    """An OrderCloud UnavailableLineItem.
+
+    Attributes:
+        product_id: ID of the product or bundle that could not be added to the new order.
+        error: The error indicating why the item could not be added.
+    """
+
+    product_id: Optional[str] = Field(None, alias="ProductID")
+    error: Optional[ApiError] = Field(None, alias="Error")
+
+
+class OrderRepeatResponse(OrderCloudModel):
+    """An OrderCloud OrderRepeatResponse.
+
+    Attributes:
+        order: The new unsubmitted order created from the original.
+        unavailable_items: Products from the original order that could not be added to the new order.
+    """
+
+    order: Optional[_Order] = Field(None, alias="Order")
+    unavailable_items: Optional[list[UnavailableLineItem]] = Field(None, alias="UnavailableItems")
 
 
 _Order = Order
