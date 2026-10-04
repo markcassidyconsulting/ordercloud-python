@@ -24,3 +24,9 @@ updates:
     labels:
       - "ci"
     open-pull-requests-limit: 5
+    groups:
+      # The init / autobuild / analyze / upload-sarif steps must share one
+      # version, so they are bumped together in a single PR.
+      codeql-action:
+        patterns:
+          - "github/codeql-action*"
