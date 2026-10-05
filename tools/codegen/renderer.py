@@ -9,6 +9,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
 from .ir import ModelGroup, OperationDef, ResourceDef
+from .sensitivity import REDACTION_MARKER, redacted_path_params
 
 __all__ = ["render"]
 
@@ -27,6 +28,28 @@ def _quote_path(path: str) -> str:
     if "{" in path:
         return f'f"{path}"'
     return f'"{path}"'
+
+
+def _path_expr(op: OperationDef) -> str:
+    """Compute the path argument an operation passes to the HTTP client.
+
+    A path with a redacted parameter becomes a ``SensitivePath`` whose
+    ``log_form`` shows ``REDACTION_MARKER`` in place of each redacted value.
+    """
+    wire = _quote_path(op.path_template)
+    redacted = redacted_path_params(op)
+    if not redacted:
+        return wire
+    log_form = op.path_template
+    for param in redacted:
+        placeholder = f"{{{param.name}}}"
+        if placeholder not in log_form:
+            raise ValueError(
+                f"{op.operation_id}: redacted path parameter '{param.name}' has no "
+                f"{placeholder} placeholder in {op.path_template!r}"
+            )
+        log_form = log_form.replace(placeholder, REDACTION_MARKER)
+    return f"SensitivePath(wire={wire}, log_form={_quote_path(log_form)})"
 
 
 def _return_annotation(op: OperationDef) -> str:
@@ -58,9 +81,11 @@ def _create_jinja_env() -> Environment:
     # Register helper functions as globals so templates can call them.
     env.globals["_return_annotation"] = _return_annotation
     env.globals["_return_description"] = _return_description
+    # Resource templates render every HTTP call's path through _path_expr,
+    # never by quoting path_template directly, so redaction cannot be skipped.
+    env.globals["_path_expr"] = _path_expr
     # Register filters.
     env.filters["safe_enum_name"] = _safe_enum_name
-    env.filters["quote_path"] = _quote_path
     return env
 
 

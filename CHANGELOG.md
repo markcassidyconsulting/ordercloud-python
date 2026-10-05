@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 
 This project uses [Calendar Versioning](https://calver.org/) — `YYYY.MM.N` where `N` is the release number within that month.
 
+## 2026.10.2 — 2026-10-05
+
+### Security
+
+- **Credential-bearing path values are no longer written to the SDK's log lines.** The SDK logs requests on the `ordercloud` logger: a `Request:` and a `Response:` line at `DEBUG` for every request, and a `Retry` line at `WARNING` before each retry (retries are off unless `max_retries` is set). In 2026.4.1, 2026.6.1 and 2026.10.1 each of these lines contained the full request path. Two path parameters in the OrderCloud spec carry values that work as credentials, so those values reached the log:
+  - `verificationCode`, in `forgotten_credentials.reset_password_by_verification_code` (`PUT /password/reset/{verificationCode}`).
+  - `invitationID`, in `group_orders.get_token` (`POST /grouporders/{invitationID}/token`, which returns an `AccessToken`). The spec says of group-order invitations: "Contributors may request an access token with the invitation ID".
+
+  The SDK classifies path parameters by name, so every operation that takes an `invitationID` is covered: `group_orders.get_token`, and on `me` the three group-order invitation operations (`get_` / `delete_` / `patch_group_order_invitation`) and the five product-collection invitation operations (`get_` / `delete_` / `patch_` / `accept_` / `decline_product_collection_invitation`). On these ten operations the SDK's log lines now show `***` in place of the value, for example `Request: PUT /password/reset/***` and `Request: POST /me/productcollections/col-1/invitations/accept/***`. Other path values, and the log lines of every other operation, are unchanged.
+- **What this release does not change:**
+  - `httpx` writes its own `HTTP Request: <METHOD> <URL> ...` line at `INFO` on the `httpx` logger, with the full URL including the query string. The SDK does not control that logger. If your application logs at `INFO` or below, set `logging.getLogger("httpx").setLevel(logging.WARNING)`. See [SECURITY.md](SECURITY.md#logging).
+  - Middleware hooks receive the concrete values: `RequestContext.path`, `url` and `params` are what is sent to the API.
+  - Exceptions that `httpx` raises for transport failures (timeouts, connection errors) carry the request, and with it the full URL, as their `request` attribute.
+- The code generator now refuses to generate while any path-parameter name in the spec is unclassified. Every name is listed in `tools/codegen/sensitivity.py` as sensitive or not sensitive, and a name missing from the not-sensitive list is redacted. See [CONTRIBUTING.md](CONTRIBUTING.md#path-parameter-classification).
+
+### Changed
+
+- Bumped package version to `2026.10.2` (CalVer).
+- `HttpClient.request()` and its `get` / `post` / `put` / `patch` / `delete` helpers accept a `SensitivePath` (new, in `ordercloud.http`) as well as a plain string path. Generated resource method signatures are unchanged.
+- Removed an unused module-level `TypeVar` from `ordercloud.sync_client`.
+
 ## 2026.10.1 — 2026-10-05
 
 Regenerated from the OrderCloud OpenAPI v3 spec, **version 1.0.454 → 1.0.470**. This release contains **one breaking change** — `ApiClient.client_secret` is removed — which the CalVer version number does not signal. Coverage is unchanged: **639 operations** across 60 resources, with 173 models and 17 enums.

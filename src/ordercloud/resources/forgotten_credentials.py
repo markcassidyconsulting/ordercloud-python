@@ -5,6 +5,7 @@
 from __future__ import annotations
 from typing import Any, Optional, Union
 
+from ..http import SensitivePath
 from ..models.auth_models import OneTimePasswordRequest, PasswordReset, PasswordResetRequest
 from .base import BaseResource
 
@@ -50,7 +51,9 @@ class ForgottenCredentialsResource(BaseResource):
             password_reset: A ``PasswordReset`` model or dict. Required fields: ClientID, Username.
         """
         await self._http.put(
-            f"/password/reset/{verification_code}",
+            SensitivePath(
+                wire=f"/password/reset/{verification_code}", log_form="/password/reset/***"
+            ),
             json=self._serialize(password_reset),
         )
 

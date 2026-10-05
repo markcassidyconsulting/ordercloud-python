@@ -3,6 +3,7 @@
 """OrderCloud GroupOrders API resource."""
 
 from __future__ import annotations
+from ..http import SensitivePath
 from ..models.auth_models import AccessToken
 from .base import BaseResource
 
@@ -24,5 +25,9 @@ class GroupOrdersResource(BaseResource):
         Returns:
             The AccessToken object.
         """
-        resp = await self._http.post(f"/grouporders/{invitation_id}/token")
+        resp = await self._http.post(
+            SensitivePath(
+                wire=f"/grouporders/{invitation_id}/token", log_form="/grouporders/***/token"
+            )
+        )
         return AccessToken(**resp.json())
