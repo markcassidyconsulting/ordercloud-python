@@ -47,7 +47,6 @@ class ApiClient(OrderCloudModel, Generic[XP]):
 
     Attributes:
         id: Used for OAuth 2.0 workflows and impersonation. (read-only)
-        client_secret: Enables the OAuth 2.0 client credentials grant type. Required on all OAuth workflows when present.
         access_token_duration:
         active: All user authentication is prohibited if false.
         app_name:
@@ -74,7 +73,6 @@ class ApiClient(OrderCloudModel, Generic[XP]):
     """
 
     id: Optional[str] = Field(None, alias="ID")
-    client_secret: Optional[str] = Field(None, alias="ClientSecret")
     access_token_duration: Optional[int] = Field(None, alias="AccessTokenDuration")
     active: Optional[bool] = Field(None, alias="Active")
     app_name: Optional[str] = Field(None, alias="AppName")

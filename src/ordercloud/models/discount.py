@@ -52,6 +52,7 @@ class Discount(OrderCloudModel, Generic[XP]):
         catalog_id:
         category_id:
         product_id:
+        priority: Controls precedence when multiple discounts apply to the same user and product. Lower number = higher precedence (1 beats 2). Null is applied last.
         xp:
     """
 
@@ -62,4 +63,5 @@ class Discount(OrderCloudModel, Generic[XP]):
     catalog_id: Optional[str] = Field(None, alias="CatalogID")
     category_id: Optional[str] = Field(None, alias="CategoryID")
     product_id: Optional[str] = Field(None, alias="ProductID")
+    priority: Optional[int] = Field(None, alias="Priority")
     xp: Optional[XP] = Field(None, alias="xp")

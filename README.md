@@ -20,7 +20,7 @@ A fully typed, async-first Python SDK for [Sitecore OrderCloud](https://orderclo
 - **Middleware hooks** — intercept requests and responses for logging, metrics, or header injection.
 - **Structured logging** — standard Python `logging` module, DEBUG/WARNING levels.
 - **Full type annotations** — `py.typed` marker for downstream type checking with mypy, pyright, etc.
-- **791 tests, 97% coverage** — 766 unit tests (mocked HTTP) + 25 integration tests (live sandbox).
+- **803 tests, 97% coverage** — 778 unit tests (mocked HTTP) + 25 integration tests (live sandbox).
 
 ## Installation
 
@@ -204,7 +204,7 @@ Before-request hooks receive a mutable `RequestContext` — modify `headers`, `p
 
 ## API Coverage
 
-The SDK covers **all 60 resources** and **639 operations** in the OrderCloud API. Models and resource clients are generated from the official OpenAPI v3 spec (version 1.0.454).
+The SDK covers **all 60 resources** and **639 operations** in the OrderCloud API. Models and resource clients are generated from the official OpenAPI v3 spec (version 1.0.470).
 
 ### Core Commerce
 
@@ -464,18 +464,18 @@ The test suite is self-bootstrapping — it uses the SDK itself to create all te
 
 ### Test Suite
 
-791 tests across 12 modules.
+803 tests across 12 modules.
 
-**Unit tests (766)** — mocked HTTP via [respx](https://lundberg.github.io/respx/), no network calls:
+**Unit tests (778)** — mocked HTTP via [respx](https://lundberg.github.io/respx/), no network calls:
 
 | Module | Tests | Purpose |
 |--------|-------|---------|
 | `test_auth.py` | 13 | OAuth2 token management |
-| `test_http.py` | 16 | HTTP client, error parsing, retries |
-| `test_models.py` | 28 | Model round-trips, enums, xp, ListPage |
-| `test_resources.py` | 22 | Representative resource operations |
+| `test_http.py` | 37 | HTTP client, error parsing, retries |
+| `test_models.py` | 44 | Model round-trips, enums, xp, ListPage |
+| `test_resources.py` | 33 | Representative resource operations |
 | `test_resource_coverage.py` | 639 | All 60 resources, all 639 operations |
-| `test_sync_client.py` | 48 | Sync wrapper, pagination |
+| `test_sync_client.py` | 12 | Sync wrapper, pagination |
 
 **Integration tests (25)** — live sandbox, skipped when credentials are absent:
 
@@ -492,11 +492,11 @@ The test suite is self-bootstrapping — it uses the SDK itself to create all te
 
 | Module | Coverage |
 |--------|----------|
-| `auth.py` | 100% |
+| `auth.py` | 93% |
 | `client.py` | 100% |
-| `config.py` | 100% |
+| `config.py` | 94% |
 | `errors.py` | 100% |
-| `http.py` | 97% |
+| `http.py` | 98% |
 | `middleware.py` | 100% |
 | `sync_client.py` | 100% |
 | `resources/base.py` | 100% |
