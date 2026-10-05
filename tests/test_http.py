@@ -9,7 +9,7 @@ import respx
 from httpx import Response
 
 from ordercloud.errors import AuthenticationError, OrderCloudError
-from ordercloud.http import HttpClient
+from ordercloud.http import HttpClient, SensitivePath
 from ordercloud.middleware import RequestContext, ResponseContext
 
 from .conftest import TEST_BASE_URL
@@ -376,6 +376,93 @@ class TestLogging:
         assert len(warnings) == 1
         assert "Retry 1/3" in warnings[0].message
         assert "503" in warnings[0].message
+
+
+# ---------------------------------------------------------------------------
+# Sensitive path redaction
+# ---------------------------------------------------------------------------
+
+SECRET = "s3cr3t-verification-code"
+SECRET_PATH = SensitivePath(wire=f"/password/reset/{SECRET}", log_form="/password/reset/***")
+
+
+def _ordercloud_records_containing(caplog: pytest.LogCaptureFixture, text: str) -> list[str]:
+    """Rendered ``ordercloud`` log records (message or raw args) that contain ``text``."""
+    found = []
+    for r in caplog.records:
+        if not r.name.startswith("ordercloud"):
+            continue
+        rendered = f"{r.getMessage()} {r.msg!r} {r.args!r}"
+        if text in rendered:
+            found.append(rendered)
+    return found
+
+
+class TestSensitivePath:
+    def test_repr_and_str_never_show_wire_form(self):
+        for rendered in (
+            repr(SECRET_PATH),
+            str(SECRET_PATH),
+            f"{SECRET_PATH}",
+            "%s" % (SECRET_PATH,),
+        ):
+            assert SECRET not in rendered
+            assert "/password/reset/***" in rendered
+
+    @respx.mock
+    async def test_request_hits_wire_route(self, http_client: HttpClient):
+        route = respx.put(f"{TEST_BASE_URL}/password/reset/{SECRET}").mock(
+            return_value=Response(204)
+        )
+        await http_client.put(SECRET_PATH, json={"ClientID": "c", "Username": "u"})
+        assert route.call_count == 1
+
+    @respx.mock
+    async def test_logs_log_form_and_never_the_secret(
+        self, http_client: HttpClient, caplog: pytest.LogCaptureFixture
+    ):
+        respx.put(f"{TEST_BASE_URL}/password/reset/{SECRET}").mock(return_value=Response(204))
+        with caplog.at_level(logging.DEBUG, logger="ordercloud"):
+            await http_client.put(SECRET_PATH, json={})
+        messages = [r.message for r in caplog.records]
+        assert "Request: PUT /password/reset/***" in messages
+        assert "Response: PUT /password/reset/*** 204" in messages
+        assert _ordercloud_records_containing(caplog, SECRET) == []
+
+    @respx.mock
+    async def test_retry_line_logs_log_form_and_never_the_secret(
+        self, retry_http_client: HttpClient, caplog: pytest.LogCaptureFixture
+    ):
+        respx.put(f"{TEST_BASE_URL}/password/reset/{SECRET}").mock(
+            side_effect=[Response(503, text="down"), Response(204)]
+        )
+        with caplog.at_level(logging.DEBUG, logger="ordercloud"):
+            await retry_http_client.put(SECRET_PATH, json={})
+        warnings = [r for r in caplog.records if r.levelno == logging.WARNING]
+        assert len(warnings) == 1
+        assert "PUT /password/reset/*** returned 503" in warnings[0].message
+        assert _ordercloud_records_containing(caplog, SECRET) == []
+
+    @respx.mock
+    async def test_hooks_receive_concrete_wire_values(self, http_client: HttpClient):
+        """Hooks see what is sent; redaction applies to the SDK's own log lines only."""
+        respx.put(f"{TEST_BASE_URL}/password/reset/{SECRET}").mock(return_value=Response(204))
+        seen: list[RequestContext] = []
+        responses: list[ResponseContext] = []
+
+        async def capture_request(ctx: RequestContext) -> None:
+            seen.append(ctx)
+
+        async def capture_response(ctx: ResponseContext) -> None:
+            responses.append(ctx)
+
+        http_client.add_before_request(capture_request)
+        http_client.add_after_response(capture_response)
+        await http_client.put(SECRET_PATH, json={})
+
+        assert seen[0].path == f"/password/reset/{SECRET}"
+        assert seen[0].url == f"{TEST_BASE_URL}/password/reset/{SECRET}"
+        assert responses[0].request.path == f"/password/reset/{SECRET}"
 
 
 # ---------------------------------------------------------------------------

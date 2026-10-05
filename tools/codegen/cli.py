@@ -9,6 +9,7 @@ from pathlib import Path
 from .grouping import validate_completeness
 from .parser import parse_spec
 from .renderer import render
+from .sensitivity import validate_path_param_classification
 from .transformer import transform
 
 __all__ = ["main"]
@@ -71,6 +72,14 @@ def main(argv: list[str] | None = None) -> int:
             print(f"Error: {e}", file=sys.stderr)
         return 1
     print("  Schema completeness: OK")
+
+    # Validate path-parameter classification.
+    errors = validate_path_param_classification(resources.values())
+    if errors:
+        for e in errors:
+            print(f"Error: {e}", file=sys.stderr)
+        return 1
+    print("  Path-parameter classification: OK")
 
     # Transform.
     print("Transforming...")

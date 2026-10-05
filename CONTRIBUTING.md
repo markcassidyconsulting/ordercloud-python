@@ -99,7 +99,31 @@ If you need to change how models or resources are structured, the relevant files
 - `tools/codegen/ir.py` — intermediate representation dataclasses
 - `tools/codegen/parser.py` — OpenAPI spec to IR
 - `tools/codegen/transformer.py` — IR enrichment (imports, grouping)
+- `tools/codegen/sensitivity.py` — path-parameter sensitivity registry (see below)
 - `tools/codegen/templates/*.j2` — Jinja2 templates for output files
+
+### Path-parameter classification
+
+The SDK logs the path of every request, and some path parameters carry values that work as credentials. Every path-parameter name in the spec is therefore classified in `tools/codegen/sensitivity.py`, in exactly one of two sets:
+
+- `SENSITIVE_PATH_PARAMS` — anyone who reads the value from a log could use it to authenticate, obtain a token, or perform an account action without the account owner's own credentials.
+- `NOT_SENSITIVE_PATH_PARAMS` — record identifiers that grant nothing without the caller's own authorisation.
+
+When uncertain, choose sensitive. `NOT_SENSITIVE_PATH_PARAMS` is an allowlist: a parameter whose name is not on it is generated as a `SensitivePath`, and the SDK logs `***` in its place.
+
+Generation stops with exit code 1, before any file is written, if a path-parameter name in the spec is unclassified, is in both sets, or is classified but no longer in the spec. A new, unclassified name fails like this (`shareToken` is an example, not a real parameter):
+
+```
+Error: Path parameter 'shareToken' is not classified (used by Products.GetShareLink); add it to SENSITIVE_PATH_PARAMS or NOT_SENSITIVE_PATH_PARAMS in tools/codegen/sensitivity.py
+```
+
+To resolve it:
+
+1. Read what the value is in the spec: the operations named in the error, their descriptions, and what they return.
+2. Apply the rule above and add the name to one of the two sets, with a comment giving the reason.
+3. Regenerate and run the tests. `tests/test_log_redaction.py` scans every generated request path and fails if one could log an unclassified or sensitive value.
+
+The classification is by name, so the gate cannot tell when a new spec reuses an already-cleared name for a credential-bearing value. Review the spec diff at each spec bump for that.
 
 ## Conventions
 

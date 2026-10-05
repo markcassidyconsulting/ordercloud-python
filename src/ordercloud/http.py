@@ -2,7 +2,8 @@
 
 import asyncio
 import logging
-from typing import Any, Optional
+from dataclasses import dataclass
+from typing import Any, Optional, Union
 
 import httpx
 
@@ -11,11 +12,26 @@ from .config import OrderCloudConfig
 from .errors import ApiError, AuthenticationError, OrderCloudError
 from .middleware import AfterResponse, BeforeRequest, RequestContext, ResponseContext
 
-__all__ = ["HttpClient"]
+__all__ = ["HttpClient", "SensitivePath"]
 
 logger = logging.getLogger("ordercloud")
 
 _RETRYABLE_STATUSES = frozenset({429, 500, 502, 503, 504})
+
+
+@dataclass(frozen=True)
+class SensitivePath:
+    """A request path that carries a sensitive value.
+
+    ``wire`` is sent to the API; ``log_form`` is the only form the SDK may log.
+    """
+
+    wire: str
+    log_form: str
+
+    def __repr__(self) -> str:
+        # str() falls back to this, so neither ever renders the wire form.
+        return f"SensitivePath({self.log_form!r})"
 
 
 class HttpClient:
@@ -60,7 +76,7 @@ class HttpClient:
     async def request(
         self,
         method: str,
-        path: str,
+        path: Union[str, SensitivePath],
         *,
         params: Optional[dict[str, Any]] = None,
         json: Optional[dict[str, Any]] = None,
@@ -69,7 +85,9 @@ class HttpClient:
 
         Args:
             method: HTTP method (e.g. ``"GET"``, ``"POST"``).
-            path: API path relative to the base URL (e.g. ``"/products"``).
+            path: API path relative to the base URL (e.g. ``"/products"``),
+                or a ``SensitivePath`` whose ``log_form`` is logged in place
+                of the path that is sent. A plain string is logged as given.
             params: Query parameters (``None`` values are stripped).
             json: JSON request body.
 
@@ -80,7 +98,8 @@ class HttpClient:
             AuthenticationError: On 401 or 403 responses.
             OrderCloudError: On any other 4xx/5xx response.
         """
-        url = f"{self._config.base_url}{path}"
+        wire_path, log_path = self._split_path(path)
+        url = f"{self._config.base_url}{wire_path}"
 
         if params:
             params = {k: v for k, v in params.items() if v is not None}
@@ -93,7 +112,7 @@ class HttpClient:
 
             ctx = RequestContext(
                 method=method,
-                path=path,
+                path=wire_path,
                 url=url,
                 headers=dict(headers),
                 params=dict(params) if params else None,
@@ -103,7 +122,7 @@ class HttpClient:
             for hook in self._before_request:
                 await hook(ctx)
 
-            logger.debug("Request: %s %s", method, path)
+            logger.debug("Request: %s %s", method, log_path)
 
             resp = await self._client.request(
                 ctx.method,
@@ -113,7 +132,7 @@ class HttpClient:
                 json=ctx.json,
             )
 
-            logger.debug("Response: %s %s %d", method, path, resp.status_code)
+            logger.debug("Response: %s %s %d", method, log_path, resp.status_code)
 
             resp_ctx = ResponseContext(request=ctx, response=resp, attempt=attempt)
             for after_hook in self._after_response:
@@ -129,7 +148,7 @@ class HttpClient:
                     attempt + 1,
                     self._config.max_retries,
                     method,
-                    path,
+                    log_path,
                     resp.status_code,
                     delay,
                 )
@@ -140,6 +159,13 @@ class HttpClient:
 
         # Unreachable — loop always returns or raises
         raise AssertionError("unreachable")  # pragma: no cover
+
+    @staticmethod
+    def _split_path(path: Union[str, SensitivePath]) -> tuple[str, str]:
+        """Return ``(wire path, log path)``; a plain ``str`` is its own log form."""
+        if isinstance(path, SensitivePath):
+            return path.wire, path.log_form
+        return path, path
 
     def _retry_delay(self, resp: httpx.Response, attempt: int) -> float:
         """Calculate the delay before the next retry attempt.
@@ -157,13 +183,13 @@ class HttpClient:
         delay: float = self._config.retry_backoff * (2**attempt)
         return min(delay, max_delay)
 
-    async def get(self, path: str, **params: Any) -> httpx.Response:
+    async def get(self, path: Union[str, SensitivePath], **params: Any) -> httpx.Response:
         """Send a GET request."""
         return await self.request("GET", path, params=params or None)
 
     async def post(
         self,
-        path: str,
+        path: Union[str, SensitivePath],
         json: Optional[dict[str, Any]] = None,
         params: Optional[dict[str, Any]] = None,
     ) -> httpx.Response:
@@ -172,7 +198,7 @@ class HttpClient:
 
     async def put(
         self,
-        path: str,
+        path: Union[str, SensitivePath],
         json: Optional[dict[str, Any]] = None,
         params: Optional[dict[str, Any]] = None,
     ) -> httpx.Response:
@@ -181,14 +207,14 @@ class HttpClient:
 
     async def patch(
         self,
-        path: str,
+        path: Union[str, SensitivePath],
         json: Optional[dict[str, Any]] = None,
         params: Optional[dict[str, Any]] = None,
     ) -> httpx.Response:
         """Send a PATCH request."""
         return await self.request("PATCH", path, json=json, params=params)
 
-    async def delete(self, path: str, **params: Any) -> httpx.Response:
+    async def delete(self, path: Union[str, SensitivePath], **params: Any) -> httpx.Response:
         """Send a DELETE request."""
         return await self.request("DELETE", path, params=params or None)
 

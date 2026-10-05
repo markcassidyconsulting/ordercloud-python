@@ -20,6 +20,13 @@ class RequestContext:
     Hooks can modify ``headers``, ``params``, or ``json`` in place
     before the request is sent.
 
+    ``path``, ``url`` and ``params`` are the concrete values sent on the
+    wire, and ``headers`` holds the ``Authorization`` bearer token. Any of
+    them may carry credentials — a password-reset verification code or a
+    group-order invitation ID in the path, for example — so redact them
+    before logging them from a hook. The SDK's own log lines redact such
+    path values; the context passed to hooks does not.
+
     Attributes:
         method: HTTP method (e.g. ``"GET"``).
         path: API path relative to the base URL.

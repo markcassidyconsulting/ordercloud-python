@@ -5,13 +5,11 @@ from __future__ import annotations
 import asyncio
 import functools
 from collections.abc import Iterator
-from typing import Any, TypeVar
+from typing import Any
 
 from .config import OrderCloudConfig
 from .middleware import AfterResponse, BeforeRequest
 from .resources.base import BaseResource
-
-T = TypeVar("T")
 
 __all__ = ["SyncOrderCloudClient", "paginate_sync"]
 

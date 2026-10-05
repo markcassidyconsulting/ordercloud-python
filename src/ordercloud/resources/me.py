@@ -5,6 +5,7 @@
 from __future__ import annotations
 from typing import Any, Optional, Union
 
+from ..http import SensitivePath
 from ..models.auth_models import AccessTokenBasic, TokenPasswordReset
 from ..models.buyer import BuyerAddress, BuyerCreditCard, BuyerProduct, BuyerSupplier, ProductSeller
 from ..models.catalog import Catalog
@@ -513,7 +514,11 @@ class MeResource(BaseResource):
         Returns:
             The GroupOrderInvitation object.
         """
-        resp = await self._http.get(f"/me/orderinvitations/{invitation_id}")
+        resp = await self._http.get(
+            SensitivePath(
+                wire=f"/me/orderinvitations/{invitation_id}", log_form="/me/orderinvitations/***"
+            )
+        )
         return GroupOrderInvitation(**resp.json())
 
     async def delete_group_order_invitation(
@@ -525,7 +530,11 @@ class MeResource(BaseResource):
         Args:
             invitation_id: ID of the invitation.
         """
-        await self._http.delete(f"/me/orderinvitations/{invitation_id}")
+        await self._http.delete(
+            SensitivePath(
+                wire=f"/me/orderinvitations/{invitation_id}", log_form="/me/orderinvitations/***"
+            )
+        )
 
     async def patch_group_order_invitation(
         self,
@@ -541,7 +550,12 @@ class MeResource(BaseResource):
         Returns:
             The GroupOrderInvitation object.
         """
-        resp = await self._http.patch(f"/me/orderinvitations/{invitation_id}", json=partial)
+        resp = await self._http.patch(
+            SensitivePath(
+                wire=f"/me/orderinvitations/{invitation_id}", log_form="/me/orderinvitations/***"
+            ),
+            json=partial,
+        )
         return GroupOrderInvitation(**resp.json())
 
     async def list_orders(
@@ -877,7 +891,10 @@ class MeResource(BaseResource):
             The ProductCollectionInvitation object.
         """
         resp = await self._http.get(
-            f"/me/productcollections/{product_collection_id}/invitations/{invitation_id}"
+            SensitivePath(
+                wire=f"/me/productcollections/{product_collection_id}/invitations/{invitation_id}",
+                log_form=f"/me/productcollections/{product_collection_id}/invitations/***",
+            )
         )
         return ProductCollectionInvitation(**resp.json())
 
@@ -893,7 +910,10 @@ class MeResource(BaseResource):
             invitation_id: ID of the invitation.
         """
         await self._http.delete(
-            f"/me/productcollections/{product_collection_id}/invitations/{invitation_id}"
+            SensitivePath(
+                wire=f"/me/productcollections/{product_collection_id}/invitations/{invitation_id}",
+                log_form=f"/me/productcollections/{product_collection_id}/invitations/***",
+            )
         )
 
     async def patch_product_collection_invitation(
@@ -913,7 +933,10 @@ class MeResource(BaseResource):
             The ProductCollectionInvitation object.
         """
         resp = await self._http.patch(
-            f"/me/productcollections/{product_collection_id}/invitations/{invitation_id}",
+            SensitivePath(
+                wire=f"/me/productcollections/{product_collection_id}/invitations/{invitation_id}",
+                log_form=f"/me/productcollections/{product_collection_id}/invitations/***",
+            ),
             json=partial,
         )
         return ProductCollectionInvitation(**resp.json())
@@ -930,7 +953,10 @@ class MeResource(BaseResource):
             invitation_id: ID of the invitation.
         """
         await self._http.post(
-            f"/me/productcollections/{product_collection_id}/invitations/accept/{invitation_id}"
+            SensitivePath(
+                wire=f"/me/productcollections/{product_collection_id}/invitations/accept/{invitation_id}",
+                log_form=f"/me/productcollections/{product_collection_id}/invitations/accept/***",
+            )
         )
 
     async def decline_product_collection_invitation(
@@ -945,7 +971,10 @@ class MeResource(BaseResource):
             invitation_id: ID of the invitation.
         """
         await self._http.post(
-            f"/me/productcollections/{product_collection_id}/invitations/decline/{invitation_id}"
+            SensitivePath(
+                wire=f"/me/productcollections/{product_collection_id}/invitations/decline/{invitation_id}",
+                log_form=f"/me/productcollections/{product_collection_id}/invitations/decline/***",
+            )
         )
 
     async def list_product_collection_entries(

@@ -16,6 +16,12 @@ from .ir import (
     ModelGroup,
     ResourceDef,
 )
+from .sensitivity import (
+    NOT_SENSITIVE_PATH_PARAMS,
+    SENSITIVE_PATH_PARAMS,
+    redacted_path_params,
+    spec_name,
+)
 
 __all__ = ["transform"]
 
@@ -269,6 +275,7 @@ def _enrich_resources(
         needs_union = False
         needs_any = False
         needs_optional = False
+        needs_sensitive_path = False
 
         for op in resource.operations:
             # Return type.
@@ -292,10 +299,17 @@ def _enrich_resources(
                 needs_union = True
                 needs_any = True
 
-            # Path params.
+            # Path params.  Only an allowlisted name may be logged; a name in
+            # both sets (which the CLI gate rejects) stays redacted.
             for param in op.path_params:
                 if param.is_enum and param.enum_type:
                     enum_refs.add(param.enum_type)
+                name = spec_name(param)
+                param.log_safe = (
+                    name in NOT_SENSITIVE_PATH_PARAMS and name not in SENSITIVE_PATH_PARAMS
+                )
+            if redacted_path_params(op):
+                needs_sensitive_path = True
 
             # Query params — check for Optional, Any, and enum types.
             for param in op.query_params:
@@ -323,6 +337,7 @@ def _enrich_resources(
             needs_union=needs_union,
             needs_any=needs_any,
             needs_optional=needs_optional,
+            needs_sensitive_path=needs_sensitive_path,
             schema_to_module=schema_to_module,
         )
 
@@ -343,6 +358,7 @@ def _build_resource_imports(
     needs_union: bool,
     needs_any: bool,
     needs_optional: bool,
+    needs_sensitive_path: bool,
     schema_to_module: dict[str, str],
 ) -> list[str]:
     """Build the import block for a resource module."""
@@ -362,6 +378,10 @@ def _build_resource_imports(
     # Blank line before relative imports.
     if lines:
         lines.append("")
+
+    # Log-safe path wrapper, for modules with a redacted path parameter.
+    if needs_sensitive_path:
+        lines.append("from ..http import SensitivePath")
 
     # Model imports — group by source module.
     by_module: dict[str, list[str]] = defaultdict(list)

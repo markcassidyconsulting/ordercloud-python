@@ -149,6 +149,13 @@ class ParamDef:
     api_name: str | None = None
     """Original API parameter name (for query params where Python name differs)."""
 
+    log_safe: bool = False
+    """Whether a path parameter's value may appear in SDK log lines.
+
+    Set by the transformer from ``sensitivity.NOT_SENSITIVE_PATH_PARAMS``;
+    the default keeps an unclassified value out of the log.
+    """
+
 
 @dataclass
 class OperationDef:

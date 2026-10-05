@@ -172,9 +172,8 @@ The SDK logs via Python's standard `logging` module under the `ordercloud` logge
 
 ```python
 import logging
-logging.basicConfig(level=logging.DEBUG)
 
-# Or configure just the SDK logger
+logging.basicConfig()  # adds a handler; the root logger stays at WARNING
 logging.getLogger("ordercloud").setLevel(logging.DEBUG)
 ```
 
@@ -182,6 +181,10 @@ logging.getLogger("ordercloud").setLevel(logging.DEBUG)
 |-------|--------------|
 | `DEBUG` | Every request (`Request: GET /products`) and response (`Response: GET /products 200`) |
 | `WARNING` | Retry attempts with status code and backoff delay |
+
+Path values that work as credentials, a password-reset verification code and an invitation ID, are logged as `***`, for example `Request: PUT /password/reset/***`. Query parameters and request bodies are not logged.
+
+Setting the root logger to `INFO` or `DEBUG` (for example `logging.basicConfig(level=logging.DEBUG)`) also turns on `httpx`'s own `HTTP Request:` line, which contains the full URL, unredacted, including the query string. The SDK does not control that logger. To keep it quiet, add `logging.getLogger("httpx").setLevel(logging.WARNING)`. See [SECURITY.md](SECURITY.md#logging).
 
 ## Middleware Hooks
 
@@ -201,6 +204,8 @@ client.add_after_response(log_timing)
 ```
 
 Before-request hooks receive a mutable `RequestContext` — modify `headers`, `params`, or `json` before the request is sent. After-response hooks receive a `ResponseContext` with the request details and response. Hooks are called on every attempt, including retries.
+
+Hooks see the concrete values sent to the API, including credential-bearing path values and the `Authorization` header; the redaction above applies only to the SDK's own log lines.
 
 ## API Coverage
 
