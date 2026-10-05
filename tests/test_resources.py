@@ -2,15 +2,20 @@
 
 from __future__ import annotations
 
+import json
+
 import respx
 from httpx import Response
 
 from ordercloud.http import HttpClient
 from ordercloud.models import Product, ListPage
+from ordercloud.models.api_client import ApiClient
 from ordercloud.models.order import Order, OrderDirection, OrderStatus
 from ordercloud.models.line_item import LineItem
 from ordercloud.models.promotion import Promotion
+from ordercloud.resources.api_clients import ApiClientsResource
 from ordercloud.resources.base import paginate
+from ordercloud.resources.discounts import DiscountsResource
 from ordercloud.resources.products import ProductsResource
 from ordercloud.resources.orders import OrdersResource
 from ordercloud.resources.line_items import LineItemsResource
@@ -292,6 +297,43 @@ class TestPhase2Resources:
         resource = ShipmentsResource(http_client)
         shipment = await resource.get("ship-1")
         assert shipment.buyer_id == "b1"
+
+    @respx.mock
+    async def test_api_clients_create_sends_client_secret_under_the_key_given(
+        self, http_client: HttpClient
+    ):
+        """With no declared field, an extra is serialised under the exact name supplied."""
+        route = respx.post(f"{TEST_BASE_URL}/apiclients").mock(
+            return_value=Response(201, json={"ID": "c1", "AppName": "app"})
+        )
+        resource = ApiClientsResource(http_client)
+        await resource.create(ApiClient(AppName="app", client_secret="s"))
+        await resource.create(ApiClient(AppName="app", ClientSecret="s"))
+        snake_body = json.loads(route.calls[0].request.content)
+        pascal_body = json.loads(route.calls[1].request.content)
+        assert snake_body["client_secret"] == "s"
+        assert "ClientSecret" not in snake_body
+        assert pascal_body["ClientSecret"] == "s"
+        assert "client_secret" not in pascal_body
+
+    @respx.mock
+    async def test_api_clients_get_keeps_client_secret_as_extra(self, http_client: HttpClient):
+        respx.get(f"{TEST_BASE_URL}/apiclients/c1").mock(
+            return_value=Response(200, json={"ID": "c1", "ClientSecret": "s"})
+        )
+        resource = ApiClientsResource(http_client)
+        api_client = await resource.get("c1")
+        assert api_client.model_extra == {"ClientSecret": "s"}
+
+    @respx.mock
+    async def test_discounts_list_passes_sort_by_through(self, http_client: HttpClient):
+        route = respx.get(f"{TEST_BASE_URL}/discounts").mock(
+            return_value=Response(200, json=list_response([{"ID": "d1", "Priority": 1}]))
+        )
+        resource = DiscountsResource(http_client)
+        page = await resource.list(sort_by="!Priority")
+        assert route.calls[0].request.url.params["sortBy"] == "!Priority"
+        assert page.items[0].priority == 1
 
 
 # ---------------------------------------------------------------------------

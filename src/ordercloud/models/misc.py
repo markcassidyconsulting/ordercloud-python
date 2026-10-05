@@ -78,6 +78,7 @@ class ApiRole(OrderCloudEnum):
     MeSubscriptionAdmin = "MeSubscriptionAdmin"
     MeXpAdmin = "MeXpAdmin"
     OrderAdmin = "OrderAdmin"
+    OrderEditAfterSubmit = "OrderEditAfterSubmit"
     OrderReader = "OrderReader"
     OverrideShipping = "OverrideShipping"
     OverrideTax = "OverrideTax"

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import pytest
 
 from ordercloud.models import (
     Address,
@@ -12,6 +13,9 @@ from ordercloud.models import (
     MetaWithFacets,
     Product,
 )
+from ordercloud.models.api_client import ApiClient
+from ordercloud.models.discount import Discount
+from ordercloud.models.misc import ApiRole
 from ordercloud.models.order import Order, OrderDirection, OrderStatus
 from ordercloud.models.line_item import LineItem
 from ordercloud.models.payment import Payment, PaymentType
@@ -241,6 +245,46 @@ class TestPhase2Models:
         assert "BuyerAdmin" in sp.roles
 
 
+class TestDiscountModel:
+    def test_priority_round_trip(self):
+        d = Discount.model_validate({"ID": "disc-1", "Priority": 1})
+        assert d.priority == 1
+        assert d.model_dump(by_alias=True, exclude_none=True)["Priority"] == 1
+
+    def test_priority_defaults_to_none(self):
+        assert Discount().priority is None
+
+
+class TestApiClientModel:
+    """``ClientSecret`` is not a declared ``ApiClient`` field (the spec dropped it in
+    1.0.470), so ``extra="allow"`` decides where a supplied value lands."""
+
+    def test_client_secret_not_a_declared_field(self):
+        assert "client_secret" not in ApiClient.model_fields
+
+    def test_client_secret_attribute_absent_when_not_supplied(self):
+        c = ApiClient(AppName="app")
+        with pytest.raises(AttributeError):
+            c.client_secret
+
+    def test_client_secret_in_response_kept_as_extra_under_api_name(self):
+        c = ApiClient.model_validate({"ID": "c1", "ClientSecret": "s"})
+        assert c.model_extra == {"ClientSecret": "s"}
+        with pytest.raises(AttributeError):
+            c.client_secret
+
+    def test_snake_case_client_secret_kwarg_kept_as_extra(self):
+        c = ApiClient(client_secret="s")
+        assert c.model_extra == {"client_secret": "s"}
+        assert c.client_secret == "s"
+
+    def test_pascal_case_client_secret_kwarg_kept_as_extra(self):
+        c = ApiClient(ClientSecret="s")
+        assert c.model_extra == {"ClientSecret": "s"}
+        with pytest.raises(AttributeError):
+            c.client_secret
+
+
 # ---------------------------------------------------------------------------
 # Enum serialisation
 # ---------------------------------------------------------------------------
@@ -265,6 +309,13 @@ class TestEnums:
     def test_payment_type_values(self):
         assert PaymentType.CreditCard.value == "CreditCard"
         assert PaymentType.PurchaseOrder.value == "PurchaseOrder"
+
+    def test_api_role_order_edit_after_submit(self):
+        assert ApiRole.OrderEditAfterSubmit.value == "OrderEditAfterSubmit"
+
+    def test_role_list_accepts_order_edit_after_submit(self):
+        sp = SecurityProfile.model_validate({"ID": "sp-1", "Roles": ["OrderEditAfterSubmit"]})
+        assert sp.roles == [ApiRole.OrderEditAfterSubmit]
 
 
 # ---------------------------------------------------------------------------
