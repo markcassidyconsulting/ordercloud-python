@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import dataclasses
+from urllib.parse import parse_qs
 
 import httpx
 import respx
@@ -77,6 +79,21 @@ class TestTokenManagerClientCredentials:
         assert f"client_id={TEST_CLIENT_ID}" in body
         assert f"client_secret={TEST_CLIENT_SECRET}" in body
         assert "scope=FullAccess" in body
+
+    @respx.mock
+    async def test_custom_roles_pass_through_in_scope(self, config: OrderCloudConfig):
+        # The README documents custom roles as plain names in `scopes`; the
+        # token endpoint must receive them space-joined with the standard roles.
+        route = respx.post(TEST_AUTH_URL).mock(
+            return_value=Response(200, json=make_token_response())
+        )
+        config = dataclasses.replace(config, scopes=("FullAccess", "MyCustomRole"))
+        manager = TokenManager(config)
+        async with httpx.AsyncClient() as client:
+            await manager.get_token(client)
+
+        form = parse_qs(route.calls[0].request.content.decode())
+        assert form["scope"] == ["FullAccess MyCustomRole"]
 
     @respx.mock
     async def test_caches_token_across_calls(self, config: OrderCloudConfig):
