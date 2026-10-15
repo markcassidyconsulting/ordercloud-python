@@ -88,6 +88,8 @@ The sync client wraps the async client internally — same features, same API sh
 | `max_retries` | `0` | Max retries on 429/5xx (0 = disabled) |
 | `retry_backoff` | `0.5` | Base delay in seconds for exponential backoff |
 
+Custom roles go in `scopes` too, by name alongside the standard roles: `scopes=("Shopper", "RecurringOrders")`. The token carries a custom role only when the user's security profiles grant it (a profile with `FullAccess` grants every custom role requested); a role the user is not granted is dropped from the token without an error. Custom roles carry no API permissions of their own: a token holding only custom roles gets a 403 from endpoints that need a standard role.
+
 ### Regional Environments
 
 | Environment | API Base URL | Auth URL |
