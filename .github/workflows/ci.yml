@@ -51,7 +51,8 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
-        run: pip install -e ".[dev]"
+        # codegen brings jinja2, without which the renderer tests skip.
+        run: pip install -e ".[dev,codegen]"
       - name: Run tests with coverage
         run: pytest --cov=ordercloud --cov-report=xml --cov-report=term-missing --cov-fail-under=90
       - name: Upload coverage to Codecov

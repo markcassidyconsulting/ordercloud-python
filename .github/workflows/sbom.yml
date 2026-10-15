@@ -29,3 +29,5 @@ jobs:
         with:
           name: sbom
           path: sbom.spdx.json
+          # A missing SBOM fails this job instead of uploading nothing.
+          if-no-files-found: error
