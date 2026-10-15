@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 This project uses [Calendar Versioning](https://calver.org/) — `YYYY.MM.N` where `N` is the release number within that month.
 
+## Unreleased
+
+### Security
+
+- **`repr()` and `str()` of a middleware context no longer show the bearer token.** `RequestContext` and `ResponseContext` are dataclasses, and in every release up to and including 2026.10.2 their generated `repr()` contained the request headers, so a hook that logged a context with `%r`, `%s` or an f-string wrote the `Authorization` header, `Bearer` token included, to the log. `RequestContext` now renders the value of every header named `Authorization`, in any letter case, as `***`, for example `headers={'Authorization': '***', 'Accept': 'application/json'}`, and a `ResponseContext` shows its request the same way. The headers are read each time the context is rendered, so a header a hook adds after the context is built is covered too. If `headers` has been replaced with something that is not a mapping, or that cannot be read, the whole value renders as `headers='***'`. The other fields render as before, in the same order and format.
+- **What this does not change:**
+  - The `headers` dict itself still holds the token, and it is what the SDK sends to the API. A hook that reads or logs `ctx.headers` sees the concrete value.
+  - Only the `Authorization` header is redacted. The SDK sets no other credential-bearing header, but a header a hook adds under another name (`Proxy-Authorization`, `Cookie`, an API-key header) renders as sent.
+  - `path`, `url`, `params` and `json` hold, and `repr()` shows, the concrete values sent to the API. A hook that logs them must redact them itself.
+  - `dataclasses.asdict()` of a context returns the concrete values, the token included.
+  - Equality, `dataclasses.replace()` and attribute access are unchanged.
+
 ## 2026.10.2 — 2026-10-05
 
 ### Security

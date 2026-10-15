@@ -483,6 +483,28 @@ class TestMiddleware:
         assert route.calls[0].request.headers["x-correlation-id"] == "test-123"
 
     @respx.mock
+    async def test_context_repr_never_shows_bearer_token(self, http_client: HttpClient):
+        route = respx.get(f"{TEST_BASE_URL}/products").mock(return_value=Response(200, json={}))
+        seen: list[RequestContext] = []
+        responses: list[ResponseContext] = []
+
+        async def capture_request(ctx: RequestContext) -> None:
+            seen.append(ctx)
+
+        async def capture_response(ctx: ResponseContext) -> None:
+            responses.append(ctx)
+
+        http_client.add_before_request(capture_request)
+        http_client.add_after_response(capture_response)
+        await http_client.get("/products")
+
+        assert route.calls[0].request.headers["authorization"] == "Bearer mock-token-12345"
+        assert seen[0].headers["Authorization"] == "Bearer mock-token-12345"
+        for rendered in (repr(seen[0]), str(seen[0]), repr(responses[0])):
+            assert "mock-token-12345" not in rendered
+            assert "'Authorization': '***'" in rendered
+
+    @respx.mock
     async def test_before_request_modifies_params(self, http_client: HttpClient):
         route = respx.get(f"{TEST_BASE_URL}/products").mock(return_value=Response(200, json={}))
 
