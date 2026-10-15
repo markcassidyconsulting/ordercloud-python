@@ -207,7 +207,7 @@ client.add_after_response(log_timing)
 
 Before-request hooks receive a mutable `RequestContext` — modify `headers`, `params`, or `json` before the request is sent. After-response hooks receive a `ResponseContext` with the request details and response. Hooks are called on every attempt, including retries.
 
-Hooks see the concrete values sent to the API, including credential-bearing path values and the `Authorization` header; the redaction above applies only to the SDK's own log lines.
+Hooks see the concrete values sent to the API, including credential-bearing path values and the `Authorization` header; the redaction above applies only to the SDK's own log lines. `repr()` and `str()` of a `RequestContext`, and of a `ResponseContext` that carries one, show the `Authorization` value as `***`; every other header, and `path`, `url`, `params` and `json`, are shown as sent, and the `headers` dict itself still holds the token.
 
 ## API Coverage
 

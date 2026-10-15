@@ -45,7 +45,7 @@ The SDK does not control what other code logs:
   ```
 
 - **`httpx` exceptions carry the request.** Exceptions that `httpx` raises for transport failures (timeouts, connection errors) carry the request as their `request` attribute, and `exc.request.url` is the full URL.
-- **Middleware hooks receive the concrete values.** `RequestContext.path`, `url` and `params` are the values sent to the API, and `headers` holds the `Authorization` bearer token. A hook that logs them must redact them itself.
+- **Middleware hooks receive the concrete values.** `RequestContext.path`, `url` and `params` are the values sent to the API, and `headers` holds the `Authorization` bearer token. A hook that logs them must redact them itself. `repr()` and `str()` of a `RequestContext`, and of a `ResponseContext` that carries one, show the `Authorization` value as `***` and every other value as sent, including `path`, `url`, `params` and `json`.
 
 ## Security Measures
 
