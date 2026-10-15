@@ -35,6 +35,8 @@ jobs:
         with:
           name: dist
           path: dist/
+          # Nothing built means the build job fails, not a later job.
+          if-no-files-found: error
 
   publish:
     name: Publish to PyPI
